@@ -25,6 +25,7 @@ void on_disconnect(user_base_t *user, network_client_t *client)
 struct test_user {
     on_extracted_func on_extracted;
     on_disconnect_func on_disconnect;
+    time_t user_select_timeout;
 };
 
 int main(void)
@@ -32,18 +33,20 @@ int main(void)
     network_manager_t *nm = create_manager(4242);
     char *input = NULL;
     size_t len = 0;
-    struct test_user user = {&on_extracted, &on_disconnect};
+    struct test_user user = {&on_extracted, &on_disconnect, 0};
 
     if (nm == NULL) {
         return (84);
     }
+    nm->default_client_disconnect_timeout = 20;
     while (getline(&input, &len, stdin) > 0) {
         if (strcmp("exit\n", input) == 0)
             break;
         free(input);
         input = NULL;
         len = 0;
-        update_manager(nm, (uint8_t *)"\n", 1, 120);
+        update_manager(nm);
+        extract_to_users(nm, (uint8_t *)"\n", 1);
         if (get_next_client_without_user(nm->client_user_map) != NULL)
             get_next_client_without_user(nm->client_user_map)->user = (void *)&user;
     }

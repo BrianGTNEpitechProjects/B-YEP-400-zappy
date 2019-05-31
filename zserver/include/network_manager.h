@@ -23,19 +23,27 @@ typedef struct network_manager_s network_manager_t;
 struct network_manager_s {
     int connexion_socket;
     struct sockaddr_in addr;
+    time_t world_event_timeout;
+    time_t default_client_disconnect_timeout;
     network_client_pool_t *client_pool;
     network_client_user_map_t *client_user_map;
 };
 
+typedef struct fd_infos_s {
+    fd_set read_set;
+    fd_set write_set;
+    int biggest_fd;
+    time_t smallest_timestamp;
+    network_client_t *to_disconnect_if_timeout;
+} fd_infos_t;
+
 void disconnect_client(network_manager_t *nm, network_client_t *client);
 void disconnect_user(network_manager_t *nm, user_base_t *user);
 
-int accept_connections(network_manager_t *nm);
-void sync_buffers(network_manager_t *nm);
+int accept_connections(network_manager_t *nm, fd_infos_t *infos);
+void sync_buffers(network_manager_t *nm, fd_infos_t *infos);
 void extract_to_users(network_manager_t *nm, uint8_t *delim, size_t delim_size);
-void timeout_clients(network_manager_t *nm, time_t timeout_at);
-void update_manager(network_manager_t *nm,
-    uint8_t *delim, size_t delim_size, time_t timeout_at);
+void update_manager(network_manager_t *nm);
 
 network_manager_t *create_manager(int port);
 void delete_manager(network_manager_t *nm);

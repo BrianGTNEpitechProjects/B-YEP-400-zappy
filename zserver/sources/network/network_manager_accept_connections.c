@@ -8,6 +8,7 @@
 /* Created the 20/05/2019 at 12:50 by jfrabel */
 
 #include <unistd.h>
+#include <stdio.h>
 #include <time.h>
 #include "network_manager.h"
 
@@ -40,21 +41,15 @@ static int create_new_connection(network_manager_t *nm)
         remove_client_from_map(nm->client_user_map, client);
         return (0);
     }
+    client->user_disconnect_timeout = nm->default_client_disconnect_timeout;
     client->last_data_in_timestamp = time(NULL);
     client->last_data_out_timestamp = time(NULL);
     return (1);
 }
 
-int accept_connections(network_manager_t *nm)
+int accept_connections(network_manager_t *nm, fd_infos_t *infos)
 {
-    fd_set conn_fd;
-    struct timeval to;
-
-    to.tv_sec = 0;
-    to.tv_usec = 1;
-    FD_ZERO(&conn_fd);
-    FD_SET(nm->connexion_socket, &conn_fd);
-    if (select(nm->connexion_socket + 1, &conn_fd, NULL, NULL, &to) > 0) {
+    if (FD_ISSET(nm->connexion_socket, &infos->read_set)) {
         return (create_new_connection(nm));
     }
     return (0);

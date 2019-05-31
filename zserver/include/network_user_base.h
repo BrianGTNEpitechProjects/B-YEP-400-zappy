@@ -23,6 +23,7 @@ typedef void (*on_disconnect_func)(user_base_t *, network_client_t *);
 struct user_base_s {
     on_extracted_func on_extracted;
     on_disconnect_func on_disconnect;
+    time_t user_event_timeout;
 };
 
 #endif //PSU_ZAPPY_2018_NETWORK_USER_BASE_H

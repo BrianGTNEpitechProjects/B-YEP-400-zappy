@@ -27,7 +27,6 @@ SRC_NETWORK	=	\
 				network_manager_disconnect.c \
 				network_manager_extract.c \
 				network_manager_sync_buffer.c \
-				network_manager_timeout_client.c \
 				network_manager_update.c \
 
 SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK))

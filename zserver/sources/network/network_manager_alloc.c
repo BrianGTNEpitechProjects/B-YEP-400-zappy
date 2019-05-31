@@ -51,6 +51,8 @@ network_manager_t *create_manager(int port)
     network_manager_t *nm = malloc(sizeof(*nm));
 
     if (nm != NULL) {
+        nm->world_event_timeout = 0;
+        nm->default_client_disconnect_timeout = 0;
         nm->connexion_socket = socket(AF_INET, SOCK_STREAM, 0);
         if (nm->connexion_socket == invalid_socket)
             perror("socket");
