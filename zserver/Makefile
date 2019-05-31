@@ -9,7 +9,12 @@ SRC_DIR		=	$(realpath sources)
 
 SRC_FILES	=	\
 				main.c \
-				websocket.c \
+				websockets/websocket.c \
+				websockets/websocket_header_end.c \
+				websockets/websocket_header_start.c \
+				websockets/websocket_set_connection.c \
+				websockets/websocket_set_key.c \
+				websockets/websocket_set_upgrade.c \
 				base64.c
 
 NETWORK_DIR	=	$(realpath sources/network)
