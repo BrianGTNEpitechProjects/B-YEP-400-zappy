@@ -24,13 +24,14 @@ bool is_alphanum(uint8_t *val, size_t size)
 
 void on_extracted(user_base_t *user, network_client_t *client, uint8_t *extracted, size_t size)
 {
-    printf("New message\n");
+    if (((struct zuser *)user)->sock_type == WEBSOCKET) {
+        send_websocket(client, (uint8_t *) "G RECU", 6);
+    }
     if (!is_alphanum(extracted, size))
         return;
     char *tmp = calloc(size + 1, sizeof(*tmp));
     if (tmp == NULL)
         return;
-    printf("=> Receved: %s <=\n", extracted);
     memcpy(tmp, extracted, size);
     parse_websocket_protocol(tmp, (struct zuser *) user, client);
     free(tmp);
@@ -57,7 +58,12 @@ int main(__attribute__((unused)) int ac, char **av)
         free(input);
         input = NULL;
         len = 0;
-        update_manager(nm, (uint8_t *)"\n", 1, 120);
+        if (accept_connections(nm) && PRINT_DEBUG) {
+            fprintf(stderr, "[DEBUG] accepted client\n");
+        }
+        sync_buffers(nm);
+        read_ws_clients_data(nm);
+        extract_to_users(nm, (uint8_t *) "\n", 1);
         if (get_next_client_without_user(nm->client_user_map) != NULL)
             get_next_client_without_user(nm->client_user_map)->user = (void *)&user;
     }

@@ -77,4 +77,5 @@ void header_end(__attribute__((unused)) char *extracted, struct zuser *user,
         send_connection(user, client);
     send_accept(user, client);
     write_to_buffer(&client->cb_out, (uint8_t *) "\r\n", 2);
+    user->sock_type = WEBSOCKET;
 }

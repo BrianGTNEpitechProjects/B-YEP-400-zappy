@@ -13,6 +13,7 @@
 #include <regex.h>
 #include "network_client.h"
 #include "network_user_base.h"
+#include "network_manager.h"
 
 enum socket_type {
     UNDEFINED,
@@ -40,6 +41,10 @@ struct websocket_header_line {
     void (*func)(char *, struct zuser *, regmatch_t *, network_client_t *);
 };
 
+struct websocket_datas {
+
+};
+
 void parse_websocket_protocol(char *, struct zuser *, network_client_t *);
 void header_start(char *, struct zuser *, regmatch_t *, network_client_t *);
 void set_upgrade(char *, struct zuser *, regmatch_t *, network_client_t *);
@@ -48,5 +53,7 @@ void set_key(char *, struct zuser *, regmatch_t *, network_client_t *);
 void header_end(char *, struct zuser *, regmatch_t *, network_client_t *);
 char *base64_encode(unsigned char *, size_t);
 unsigned int get_base64_size(size_t);
+void read_ws_clients_data(network_manager_t *);
+void send_websocket(network_client_t *, uint8_t *, size_t);
 
 #endif //PSU_ZAPPY_2018_ZSERVER_H
