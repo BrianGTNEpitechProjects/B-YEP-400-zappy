@@ -25,9 +25,9 @@ struct websocket_header_line header_lines[] = {
 };
 
 void send_websocket(network_client_t *client, uint8_t *data,
-        size_t length)
+        size_t length, uint8_t opcode)
 {
-    uint8_t to_write = 0b10000001;
+    uint8_t to_write = 0b10000000 + opcode;
 
     write_to_buffer(&client->cb_out, &to_write, 1);
     to_write = length & 0b011111111;
@@ -35,36 +35,44 @@ void send_websocket(network_client_t *client, uint8_t *data,
     write_to_buffer(&client->cb_out, data, length);
 }
 
+static char *send_readed(size_t size, uint8_t *tmp, size_t *bytes_used,
+        uint8_t *masking_key)
+{
+    char *str = calloc(size, sizeof(*str));
+
+    if (str == NULL)
+        return (NULL);
+    for (size_t i = 0; i < size; i++) {
+        char c = tmp[(*bytes_used)++ - 1];
+        if (tmp[1] & 0b10000000)
+            c ^= masking_key[i % 4];
+        str[i] = c;
+    }
+    return (str);
+}
+
 static void read_ws_client_data(struct zuser *user, network_client_t *client)
 {
     uint8_t tmp[C_BUFFER_SIZE];
-    size_t bytes_flushed = flush_buffer(&client->cb_in, tmp);
+    size_t sz_flushed = flush_buffer(&client->cb_in, tmp);
     size_t bytes_used = 0;
-    char *str;
-    size_t payload_size = 0;
-    uint8_t *masking_key;
-    bool need_mask = false;
+    size_t size = 0;
+    char *str = NULL;
+    uint8_t *masking_key = NULL;
 
-    if (bytes_flushed <= 0)
+    if (sz_flushed <= 0 || (tmp[0] & 0b00001111) > 2)
         return;
-    if ((tmp[0] & 0b00001111) != 1)
-        return;
-    need_mask = tmp[1] & 0b10000000;
-    payload_size = tmp[1] & 0b01111111;
-    str = calloc(payload_size, sizeof(*str));
+    size = tmp[1] & 0b01111111;
+    bytes_used = 2;
+    if (tmp[1] & 0b10000000) {
+        masking_key = (uint8_t[]) {tmp[2], tmp[3], tmp[4], tmp[5]};
+        bytes_used = 6;
+    }
+    str = send_readed(size, tmp, &bytes_used, masking_key);
     if (str == NULL)
         return;
-    bytes_used = 2;
-    if (need_mask)
-        masking_key = (uint8_t[]) {tmp[2], tmp[3], tmp[4], tmp[5]};
-    for (size_t i = 0; i < payload_size; i++) {
-        char c = tmp[bytes_used - 1];
-        if (need_mask)
-            c ^= masking_key[i % 4];
-        bytes_used++;
-    }
-    user->on_extracted((user_base_t *) user, client, (uint8_t *) str,
-            payload_size);
+    user->on_extracted((user_base_t *) user, client, (uint8_t *) str, size);
+    write_to_buffer(&client->cb_in, tmp + bytes_used, sz_flushed - bytes_used);
     free(str);
 }
 

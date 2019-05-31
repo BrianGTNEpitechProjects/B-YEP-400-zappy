@@ -54,6 +54,6 @@ void header_end(char *, struct zuser *, regmatch_t *, network_client_t *);
 char *base64_encode(unsigned char *, size_t);
 unsigned int get_base64_size(size_t);
 void read_ws_clients_data(network_manager_t *);
-void send_websocket(network_client_t *, uint8_t *, size_t);
+void send_websocket(network_client_t *, uint8_t *, size_t, uint8_t);
 
 #endif //PSU_ZAPPY_2018_ZSERVER_H

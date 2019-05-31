@@ -25,7 +25,7 @@ bool is_alphanum(uint8_t *val, size_t size)
 void on_extracted(user_base_t *user, network_client_t *client, uint8_t *extracted, size_t size)
 {
     if (((struct zuser *)user)->sock_type == WEBSOCKET) {
-        send_websocket(client, (uint8_t *) "G RECU", 6);
+        send_websocket(client, (uint8_t *) "G RECU", 6, 1);
     }
     if (!is_alphanum(extracted, size))
         return;
