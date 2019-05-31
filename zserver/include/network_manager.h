@@ -21,6 +21,7 @@
 typedef struct network_manager_s network_manager_t;
 
 struct network_manager_s {
+    bool timeout_on_stdin;
     int connexion_socket;
     struct sockaddr_in addr;
     time_t world_event_timeout;

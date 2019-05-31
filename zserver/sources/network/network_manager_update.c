@@ -68,6 +68,8 @@ static void fill_fd_infos(fd_infos_t *infos, network_manager_t *nm)
     infos->biggest_fd = nm->connexion_socket;
     infos->smallest_timestamp = nm->world_event_timeout;
     infos->to_disconnect_if_timeout = NULL;
+    if (nm->timeout_on_stdin)
+        FD_SET(0, &infos->read_set);
     FD_SET(nm->connexion_socket, &infos->read_set);
     fill_fd_infos_users(infos, nm);
     fill_fd_infos_clients(infos, nm);

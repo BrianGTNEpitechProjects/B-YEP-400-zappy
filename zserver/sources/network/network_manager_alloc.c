@@ -51,6 +51,7 @@ network_manager_t *create_manager(int port)
     network_manager_t *nm = malloc(sizeof(*nm));
 
     if (nm != NULL) {
+        nm->timeout_on_stdin = true;
         nm->world_event_timeout = 0;
         nm->default_client_disconnect_timeout = 0;
         nm->connexion_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -61,10 +62,8 @@ network_manager_t *create_manager(int port)
         bind_server(nm, port);
         listen_server(nm);
     }
-    if (nm != NULL &&
-    (nm->connexion_socket == invalid_socket ||
-    nm->client_user_map == NULL ||
-    nm->client_pool == NULL)) {
+    if (nm != NULL && (nm->connexion_socket == invalid_socket ||
+    nm->client_user_map == NULL || nm->client_pool == NULL)) {
         delete_manager(nm);
         nm = NULL;
     }
