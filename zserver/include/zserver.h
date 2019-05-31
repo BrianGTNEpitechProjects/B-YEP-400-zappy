@@ -32,6 +32,7 @@ struct websocket_header {
 struct zuser {
     on_extracted_func on_extracted;
     on_disconnect_func on_disconnect;
+    time_t user_select_timeout;
     enum socket_type sock_type;
     struct websocket_header *websocket_hdr;
 };

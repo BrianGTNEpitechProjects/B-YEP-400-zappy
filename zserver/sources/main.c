@@ -47,21 +47,19 @@ int main(__attribute__((unused)) int ac, char **av)
     network_manager_t *nm = create_manager(atoi(av[1]));
     char *input = NULL;
     size_t len = 0;
-    struct zuser user = {&on_extracted, &on_disconnect, UNDEFINED, NULL};
+    struct zuser user = {&on_extracted, &on_disconnect, 0, UNDEFINED, NULL};
 
     if (nm == NULL) {
         return (84);
     }
+    nm->default_client_disconnect_timeout = 20;
     while (getline(&input, &len, stdin) > 0) {
         if (strcmp("exit\n", input) == 0)
             break;
         free(input);
         input = NULL;
         len = 0;
-        if (accept_connections(nm) && PRINT_DEBUG) {
-            fprintf(stderr, "[DEBUG] accepted client\n");
-        }
-        sync_buffers(nm);
+        update_manager(nm);
         read_ws_clients_data(nm);
         extract_to_users(nm, (uint8_t *) "\n", 1);
         if (get_next_client_without_user(nm->client_user_map) != NULL)
