@@ -103,7 +103,6 @@ void parse_websocket_protocol(char *extracted, struct zuser *user,
     if (user->sock_type == CLASSIC)
         return;
     for (int i = 0; header_lines[i].line_regex != NULL; i++) {
-        //TODO: Norme (Regex manager)
         err = regcomp(&preg, header_lines[i].line_regex, REG_EXTENDED);
         if (!err) {
             match = regexec(&preg, extracted, 10, regmatch, 0);
