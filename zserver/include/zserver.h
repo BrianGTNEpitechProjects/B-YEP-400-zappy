@@ -73,6 +73,9 @@ typedef struct {
 
 #include "zappy_world.h"
 
+#define ZAPPY_DELIM "\n"
+#define ZAPPY_DELIM_SIZE 1
+
 typedef pos_t dim_t;
 typedef struct {
     dim_t map_size;

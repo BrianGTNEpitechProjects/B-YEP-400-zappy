@@ -51,9 +51,14 @@ static zappy_t *create_zappy(args_t *args)
 }
 
 bool run_zappy(zappy_t *zap) {
+    network_server_t *server = get_server(zap->nm, zap->classic_id);
+
+    if (server == NULL)
+        return (false);
     setup_catch_signals();
     while (running()) {
-
+        update_manager(zap->nm);
+        extract_to_users(server, ZAPPY_DELIM, ZAPPY_DELIM_SIZE);
     }
     remove_sig_catch();
     return (true);
