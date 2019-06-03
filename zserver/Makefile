@@ -22,12 +22,15 @@ SRC_NETWORK	=	\
 				network_client_user_map_getters.c \
 				network_client_user_map_manage.c \
 				network_client_user_map_without_users.c \
-				network_manager_accept_connections.c \
 				network_manager_alloc.c \
-				network_manager_disconnect.c \
-				network_manager_extract.c \
-				network_manager_sync_buffer.c \
+				network_manager_servers_handle.c \
 				network_manager_update.c \
+				network_server_accept_connections.c \
+				network_server_alloc.c \
+				network_server_disconnect.c \
+				network_server_extract.c \
+				network_server_sync_buffer.c \
+				network_server_update.c \
 
 SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK))
 
