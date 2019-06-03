@@ -24,7 +24,7 @@ bool is_alphanum(uint8_t *val, size_t size)
 
 void on_extracted(user_base_t *user, network_client_t *client, uint8_t *extracted, size_t size)
 {
-    printf("Extract\n");
+    printf("Extract [%s]\n", extracted);
     if (((struct zuser *)user)->sock_type == WEBSOCKET) {
         send_websocket(client, (uint8_t *) "G RECU", 6, 1);
     }
@@ -58,25 +58,22 @@ int main(__attribute__((unused)) int ac, char **av)
     if (nm == NULL) {
         return (84);
     }
+    nm->timeout_on_stdin = true;
     server->default_client_disconnect_timeout = 20;
-    while (getline(&input, &len, stdin) > 0) {
-
-        printf("start1\n");
-        if (strcmp("exit\n", input) == 0)
+    while (1) {
+        if (update_manager(nm)) {
+            if (getline(&input, &len, stdin) <= 0)
+                break;
+        }
+        if (input && strcmp("exit\n", input) == 0)
             break;
         free(input);
-        printf("start2\n");
         input = NULL;
         len = 0;
-        printf("start3\n");
-        update_manager(nm);
-        printf("start4\n");
-        read_ws_clients_data(server);
-        printf("start5\n");
-        extract_to_users(server, (uint8_t *) "\n", 1);
         if (get_next_client_without_user(server->client_user_map) != NULL)
             get_next_client_without_user(server->client_user_map)->user = (void *)&user;
-        printf("end1\n");
+        read_ws_clients_data(server);
+        extract_to_users(server, (uint8_t *) "\n", 1);
     }
     free(input);
     delete_manager(nm);
