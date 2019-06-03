@@ -14,10 +14,8 @@ void delete_zappy(zappy_t *zappy)
         return;
     if (zappy->nm != NULL)
         delete_manager(zappy->nm);
-    if (zappy->map != NULL)
-        free(zappy->map);
-    if (zappy->players != NULL)
-        free(zappy->players);
+    free(zappy->map);
+    free(zappy->players);
 }
 
 static zappy_t *create_zappy(args_t *args){
@@ -32,7 +30,7 @@ static zappy_t *create_zappy(args_t *args){
         delete_zappy(res);
         return (NULL);
     }
-    res->teams = (team_t *) args->teams;
+    res->teams = (team_t *)args->teams;
     return (res);
 }
 
