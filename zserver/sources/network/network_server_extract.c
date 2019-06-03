@@ -7,13 +7,13 @@
 
 /* Created the 21/05/2019 at 15:07 by jfrabel */
 
-#include "network_manager.h"
+#include "network_server.h"
 
-void extract_to_users(network_manager_t *nm, uint8_t *delim, size_t delim_size)
+void extract_to_users(network_server_t *ns, uint8_t *delim, size_t delim_size)
 {
     network_client_t *client;
     user_base_t *user;
-    map_t curr = nm->client_user_map->client_user_map;
+    map_t curr = ns->client_user_map->client_user_map;
     uint8_t buffer[C_BUFFER_SIZE];
     size_t size;
 
