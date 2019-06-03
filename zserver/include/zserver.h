@@ -78,6 +78,7 @@ typedef struct {
     dim_t map_size;
     tile_t **map;
     network_manager_t *nm;
+    id_t server_id;
     trantorian_t *players;
     team_t *teams;
 } zappy_t;

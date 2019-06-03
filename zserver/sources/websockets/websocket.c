@@ -78,18 +78,18 @@ static void read_ws_client_data(struct zuser *user, network_client_t *client)
 
 void read_ws_clients_data(network_manager_t *nm)
 {
-    client_user_pair_t *pair = NULL;
-    struct zuser *user = NULL;
-    map_t map = nm->client_user_map->client_user_map;
-
-    for (map_t curr = map; curr != NULL; curr = curr->next) {
-        pair = curr->value;
-        if (pair->user == NULL)
-            continue;
-        user = (struct zuser *) pair->user;
-        if (user->sock_type == WEBSOCKET)
-            read_ws_client_data((struct zuser *) pair->user, pair->client);
-    }
+    //client_user_pair_t *pair = NULL;
+    //struct zuser *user = NULL;
+    //map_t map = nm->client_user_map->client_user_map;
+//
+    //for (map_t curr = map; curr != NULL; curr = curr->next) {
+    //    pair = curr->value;
+    //    if (pair->user == NULL)
+    //        continue;
+    //    user = (struct zuser *) pair->user;
+    //    if (user->sock_type == WEBSOCKET)
+    //        read_ws_client_data((struct zuser *) pair->user, pair->client);
+    //}
 }
 
 void parse_websocket_protocol(char *extracted, struct zuser *user,

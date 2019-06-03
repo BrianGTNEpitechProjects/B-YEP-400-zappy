@@ -25,10 +25,13 @@ static zappy_t *create_zappy(args_t *args)
 
     if (res == NULL)
         return (NULL);
-    res->nm = create_manager(args->port);
+    res->nm = create_manager();
     res->map = create_map(args->x, args->y);
     res->players = calloc(sizeof(*res->players), args->tc * args->ppt);
-    if (res->nm == NULL || res->map == NULL || res->players == NULL) {
+    if (res->nm != NULL)
+        res->server_id = add_server(res->nm, args->port);
+    if (res->nm == NULL || res->map == NULL || res->players == NULL ||
+    res->server_id == invalid_id) {
         delete_zappy(res);
         return (NULL);
     }
