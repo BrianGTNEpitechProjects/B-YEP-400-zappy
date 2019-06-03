@@ -10,7 +10,9 @@
 #ifndef PSU_ZAPPY_2018_ZSERVER_H
 #define PSU_ZAPPY_2018_ZSERVER_H
 
+#include <stdio.h>
 #include <regex.h>
+#include "common.h"
 #include "network_client.h"
 #include "network_user_base.h"
 #include "network_manager.h"
@@ -56,5 +58,25 @@ char *base64_encode(unsigned char *, size_t);
 unsigned int get_base64_size(size_t);
 void read_ws_clients_data(network_manager_t *);
 void send_websocket(network_client_t *, uint8_t *, size_t, uint8_t);
+
+
+typedef struct {
+    int port;
+    int x;
+    int y;
+    int ppt;
+    int freq;
+    char **teams;
+} args_t;
+
+/* utils.c */
+int handle_error_return(char *s, int ret);
+char *concat(char *str1, char *str2, bool free1, bool free2);
+
+/* zappy.c */
+bool zappy(int ac, char **av);
+
+/*  arguments.c */
+bool parse_args(args_t *arguments, int ac, char **av);
 
 #endif //PSU_ZAPPY_2018_ZSERVER_H

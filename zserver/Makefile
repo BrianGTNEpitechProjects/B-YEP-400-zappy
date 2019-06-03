@@ -9,6 +9,9 @@ SRC_DIR		=	$(realpath sources)
 
 SRC_FILES	=	\
 				main.c \
+				utils.c \
+				gameplay/zappy.c \
+				gameplay/arguments.c \
 				websockets/websocket.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \
@@ -50,7 +53,7 @@ LIB_C_BUFFER	=	$(addprefix $(LIB_C_BUFFER_PATH)/, libcircular_buffer.a)
 
 INCLUDE		=	-iquote $(realpath include) -iquote $(realpath lib/containers/include) -iquote $(realpath lib/circular_buffer/include)
 
-CFLAGS		=	-W -Wall -Wextra -Werror -Wno-unknown-pragmas -Wshadow
+CFLAGS		=	-W -Wall -Wextra -Wno-unknown-pragmas -Wshadow
 CFLAGS		+=	$(INCLUDE)
 
 LDFLAGS		=	-L $(LIB_CONTAINER_PATH) -lcontainers -L $(LIB_C_BUFFER_PATH) -lcircular_buffer -lcrypto
