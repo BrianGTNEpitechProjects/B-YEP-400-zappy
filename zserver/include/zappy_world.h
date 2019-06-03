@@ -38,6 +38,7 @@ typedef struct {
 } team_t;
 
 typedef struct {
+    user_base_t base;
     team_t team;
     unsigned int life_unit;
     unsigned int lvl;
