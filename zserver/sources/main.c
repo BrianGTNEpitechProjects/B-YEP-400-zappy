@@ -24,7 +24,6 @@ bool is_alphanum(uint8_t *val, size_t size)
 
 void on_extracted(user_base_t *user, network_client_t *client, uint8_t *extracted, size_t size)
 {
-    printf("Extract [%s]\n", extracted);
     if (((struct zuser *)user)->sock_type == WEBSOCKET) {
         send_websocket(client, (uint8_t *) "G RECU", 6, 1);
     }
@@ -36,7 +35,6 @@ void on_extracted(user_base_t *user, network_client_t *client, uint8_t *extracte
     memcpy(tmp, extracted, size);
     parse_websocket_protocol(tmp, (struct zuser *) user, client);
     free(tmp);
-    printf("End extract\n");
 }
 
 void on_disconnect(user_base_t *user, network_client_t *client)

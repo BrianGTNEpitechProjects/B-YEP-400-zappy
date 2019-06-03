@@ -83,7 +83,6 @@ void read_ws_clients_data(network_server_t *server)
     map_t map = server->client_user_map->client_user_map;
 
     for (map_t curr = map; curr != NULL; curr = curr->next) {
-        printf("Boucle1\n");
         pair = curr->value;
         if (pair->user == NULL)
             continue;
