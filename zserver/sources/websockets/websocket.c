@@ -76,13 +76,14 @@ static void read_ws_client_data(struct zuser *user, network_client_t *client)
     free(str);
 }
 
-void read_ws_clients_data(network_manager_t *nm)
+void read_ws_clients_data(network_server_t *server)
 {
     client_user_pair_t *pair = NULL;
     struct zuser *user = NULL;
-    map_t map = nm->client_user_map->client_user_map;
+    map_t map = server->client_user_map->client_user_map;
 
     for (map_t curr = map; curr != NULL; curr = curr->next) {
+        printf("Boucle1\n");
         pair = curr->value;
         if (pair->user == NULL)
             continue;
