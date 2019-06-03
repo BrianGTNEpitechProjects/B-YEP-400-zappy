@@ -76,6 +76,9 @@ char *concat(char *str1, char *str2, bool free1, bool free2);
 /* zappy.c */
 bool zappy(int ac, char **av);
 
+/*  map.c   */
+static tile_t *create_map(int x, int y);
+
 /*  arguments.c */
 bool parse_args(args_t *arguments, int ac, char **av);
 
