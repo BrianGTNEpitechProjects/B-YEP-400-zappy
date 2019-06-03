@@ -8,7 +8,7 @@
 /* Created the 21/05/2019 at 13:46 by jfrabel */
 
 #include <stdio.h>
-#include "network_manager.h"
+#include "network_server.h"
 
 static void sync_client(network_client_t *client, fd_set *rfds, fd_set *wfds)
 {
@@ -34,9 +34,9 @@ static void sync_batch(network_client_pool_batch_t *batch,fd_infos_t *infos)
     }
 }
 
-void sync_buffers(network_manager_t *nm, fd_infos_t *infos)
+void sync_buffers(network_server_t *ns, fd_infos_t *infos)
 {
-    for (list_t curr = nm->client_pool->batches_list; curr; curr = curr->next) {
+    for (list_t curr = ns->client_pool->batches_list; curr; curr = curr->next) {
         sync_batch(curr->value, infos);
     }
 }

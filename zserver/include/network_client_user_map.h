@@ -14,7 +14,7 @@
 #include "network_client.h"
 #include "map.h"
 
-struct network_manager_s;
+struct network_server_s;
 
 typedef struct network_client_user_map_s {
     map_t client_user_map;

@@ -12,7 +12,7 @@
 #include <string.h>
 #include "network_client_pool.h"
 
-network_client_pool_t *create_new_pool()
+network_client_pool_t *create_new_pool(void)
 {
     network_client_pool_t *new_pool = malloc(sizeof(*new_pool));
 

@@ -30,7 +30,7 @@ typedef struct network_client_pool_s {
 size_t get_nb_slot_taken(const network_client_pool_t *pool);
 size_t get_nb_slot_empty(const network_client_pool_t *pool);
 
-network_client_pool_t *create_new_pool();
+network_client_pool_t *create_new_pool(void);
 void delete_pool(network_client_pool_t *pool);
 void delete_batch(network_client_pool_batch_t *batch);
 
