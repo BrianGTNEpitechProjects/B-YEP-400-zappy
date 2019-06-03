@@ -73,7 +73,9 @@ typedef struct {
 
 #include "zappy_world.h"
 
+typedef pos_t dim_t;
 typedef struct {
+    dim_t map_size;
     tile_t **map;
     network_manager_t *nm;
     trantorian_t *players;
