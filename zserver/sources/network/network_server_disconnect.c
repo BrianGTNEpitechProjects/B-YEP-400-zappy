@@ -48,3 +48,19 @@ void disconnect_user(network_server_t *ns, user_base_t *user)
     client = get_client(ns->client_user_map, user);
     disconnect(ns, client, user);
 }
+
+void update_disconnected(network_server_t *ns)
+{
+    map_t curr = ns->client_user_map->client_user_map;
+    client_user_pair_t *pair;
+
+    while (curr != EMPTY_MAP) {
+        pair = curr->value;
+        if (pair->client->lost_connection) {
+            curr = curr->next;
+            disconnect_client(ns, pair->client);
+        } else {
+            curr = curr->next;
+        }
+    }
+}

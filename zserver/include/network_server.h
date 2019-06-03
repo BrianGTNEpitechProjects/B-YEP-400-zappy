@@ -36,6 +36,7 @@ void disconnect_user(network_server_t *ns, user_base_t *user);
 
 int accept_connections(network_server_t *ns, fd_infos_t *infos);
 void sync_buffers(network_server_t *ns, fd_infos_t *infos);
+void update_disconnected(network_server_t *ns);
 void update_server(network_server_t *ns, fd_infos_t *infos);
 
 void extract_to_users(network_server_t *ns, uint8_t *delim, size_t delim_size);

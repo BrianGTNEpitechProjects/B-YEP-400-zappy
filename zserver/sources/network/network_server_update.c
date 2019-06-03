@@ -13,4 +13,5 @@ void update_server(network_server_t *ns, fd_infos_t *infos)
 {
     accept_connections(ns, infos);
     sync_buffers(ns, infos);
+    update_disconnected(ns);
 }
