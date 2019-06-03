@@ -68,7 +68,17 @@ typedef struct {
     int ppt;
     int freq;
     char **teams;
+    int tc;
 } args_t;
+
+#include "zappy_world.h"
+
+typedef struct {
+    tile_t *map;
+    network_manager_t *nm;
+    trantorian_t *players;
+    team_t *teams;
+} zappy_t;
 
 /* utils.c */
 int handle_error_return(char *s, int ret);

@@ -10,15 +10,14 @@
 #include <limits.h>
 #include "zserver.h"
 
-static char **extract_teams(int index, char **av)
+static char **extract_teams(int index, char **av, int *team_count)
 {
     char **teams = NULL;
-    int team_count = 0;
     int curr_team = 0;
 
     for (int i = index; av[i] && av[i][0] != '-'; i++)
-        team_count++;
-    teams = calloc(team_count + 1, sizeof(*teams));
+        (*team_count)++;
+    teams = calloc(*team_count + 1, sizeof(*teams));
     if (teams == NULL) {
         handle_error_return("calloc: %s\n", 0);
         return (NULL);
@@ -57,7 +56,7 @@ bool parse_args(args_t *arguments, int ac, char **av)
             break;
         case 'f': ret = ret || !extract_int(&arguments->freq, optarg);
             break;
-        case 'n': arguments->teams = extract_teams(optind, av);
+        case 'n': arguments->teams = extract_teams(optind, av, &arguments->tc);
             ret = ret || (arguments->teams == NULL);
             break;
         default: break;
