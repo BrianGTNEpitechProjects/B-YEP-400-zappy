@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2018
 ** PSU_zappy_2018
 ** File description:
-** No file there , just an Epitech header example
+** zappy_world.h
 */
 
 #ifndef PSU_ZAPPY_2018_ZAPPY_WORLD_H
@@ -46,8 +46,13 @@ typedef struct {
     unsigned int inventory[TOT_ITEM_NB];
 } trantorian_t;
 
-typedef struct {
+
+typedef struct tile_s {
     unsigned int content[TOT_ITEM_NB];
+    struct title_s *up;
+    struct title_s *down;
+    struct title_s *left;
+    struct title_s *right;
 } tile_t;
 
 #endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H
