@@ -44,5 +44,6 @@ bool zappy(int ac, char **av)
     zap = create_zappy(&arguments);
     if (zap == NULL)
         return (false);
+    delete_zappy(zap);
     return (true);
 }

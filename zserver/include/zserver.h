@@ -74,7 +74,7 @@ typedef struct {
 #include "zappy_world.h"
 
 typedef struct {
-    tile_t *map;
+    tile_t **map;
     network_manager_t *nm;
     trantorian_t *players;
     team_t *teams;
@@ -88,7 +88,7 @@ char *concat(char *str1, char *str2, bool free1, bool free2);
 bool zappy(int ac, char **av);
 
 /*  map.c   */
-tile_t *create_map(int x, int y);
+tile_t **create_map(int x, int y);
 
 /*  arguments.c */
 bool parse_args(args_t *arguments, int ac, char **av);
