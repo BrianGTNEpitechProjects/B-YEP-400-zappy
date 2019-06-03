@@ -78,7 +78,8 @@ typedef struct {
     dim_t map_size;
     tile_t **map;
     network_manager_t *nm;
-    id_t server_id;
+    id_t classic_id;
+    id_t websocket_id;
     trantorian_t *players;
     team_t *teams;
 } zappy_t;
@@ -95,5 +96,10 @@ tile_t **create_map(int x, int y);
 
 /*  arguments.c */
 bool parse_args(args_t *arguments, int ac, char **av);
+
+/*  server_running.c    */
+bool setup_catch_signals(void);
+bool remove_sig_catch(void);
+bool running(void);
 
 #endif //PSU_ZAPPY_2018_ZSERVER_H

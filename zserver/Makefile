@@ -12,6 +12,7 @@ SRC_FILES	=	\
 				utils.c \
 				gameplay/zappy.c \
 				gameplay/map.c \
+				gameplay/server_running.c \
 				gameplay/arguments.c \
 				websockets/websocket.c \
 				websockets/websocket_header_end.c \

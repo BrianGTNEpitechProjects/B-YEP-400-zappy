@@ -19,6 +19,14 @@ void delete_zappy(zappy_t *zappy)
     free(zappy);
 }
 
+static bool init_server(zappy_t *res, int port) {
+    res->classic_id = add_server(res->nm, port);
+    if (res->classic_id == invalid_id)
+        return (false);
+    //TODO Websocket server
+    return (true);
+}
+
 static zappy_t *create_zappy(args_t *args)
 {
     zappy_t *res = calloc(sizeof(*res), 1);
@@ -28,10 +36,11 @@ static zappy_t *create_zappy(args_t *args)
     res->nm = create_manager();
     res->map = create_map(args->x, args->y);
     res->players = calloc(sizeof(*res->players), args->tc * args->ppt);
-    if (res->nm != NULL)
-        res->server_id = add_server(res->nm, args->port);
-    if (res->nm == NULL || res->map == NULL || res->players == NULL ||
-    res->server_id == invalid_id) {
+    if (res->nm == NULL || res->map == NULL || res->players == NULL) {
+        delete_zappy(res);
+        return (NULL);
+    }
+    if (init_server(res, args->port) == false) {
         delete_zappy(res);
         return (NULL);
     }
@@ -41,17 +50,30 @@ static zappy_t *create_zappy(args_t *args)
     return (res);
 }
 
+bool run_zappy(zappy_t *zap) {
+    setup_catch_signals();
+    while (running()) {
+
+    }
+    remove_sig_catch();
+    return (true);
+}
+
 bool zappy(int ac, char **av)
 {
     args_t arguments = {0};
     zappy_t *zap = NULL;
+    bool ret = false;
 
     if (parse_args(&arguments, ac, av) == false)
-        return (false);
+        return (ret);
     zap = create_zappy(&arguments);
-    if (zap == NULL)
-        return (false);
+    if (zap == NULL) {
+        free(arguments.teams);
+        return (ret);
+    }
+    ret = run_zappy(zap);
     delete_zappy(zap);
     free(arguments.teams);
-    return (true);
+    return (ret);
 }
