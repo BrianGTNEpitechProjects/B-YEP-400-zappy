@@ -46,13 +46,13 @@ typedef struct {
     unsigned int inventory[TOT_ITEM_NB];
 } trantorian_t;
 
-
-typedef struct tile_s {
+typedef struct tile_s tile_t;
+struct tile_s {
     unsigned int content[TOT_ITEM_NB];
-    struct title_s *up;
-    struct title_s *down;
-    struct title_s *left;
-    struct title_s *right;
-} tile_t;
+    tile_t *up;
+    tile_t *down;
+    tile_t *left;
+    tile_t *right;
+};
 
 #endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H
