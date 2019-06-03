@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(PSU_zappy_2018)
 
-SET(CMAKE_C_FLAGS "-W -Wall -Wextra -Werror -Wunused")
+SET(CMAKE_C_FLAGS "-W -Wall -Wextra -Wunused")
 
 set(HEADER_FILES_PATH ${PROJECT_SOURCE_DIR}/include)
 set(SOURCE_FILES_PATH ${PROJECT_SOURCE_DIR}/sources)
