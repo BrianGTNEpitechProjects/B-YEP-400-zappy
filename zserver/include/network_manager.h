@@ -5,48 +5,32 @@
 ** network_manager.h
 */
 
-/* Created the 15/05/2019 at 16:30 by jfrabel */
+/* Created the 03/06/2019 at 21:12 by jfrabel */
 
 #ifndef PSU_ZAPPY_2018_NETWORK_MANAGER_H
 #define PSU_ZAPPY_2018_NETWORK_MANAGER_H
 
-#define MAX_PENDING_CONNECTIONS 10
+#include "generic_list.h"
+#include "network_server.h"
 
-#define PRINT_DEBUG 1
+typedef unsigned int id_t;
 
-#include "network_user_base.h"
-#include "network_client_pool.h"
-#include "network_client_user_map.h"
+extern const id_t invalid_id;
 
-typedef struct network_manager_s network_manager_t;
-
-struct network_manager_s {
+typedef struct network_manager_s {
+    id_t biggest_id;
+    int nb_servers;
+    list_t servers;
     bool timeout_on_stdin;
-    int connexion_socket;
-    struct sockaddr_in addr;
-    time_t world_event_timeout;
-    time_t default_client_disconnect_timeout;
-    network_client_pool_t *client_pool;
-    network_client_user_map_t *client_user_map;
-};
+} network_manager_t;
 
-typedef struct fd_infos_s {
-    fd_set read_set;
-    fd_set write_set;
-    int biggest_fd;
-    time_t smallest_timestamp;
-    network_client_t *to_disconnect_if_timeout;
-} fd_infos_t;
-
-void disconnect_client(network_manager_t *nm, network_client_t *client);
-void disconnect_user(network_manager_t *nm, user_base_t *user);
-
-int accept_connections(network_manager_t *nm, fd_infos_t *infos);
-void sync_buffers(network_manager_t *nm, fd_infos_t *infos);
-void extract_to_users(network_manager_t *nm, uint8_t *delim, size_t delim_size);
-void update_manager(network_manager_t *nm);
-
-network_manager_t *create_manager(int port);
+network_manager_t *create_manager(void);
 void delete_manager(network_manager_t *nm);
+
+bool update_manager(network_manager_t *nm);
+
+id_t add_server(network_manager_t *nm, int port);
+void remove_server(network_manager_t *nm, id_t server_id);
+network_server_t *get_server(network_manager_t *nm, id_t server_id);
 
 #endif //PSU_ZAPPY_2018_NETWORK_MANAGER_H
