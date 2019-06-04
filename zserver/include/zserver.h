@@ -16,7 +16,7 @@
 #include "network_client.h"
 #include "network_user_base.h"
 #include "network_manager.h"
-#include "zappy_world.h"
+#include "zworld.h"
 
 enum socket_type {
     UNDEFINED,
@@ -71,31 +71,9 @@ typedef struct {
     int tc;
 } args_t;
 
-#include "zappy_world.h"
-
-#define ZAPPY_DELIM "\n"
-#define ZAPPY_DELIM_SIZE 1
-
-typedef pos_t dim_t;
-typedef struct {
-    dim_t map_size;
-    tile_t **map;
-    network_manager_t *nm;
-    id_t classic_id;
-    id_t websocket_id;
-    trantorian_t *players;
-    team_t *teams;
-} zappy_t;
-
 /* utils.c */
 int handle_error_return(char *s, int ret);
 char *concat(char *str1, char *str2, bool free1, bool free2);
-
-/* zappy.c */
-bool zappy(int ac, char **av);
-
-/*  map.c   */
-tile_t **create_map(int x, int y);
 
 /*  arguments.c */
 bool parse_args(args_t *arguments, int ac, char **av);

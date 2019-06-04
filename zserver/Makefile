@@ -11,6 +11,7 @@ SRC_FILES	=	\
 				main.c \
 				utils.c \
 				gameplay/zappy.c \
+				gameplay/zappy_run.c \
 				gameplay/map.c \
 				gameplay/server_running.c \
 				gameplay/arguments.c \
@@ -21,6 +22,11 @@ SRC_FILES	=	\
 				websockets/websocket_set_key.c \
 				websockets/websocket_set_upgrade.c \
 				base64.c
+
+COMMAND_DIR		=	$(realpath sources/gameplay/commands)
+
+COMMAND_FILES	=	\
+					forward.c\
 
 NETWORK_DIR	=	$(realpath sources/network)
 
@@ -44,7 +50,7 @@ SRC_NETWORK	=	\
 				network_server_sync_buffer.c \
 				network_server_update.c \
 
-SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK))
+SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES))
 
 OBJ			=	$(SRC:%.c=%.o)
 

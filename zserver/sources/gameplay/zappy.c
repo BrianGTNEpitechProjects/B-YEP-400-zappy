@@ -7,6 +7,23 @@
 
 #include <stdlib.h>
 #include "zserver.h"
+#include "zcommands.h"
+
+const command_info_t commands[] = {
+    {.code = EMPTY, .command = NULL, .callback = NULL},
+    {.code = FORWARD, .command = "Forward", .callback = &forward},
+    {.code = RIGHT, .command = "Right", .callback = NULL},
+    {.code = LEFT, .command = "Left", .callback = NULL},
+    {.code = LOOK, .command = "Look", .callback = NULL},
+    {.code = INVENTORY, .command = "Inventory", .callback = NULL},
+    {.code = BROADCAST, .command = "Broadcast", .callback = NULL},
+    {.code = CONNECT_NBR, .command = "Connect_nbr", .callback = NULL},
+    {.code = FORK, .command = "Fork", .callback = NULL},
+    {.code = EJECT, .command = "Eject", .callback = NULL},
+    {.code = TAKE_OBJECT, .command = "Take", .callback = NULL},
+    {.code = SET_OBJECT, .command = "Set", .callback = NULL},
+    {.code = INCANTATION, .command = "Incantation", .callback = NULL},
+};
 
 void delete_zappy(zappy_t *zappy)
 {
@@ -19,7 +36,8 @@ void delete_zappy(zappy_t *zappy)
     free(zappy);
 }
 
-static bool init_server(zappy_t *res, int port) {
+static bool init_server(zappy_t *res, int port)
+{
     res->classic_id = add_server(res->nm, port);
     if (res->classic_id == invalid_id)
         return (false);
@@ -34,7 +52,9 @@ void on_disconnect(user_base_t *base, network_client_t *client)
 
 void on_extract(user_base_t *base, network_client_t *client, uint8_t *data, size_t size)
 {
-    printf("%.*s\n", (int) size, data);
+#ifdef DEBUG_PRINT_RECV
+    printf("%.*s\n", (int)size, data);
+#endif
 }
 
 static zappy_t *create_zappy(args_t *args)
@@ -62,27 +82,6 @@ static zappy_t *create_zappy(args_t *args)
     res->map_size.x = args->x;
     res->map_size.y = args->y;
     return (res);
-}
-
-#include <string.h>
-bool run_zappy(zappy_t *zap) {
-    network_server_t *server = get_server(zap->nm, zap->classic_id);
-    client_user_pair_t *client = NULL;
-
-    if (server == NULL)
-        return (false);
-    setup_catch_signals();
-    while (running()) {
-        update_manager(zap->nm);
-        extract_to_users(server, ZAPPY_DELIM, ZAPPY_DELIM_SIZE);
-        while (get_next_client_without_user(server->client_user_map) != NULL) {
-            client = get_next_client_without_user(server->client_user_map);
-            client->user = &zap->players[0].base;
-            write_to_buffer(&client->client->cb_out, (uint8_t *)"WELCOME\n", strlen("WELCOME\n"));
-        }
-    }
-    remove_sig_catch();
-    return (true);
 }
 
 bool zappy(int ac, char **av)
