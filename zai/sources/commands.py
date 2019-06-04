@@ -2,7 +2,8 @@
 
 import sys
 import os
-from main import connect_clients, player
+from main import connect_clients
+from player import player
 
 
 def forward(buffer):

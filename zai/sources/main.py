@@ -5,7 +5,6 @@ import socket
 import select
 from commands import *
 from globals import *
-from player import player
 
 
 def static_vars(**kwargs):
