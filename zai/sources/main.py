@@ -52,10 +52,6 @@ def run(client_socket):
     pending_commands = []
     fds = [client_socket]
 
-    commands.append("Inventory\n")
-    commands.append("Set food\n")
-    player.throw("food")
-    commands.append("Inventory\n")
     while 1:
         infds, outfds, errfds = select.select(fds, fds, [], 0.1)
         if len(infds) != 0:
@@ -67,6 +63,7 @@ def run(client_socket):
             client_socket.send(("".join(commands)).encode("Utf8"))
             pending_commands = commands.copy()
             commands.clear()
+        # TODO implement AI here
 
 
 def init_client_connection(client_socket):
