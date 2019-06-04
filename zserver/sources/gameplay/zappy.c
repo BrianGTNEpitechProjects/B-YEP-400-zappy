@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include <string.h>
 #include "zserver.h"
 #include "zcommands.h"
 
@@ -50,11 +51,33 @@ void on_disconnect(user_base_t *base, network_client_t *client)
     puts("client disconnect");
 }
 
-void on_extract(user_base_t *base, network_client_t *client, uint8_t *data, size_t size)
+static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
 {
+    int ind;
+
+    for (int i = 0; i <= 10; i++) {
+        ind = (player->command_ind + i) % COMMAND_QUEUE_LEN;
+        if (player->queue[ind].code == EMPTY) {
+            player->queue[ind].code = id;
+            strcpy(player->queue[ind].arg, arg);
+            return (i);
+        }
+    }
+    return (-1);
+}
+
+void on_extract(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
+{
+    int i;
+
 #ifdef DEBUG_PRINT_RECV
-    printf("%.*s\n", (int)size, data);
+    printf("%.*s\n", (int)sz, data);
 #endif
+    for (i = 1; i <= 12; i++)
+        if (strncmp(data, commands[i].command, strcspn(data, " \n")) == 0)
+            break;
+    if (i < 13 && emplace_command((trantorian_t *)b, EMPTY, "") < 0)
+        write_to_buffer(&c->cb_out, (const uint8_t *)"ko\n", 3);
 }
 
 static zappy_t *create_zappy(args_t *args)

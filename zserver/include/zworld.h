@@ -8,10 +8,13 @@
 #ifndef PSU_ZAPPY_2018_ZAPPY_WORLD_H
 #define PSU_ZAPPY_2018_ZAPPY_WORLD_H
 
+#include "network_manager.h"
 #include "zcommands.h"
 
 #define ZAPPY_DELIM "\n"
 #define ZAPPY_DELIM_SIZE 1
+
+#define COMMAND_QUEUE_LEN (10)
 
 typedef enum {
     NORTH,
@@ -47,7 +50,8 @@ typedef struct tile_s tile_t;
 
 struct trantorian_s {
     user_base_t base;
-    command_t queue[10];
+    unsigned char command_ind;
+    command_t queue[COMMAND_QUEUE_LEN];
     team_t team;
     unsigned int life_unit;
     unsigned int lvl;
