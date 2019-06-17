@@ -8,24 +8,43 @@
 #include <string.h>
 #include "zserver.h"
 
-int count_unused_slot(zappy_t *zap, char *team_name)
+trantorian_t *get_egg_hatched(char *team, zappy_t *zap)
 {
-    int tot = 0;
-    int if_no_eggs = zap->default_slots_teams;
-
-    for (trantorian_t *node = zap->players; node; node = node->next) {
-        if (team_name == NULL || strcmp(node->team.name, team_name) == 0) {
-            tot += (node->base.on_disconnect == NULL);
-            if_no_eggs -= (node->base.on_disconnect == NULL);
-        }
+    for (trantorian_t *curr = zap->players; curr != NULL; curr = curr->next) {
+        if (curr->base.on_extracted == NULL && curr->team.name == team)
+            return (curr);
     }
-    return (tot < zap->default_slots_teams ? if_no_eggs : tot);
+    return (NULL);
+}
+
+void replace_egg(trantorian_t *trantorian, trantorian_t *egg)
+{
+    network_server_t *server = get_server(trantorian->zappy->nm, trantorian->zappy->classic_id);
+    client_user_pair_t *pair = NULL;
+
+    for (map_t curr = server->client_user_map->client_user_map; curr != NULL; curr = curr->next) {
+        if (((client_user_pair_t *)curr->value)->user == &trantorian->base)
+            pair = (client_user_pair_t *)curr->value;
+    }
+    if (pair == NULL)
+        return;
+    pair->user = &egg->base;
 }
 
 void join_team(char *name, trantorian_t *trantorian)
 {
+    trantorian_t *egg = NULL;
+
     if (count_unused_slot(trantorian->zappy, name) > 0) {
+        if (count_players_team(trantorian->zappy, name) < \
+trantorian->zappy->default_slots_teams)
         trantorian->team.name = name;
+        else {
+            egg = get_egg_hatched(name, trantorian->zappy);
+            if (egg == NULL)
+                return;
+            replace_egg(trantorian, egg);
+        }
     }
 }
 

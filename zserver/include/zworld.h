@@ -110,6 +110,13 @@ bool zappy(int ac, char **av);
 /*  map.c   */
 tile_t **create_map(int x, int y);
 
+/* new.c */
+trantorian_t *accept_player(zappy_t *zap);
+
+/* teams.c */
+int count_unused_slot(zappy_t *zap, char *team_name);
+int count_players_team(zappy_t *zap, char *team_name);
+
 /* neighbour.c */
 void trantorian_place_on_tile(trantorian_t *trantorian, tile_t *tile);
 int tile_population_size(tile_t *tile);

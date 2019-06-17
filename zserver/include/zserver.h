@@ -81,13 +81,8 @@ bool setup_catch_signals(void);
 bool remove_sig_catch(void);
 bool running(void);
 
-/* new.c */
-trantorian_t *accept_player(zappy_t *zap);
-
 /* connection.c */
 void response_success_connection(trantorian_t *tranto, network_client_t *nc);
 void add_user_to_team(client_user_pair_t *pair, char *team);
-int count_unused_slot(zappy_t *zap, char *team_name);
-
 
 #endif //PSU_ZAPPY_2018_ZSERVER_H
