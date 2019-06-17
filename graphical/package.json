@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@types/three": "^0.103.2",
-    "three": "^0.105.2"
+    "three": "^0.105.2",
+    "three-gltf-loader": "^1.105.0",
+    "three-orbitcontrols-ts": "^0.1.2"
   }
 }
