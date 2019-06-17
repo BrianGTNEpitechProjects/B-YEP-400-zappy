@@ -16,6 +16,7 @@ SRC_FILES	=	\
 				gameplay/map.c \
 				gameplay/server_running.c \
 				gameplay/arguments.c \
+				gameplay/process_command.c \
 				gameplay/trantorian/move.c \
 				gameplay/trantorian/neighbour.c \
 				gameplay/utils/cardinal_utils.c \

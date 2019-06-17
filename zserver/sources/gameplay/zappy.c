@@ -20,78 +20,91 @@ const command_info_t commands[] = {
         .code = EMPTY,
         .command = NULL,
         .charge_time = 0,
+        .is_valid = &always_true,
         .callback = NULL
     },
     {
         .code = FORWARD,
         .command = "Forward",
         .charge_time = 7,
+        .is_valid = &always_true,
         .callback = &forward
     },
     {
         .code = RIGHT,
         .command = "Right",
         .charge_time = 7,
+        .is_valid = &always_true,
         .callback = &right
     },
     {
         .code = LEFT,
         .command = "Left",
         .charge_time = 7,
+        .is_valid = &always_true,
         .callback = &left
     },
     {
         .code = LOOK,
         .command = "Look",
         .charge_time = 7,
+        .is_valid = &always_true,
         .callback = &look
     },
     {
         .code = INVENTORY,
         .command = "Inventory",
         .charge_time = 1,
+        .is_valid = &always_true,
         .callback = NULL
     },
     {
         .code = BROADCAST,
         .command = "Broadcast",
         .charge_time = 7,
+        .is_valid = &always_true,
         .callback = NULL
     },
     {
         .code = CONNECT_NBR,
         .command = "Connect_nbr",
         .charge_time = 0,
+        .is_valid = &always_true,
         .callback = NULL
     },
     {
         .code = FORK,
         .command = "Fork",
         .charge_time = 42,
+        .is_valid = &always_true,
         .callback = NULL
     },
     {
         .code = EJECT,
         .command = "Eject",
         .charge_time = 7,
+        .is_valid = &always_true,
         .callback = &eject
     },
     {
         .code = TAKE_OBJECT,
         .command = "Take",
         .charge_time = 7,
+        .is_valid = &always_true,
         .callback = NULL
     },
     {
         .code = SET_OBJECT,
         .command = "Set",
         .charge_time = 7,
+        .is_valid = &always_true,
         .callback = NULL
     },
     {
         .code = INCANTATION,
         .command = "Incantation",
         .charge_time = 300,
+        .is_valid = &always_true,
         .callback = NULL
     }
 };
