@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(PSU_zappy_2018)
 
-SET(CMAKE_C_FLAGS "-W -Wall -Wextra -Werror -Wunused")
+SET(CMAKE_C_FLAGS "-W -Wall -Wextra -Wunused")
 
 set(HEADER_FILES_PATH ${PROJECT_SOURCE_DIR}/include)
 set(SOURCE_FILES_PATH ${PROJECT_SOURCE_DIR}/sources)
@@ -29,7 +29,8 @@ file(
 
 add_executable(zappy_server ${SOURCE_FILES} ${HEADER_FILES})
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -iquote ${HEADER_FILES_PATH} -iquote ${LIB_CIRCULAR_BUFFER_PATH}/include -iquote ${LIB_CONTAINERS_PATH}/include")
-target_link_libraries(zappy_server circular_buffer containers crypto)
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D DEBUG_PRINT_RECV")
+target_link_libraries(zappy_server circular_buffer containers crypto m)
 
 file(
         GLOB_RECURSE
