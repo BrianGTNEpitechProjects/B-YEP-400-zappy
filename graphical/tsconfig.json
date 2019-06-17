@@ -3,9 +3,8 @@
       "outDir": "./dist/",
       "sourceMap": true,
       "noImplicitAny": true,
-      "module": "es6",
+      "module": "commonjs",
       "target": "es5",
-      "jsx": "react",
-      "allowJs": false
+      "allowJs": false,
     }
   }
