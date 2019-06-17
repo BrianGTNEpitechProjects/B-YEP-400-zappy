@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2018
 ** PSU_zappy_2018
 ** File description:
-** No file there , just an Epitech header example
+** Zappy
 */
 
 #include <stdlib.h>
@@ -26,8 +26,10 @@ static void process_welcome_procedure(zappy_t *zap, network_server_t *server)
         client = get_next_client_without_user(server->client_user_map);
         if (!client)
             return;
-        client->user = (user_base_t *)&zap->players[0];
-        write_to_client(client, (uint8_t *)WELCOME_MSG, WELCOME_MSG_LEN);
+        client->user = (user_base_t *) accept_player(zap);
+        if (client->user == NULL)
+            return;
+                write_to_client(client, (uint8_t *)WELCOME_MSG, WELCOME_MSG_LEN);
     } while (1);
 }
 
@@ -45,7 +47,7 @@ static void process_command_on_users(zappy_t *z, network_client_user_map_t *m)
         command->remaining_time -= time.tv_sec * z->time_scale;
         command->remaining_time -= time.tv_nsec * \
 ((float)z->time_scale) / pow(10, 9);
-        if (command->remaining_time < 0) {
+        if (command->remaining_time < 0 && command->code != EMPTY) {
             commands[command->code].callback(node->value, command->arg);
             ++trantorian->command_ind;
             command->code = EMPTY;

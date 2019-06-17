@@ -71,11 +71,13 @@ typedef struct {
     id_t websocket_id;
     trantorian_t *players;
     team_t *teams;
-    int time_scale
+    int default_slots_teams;
+    int time_scale;
 } zappy_t;
 
 struct trantorian_s {
     user_base_t base;
+    bool is_egg;
     zappy_t *zappy;
     unsigned char command_ind;
     command_t queue[COMMAND_QUEUE_LEN];

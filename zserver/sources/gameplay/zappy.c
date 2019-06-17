@@ -135,15 +135,15 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
     return (-1);
 }
 
-void on_extract(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
+void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
 {
     int i;
-    size_t separator_ind = strcspn(data, " \n");
+    size_t separator_ind = strcspn((char *) data, " \n");
     char *arg;
     client_user_pair_t pair = {c, b};
 
 #ifdef DEBUG_PRINT_RECV
-    printf("RECEIVED: %.*s\n", (int)sz, data);
+    printf("RECEIVED: %.*s\n", (int)sz - 1, data);
 #endif
     for (i = 1; i <= COMMAND_NB; i++)
         if (strncmp(data, commands[i].command, separator_ind) == 0)
@@ -157,6 +157,19 @@ void on_extract(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
         write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
 }
 
+void on_extract_not_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
+{
+    client_user_pair_t pair = {c, b};
+
+    add_user_to_team(&pair, data, sz);
+    if (((trantorian_t *)b)->team.name == NULL) {
+        write_to_buffer(&pair.client->cb_out, KO_MSG, KO_MSG_LEN);
+    } else {
+        response_success_connection((trantorian_t *)b, c);
+        b->on_extracted = &on_extract_connected;
+    }
+}
+
 static zappy_t *create_zappy(args_t *args)
 {
     zappy_t *res = calloc(sizeof(*res), 1);
@@ -165,12 +178,7 @@ static zappy_t *create_zappy(args_t *args)
         return (NULL);
     res->nm = create_manager();
     res->map = create_map(args->x, args->y);
-    res->players = calloc(sizeof(*res->players), args->tc * args->ppt);
-    for (int i = 0; i < args->tc * args->ppt; i++) {
-        res->players->base.on_extracted = &on_extract;
-        res->players->base.on_disconnect = &on_disconnect;
-    }
-    if (res->nm == NULL || res->map == NULL || res->players == NULL) {
+    if (res->nm == NULL || res->map == NULL) {
         delete_zappy(res);
         return (NULL);
     }
@@ -178,6 +186,7 @@ static zappy_t *create_zappy(args_t *args)
         delete_zappy(res);
         return (NULL);
     }
+    res->default_slots_teams = args->ppt;
     res->time_scale = args->freq;
     res->teams = (team_t *)args->teams;
     res->map_size.x = args->x;

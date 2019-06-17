@@ -69,6 +69,10 @@ typedef struct {
 int handle_error_return(char *s, int ret);
 char *concat(char *str1, char *str2, bool free1, bool free2);
 
+/* zappy.c */
+void on_disconnect(user_base_t *base, network_client_t *client);
+void on_extract_not_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz);
+
 /*  arguments.c */
 bool parse_args(args_t *arguments, int ac, char **av);
 
@@ -76,5 +80,12 @@ bool parse_args(args_t *arguments, int ac, char **av);
 bool setup_catch_signals(void);
 bool remove_sig_catch(void);
 bool running(void);
+
+/* new.c */
+trantorian_t *accept_player(zappy_t *zap);
+
+/* connection.c */
+void response_success_connection(trantorian_t *tranto, network_client_t *nc);
+void add_user_to_team(client_user_pair_t *pair, uint8_t *data, size_t sz);
 
 #endif //PSU_ZAPPY_2018_ZSERVER_H
