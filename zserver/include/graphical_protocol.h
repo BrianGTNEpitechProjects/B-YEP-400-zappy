@@ -13,6 +13,11 @@
 #include "zworld.h"
 #include "zserver.h"
 
+typedef enum incantation_result {
+    GP_INCANTATION_RESULT_SUCCESS,
+    GP_INCANTATION_RESULT_FAILURE
+} incantation_result_t;
+
 typedef struct graphical_user {
     zuser_ws_t base;
     zappy_t *world_infos;
@@ -47,5 +52,6 @@ bool sbp(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 
 void smg(zappy_t *world, const char *msg);
 void seg(zappy_t *world, const char *team);
+void pie(zappy_t *world, int x, int y, incantation_result_t result);
 
 #endif //PSU_ZAPPY_2018_GRAPHICAL_PROTOCOL_H
