@@ -24,7 +24,7 @@ bool is_alphanum(uint8_t *val, size_t size)
 
 void on_extracted(user_base_t *user, network_client_t *client, uint8_t *extracted, size_t size)
 {
-    if (((struct zuser *)user)->sock_type == WEBSOCKET) {
+    if (((zuser_ws_t *)user)->sock_type == WEBSOCKET) {
         send_websocket(client, (uint8_t *) "G RECU", 6, 1);
     }
     if (!is_alphanum(extracted, size))
@@ -33,7 +33,7 @@ void on_extracted(user_base_t *user, network_client_t *client, uint8_t *extracte
     if (tmp == NULL)
         return;
     memcpy(tmp, extracted, size);
-    parse_websocket_protocol(tmp, (struct zuser *) user, client);
+    parse_websocket_protocol(tmp, (zuser_ws_t *) user, client);
     free(tmp);
 }
 
@@ -51,7 +51,7 @@ int main(__attribute__((unused)) int ac, char **av)
     struct network_server_s *server = get_server(nm, id);
     char *input = NULL;
     size_t len = 0;
-    struct zuser user = {&on_extracted, &on_disconnect, 0, UNDEFINED, NULL};
+    zuser_ws_t user = {{&on_extracted, &on_disconnect, 0}, UNDEFINED, NULL};
 
     if (nm == NULL) {
         return (84);

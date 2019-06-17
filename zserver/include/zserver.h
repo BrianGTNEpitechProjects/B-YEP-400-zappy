@@ -29,29 +29,23 @@ struct websocket_header {
     char *key;
 };
 
-struct zuser {
-    on_extracted_func on_extracted;
-    on_disconnect_func on_disconnect;
-    time_t user_select_timeout;
+typedef struct zuser_websocket {
+    user_base_t base;
     enum socket_type sock_type;
     struct websocket_header *websocket_hdr;
-};
+} zuser_ws_t;
 
 struct websocket_header_line {
     const char *line_regex;
-    void (*func)(char *, struct zuser *, regmatch_t *, network_client_t *);
+    void (*func)(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
 };
 
-struct websocket_datas {
-
-};
-
-void parse_websocket_protocol(char *, struct zuser *, network_client_t *);
-void header_start(char *, struct zuser *, regmatch_t *, network_client_t *);
-void set_upgrade(char *, struct zuser *, regmatch_t *, network_client_t *);
-void set_connection(char *, struct zuser *, regmatch_t *, network_client_t *);
-void set_key(char *, struct zuser *, regmatch_t *, network_client_t *);
-void header_end(char *, struct zuser *, regmatch_t *, network_client_t *);
+void parse_websocket_protocol(char *, zuser_ws_t *, network_client_t *);
+void header_start(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
+void set_upgrade(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
+void set_connection(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
+void set_key(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
+void header_end(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
 char *base64_encode(unsigned char *, size_t);
 unsigned int get_base64_size(size_t);
 void send_websocket(network_client_t *, uint8_t *, size_t, uint8_t);
