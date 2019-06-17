@@ -11,6 +11,7 @@ export class Map extends MapObject {
 
         plane.position.x = Game.lines * Game.squareSize / 2;
         plane.position.y = Game.col * Game.squareSize / 2;
+        this.object3D = plane;
         Game.scene.add(plane);
     }
 }

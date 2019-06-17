@@ -1,10 +1,11 @@
-import { TextureLoader, MeshBasicMaterial, RepeatWrapping } from "three";
+import { TextureLoader, MeshBasicMaterial, RepeatWrapping, Object3D } from "three";
 import { Game } from "./game";
 
 export class MapObject {
     position: { x: number; y: number; z: number; };
     heightPlace: number;
     sizeZ: number;
+    object3D: Object3D;
     constructor(posX: number, posY: number, posZ: number, heightPlace: number, sizeZ: number) {
         this.position = {
             x:posX,

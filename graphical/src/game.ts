@@ -28,9 +28,11 @@ export class Game {
         this.controls.target.set(50, 50, 0);
         this.controls.update();
         this.animate();
-        this.map = new Map();
-        this.initiateIntervalSpawnFood();
         this.onWindowResize();
+        this.map = new Map();
+        new Food(1, 2, 2);
+        new Food(2, 2, 2);
+        // this.initiateIntervalSpawnFood();
     }
 
     createMaterialTexture(textureName: string, repeatX: number, repeatY: number) {
@@ -53,20 +55,40 @@ export class Game {
     animate() {
         requestAnimationFrame(()=>this.animate());
         this.renderer.render(Game.scene, this.camera);
-    }
-
-    initiateIntervalSpawnFood() {
         var that = this;
-        setInterval(function() { that.spawnFood(1, "textures/iron_ore");}, 3000);
-        setInterval(function() { that.spawnFood(2, "textures/iron_block");}, 4500);
-        setInterval(function() { that.spawnFood(3, "textures/gold_ore");}, 6000);
-        setInterval(function() { that.spawnFood(4, "textures/gold_block");}, 7500);
-        setInterval(function() { that.spawnFood(5, "textures/diamond_ore");}, 9000);
-        setInterval(function() { that.spawnFood(6, "textures/diamond_block");}, 10500);
+        setInterval(function(){that.deleteFood(1, 2, 2);}, 2000);
     }
 
-    spawnFood(type: number, texture: string) {
-        var food = new Food(type, texture);
-        Game.mapObject.push(food);
+    deleteFood(type: number, posX: number, posY: number) {
+        for (var i = 0; i < Game.mapObject.length; i++) {
+            if (Game.mapObject[i].position.x == posX && Game.mapObject[i].position.y == posY && Game.mapObject[i] instanceof Food) {
+                var food = Game.mapObject[i] as Food;
+                if (food.type == type) {
+                    for (var j = 0; j < Game.mapObject.length; j++) {
+                        if (Game.mapObject[j].position.x == posX && Game.mapObject[j].position.y == posY && Game.mapObject[j].position.z > Game.mapObject[i].position.z) {
+                            Game.mapObject[j].position.z -= Game.mapObject[i].sizeZ;
+                            Game.mapObject[j].object3D.position.z -= Game.mapObject[i].sizeZ;
+                        }
+                    }
+                    Game.scene.remove(food.object3D);
+                    Game.mapObject.splice(i, 1);
+                }
+            }
+        }
     }
+
+    // initiateIntervalSpawnFood() {
+    //     var that = this;
+    //     setInterval(function() { that.spawnFood(1, "textures/iron_ore");}, 3000);
+    //     setInterval(function() { that.spawnFood(2, "textures/iron_block");}, 4500);
+    //     setInterval(function() { that.spawnFood(3, "textures/gold_ore");}, 6000);
+    //     setInterval(function() { that.spawnFood(4, "textures/gold_block");}, 7500);
+    //     setInterval(function() { that.spawnFood(5, "textures/diamond_ore");}, 9000);
+    //     setInterval(function() { that.spawnFood(6, "textures/diamond_block");}, 10500);
+    // }
+
+    // spawnFood(type: number, texture: string) {
+    //     var food = new Food(type, texture);
+    //     // Game.mapObject.push(food);
+    // }
 }
