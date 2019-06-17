@@ -18,6 +18,7 @@ const uint8_t WELCOME_MSG[] = "WELCOME\n";
 const size_t WELCOME_MSG_LEN = sizeof(WELCOME_MSG);
 
 const item_t item_map[] = {
+    {FOOD,      (const uint8_t *)"Food"},
     {LINEMATE,  (const uint8_t *)"Linemate"},
     {DERAUMERE, (const uint8_t *)"Deraumere"},
     {SIBUR,     (const uint8_t *)"Sibur"},

@@ -35,6 +35,7 @@ COMMAND_FILES	=	\
 					right.c\
 					left.c\
 					look.c\
+					inventory.c\
 
 NETWORK_DIR	=	$(realpath sources/network)
 

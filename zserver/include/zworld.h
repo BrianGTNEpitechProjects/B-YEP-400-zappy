@@ -38,6 +38,7 @@ typedef union {
  * ITEM
  */
 typedef enum {
+    FOOD,
     LINEMATE,
     DERAUMERE,
     SIBUR,
