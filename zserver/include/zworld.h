@@ -62,28 +62,6 @@ typedef struct {
 typedef struct trantorian_s trantorian_t;
 typedef struct tile_s tile_t;
 
-struct trantorian_s {
-    user_base_t base;
-    unsigned char command_ind;
-    command_t queue[COMMAND_QUEUE_LEN];
-    team_t team;
-    unsigned int life_unit;
-    unsigned int lvl;
-    tile_t *pos;
-    trantorian_t *neighbour;
-    e_cardinal_t orientation;
-    unsigned int inventory[TOT_ITEM_NB];
-};
-
-struct tile_s {
-    unsigned int content[TOT_ITEM_NB];
-    trantorian_t *first;
-    tile_t *north;
-    tile_t *south;
-    tile_t *west;
-    tile_t *east;
-};
-
 typedef pos_t dim_t;
 typedef struct {
     dim_t map_size;
@@ -94,6 +72,30 @@ typedef struct {
     trantorian_t *players;
     team_t *teams;
 } zappy_t;
+
+struct trantorian_s {
+    user_base_t base;
+    zappy_t *zappy;
+    unsigned char command_ind;
+    command_t queue[COMMAND_QUEUE_LEN];
+    team_t team;
+    unsigned int life_unit;
+    unsigned int lvl;
+    tile_t *pos;
+    trantorian_t *neighbour;
+    trantorian_t *next;
+    e_cardinal_t orientation;
+    uint inventory[TOT_ITEM_NB];
+};
+
+struct tile_s {
+    unsigned int content[TOT_ITEM_NB];
+    trantorian_t *first;
+    tile_t *north;
+    tile_t *south;
+    tile_t *west;
+    tile_t *east;
+};
 
 /* zappy_run.c */
 bool run_zappy(zappy_t *zap);
