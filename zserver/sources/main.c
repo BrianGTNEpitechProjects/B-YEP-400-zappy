@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "zserver.h"
 
-static void display_usage(char *progname)
+static void display_usage(const char *progname)
 {
     printf("USAGE: %s -p port -x width -y height -n name1 name2 ... nameX -c \
 clientsNb [-f freq] [-w wsport]\n", progname);

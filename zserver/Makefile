@@ -16,9 +16,14 @@ SRC_FILES	=	\
 				gameplay/map.c \
 				gameplay/server_running.c \
 				gameplay/arguments.c \
+				gameplay/connection.c \
+				gameplay/teams.c \
+				gameplay/trantorian/new.c \
+				gameplay/process_command.c \
 				gameplay/trantorian/move.c \
 				gameplay/trantorian/neighbour.c \
 				gameplay/utils/cardinal_utils.c \
+				gameplay/utils/always_true.c \
 				websockets/websocket.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \
@@ -38,6 +43,7 @@ COMMAND_FILES	=	\
 					right.c\
 					left.c\
 					look.c\
+					inventory.c\
 
 GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
 

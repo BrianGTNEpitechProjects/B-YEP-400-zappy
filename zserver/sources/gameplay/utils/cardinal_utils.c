@@ -17,3 +17,15 @@ e_cardinal_t cardinal_rotate_left(e_cardinal_t dir)
     --dir;
     return ((dir < 0) ? 3 : dir);
 }
+
+char *cardinal_to_string(e_cardinal_t dir)
+{
+    char *map[] = {
+        "NORTH",
+        "EAST",
+        "SOUTH",
+        "WEST"
+    };
+
+    return (map[dir]);
+}
