@@ -43,4 +43,6 @@ bool sst(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool suc(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool sbp(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 
+void smg(zappy_t *world, const char *msg);
+
 #endif //PSU_ZAPPY_2018_GRAPHICAL_PROTOCOL_H
