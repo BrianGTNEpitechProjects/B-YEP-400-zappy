@@ -72,8 +72,17 @@ network_server_t *create_server(int port, id_t id)
 
 void delete_server(network_server_t *ns)
 {
+    map_t curr = NULL;
+    map_t last = NULL;
+
     if (ns == NULL)
         return;
+    curr = ns->client_user_map->client_user_map;
+    while (curr != NULL) {
+        last = curr;
+        curr = curr->next;
+        disconnect_client(ns, ((client_user_pair_t *)last->value)->client);
+    }
     delete_network_client_user_map(ns->client_user_map);
     delete_pool(ns->client_pool);
     if (ns->connexion_socket != invalid_socket)

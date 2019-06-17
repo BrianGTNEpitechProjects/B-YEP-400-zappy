@@ -10,11 +10,14 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #define ERROR (-1)
 #define SUCCESS 0
 #define ERROR_EXIT 84
 #define SUCCESS_EXIT 0
 #define UNUSED __attribute__((unused))
+
+bool data_isalnum(const uint8_t *data, size_t data_len);
 
 #endif

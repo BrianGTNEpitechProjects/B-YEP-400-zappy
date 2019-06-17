@@ -25,6 +25,8 @@ SRC_FILES	=	\
 				websockets/websocket_set_connection.c \
 				websockets/websocket_set_key.c \
 				websockets/websocket_set_upgrade.c \
+				graphical_protocol/graphical_user.c \
+				graphical_protocol/update_ws_server.c \
 				base64.c
 
 COMMAND_DIR		=	$(realpath sources/gameplay/commands)
@@ -131,7 +133,7 @@ fclean:		clean
 
 re:			fclean all
 
-debug:		CFLAGS += -g
+debug:		CFLAGS += -g -DGRAPHICAL_SERVER_DEBUG
 debug:		re
 
 tests_run:

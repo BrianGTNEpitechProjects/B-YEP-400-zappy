@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include "zserver.h"
+#include "graphical_protocol.h"
 
 static inline void write_to_client(struct client_user_pair_s *client, \
                                    uint8_t *msg, \
@@ -39,6 +40,7 @@ bool run_zappy(zappy_t *zap)
         update_manager(zap->nm);
         extract_to_users(server, (uint8_t *)ZAPPY_DELIM, ZAPPY_DELIM_SIZE);
         process_welcome_procedure(zap, server);
+        update_ws_server(zap);
     }
     remove_sig_catch();
     return (true);
