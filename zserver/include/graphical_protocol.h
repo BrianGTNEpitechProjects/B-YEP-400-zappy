@@ -18,9 +18,22 @@ typedef struct graphical_user {
     zappy_t *world_infos;
 } graphical_user_t;
 
+typedef struct guser_possible_cmds {
+    const char *cmd;
+    bool (*func)(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+} guser_possible_cmds_t;
+
 graphical_user_t *create_new_graphical_user(zappy_t *world_data);
 void delete_graphical_user(graphical_user_t *user);
 
 void update_ws_server(zappy_t *zap);
+
+void handle_graphical_user_cmd(graphical_user_t *user,
+    network_client_t *client, uint8_t *data, size_t data_size);
+
+bool msz(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool bct(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool suc(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool sbp(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 
 #endif //PSU_ZAPPY_2018_GRAPHICAL_PROTOCOL_H

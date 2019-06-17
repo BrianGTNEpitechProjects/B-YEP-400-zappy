@@ -34,7 +34,7 @@ static void graphical_user_on_extracted(user_base_t *user,
     printf("]\n");
 #endif
     if (guser->base.sock_type == WEBSOCKET) {
-        send_websocket(client, (uint8_t *)"already authentificated", 23, 1);
+        handle_graphical_user_cmd(user, client, data, data_size);
     } else {
         graphical_user_websocket_handshake(guser, client, data, data_size);
     }

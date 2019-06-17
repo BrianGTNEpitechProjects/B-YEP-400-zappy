@@ -43,9 +43,10 @@ static char *send_readed(size_t size, uint8_t *tmp, size_t *bytes_used,
     if (str == NULL)
         return (NULL);
     for (size_t i = 0; i < size; i++) {
-        char c = tmp[(*bytes_used)++ - 1];
-        if (tmp[1] & 0b10000000)
+        char c = tmp[++(*bytes_used) - 1];
+        if (tmp[1] & 0b10000000) {
             c ^= masking_key[i % 4];
+        }
         str[i] = c;
     }
     return (str);
@@ -95,20 +96,15 @@ void read_ws_clients_data(network_server_t *server)
 void parse_websocket_protocol(char *extracted, zuser_ws_t *user,
         network_client_t *client)
 {
-    int match = 0;
     regex_t preg = {0};
     regmatch_t regmatch[10] = {0};
-    int err = 0;
 
     if (user->sock_type == CLASSIC)
         return;
     for (int i = 0; header_lines[i].line_regex != NULL; i++) {
-        err = regcomp(&preg, header_lines[i].line_regex, REG_EXTENDED);
-        if (!err) {
-            match = regexec(&preg, extracted, 10, regmatch, 0);
-            if (match == 0) {
+        if (!regcomp(&preg, header_lines[i].line_regex, REG_EXTENDED) &&
+        !regexec(&preg, extracted, 10, regmatch, 0)) {
                 header_lines[i].func(extracted, user, regmatch, client);
-            }
         }
         regfree(&preg);
     }
