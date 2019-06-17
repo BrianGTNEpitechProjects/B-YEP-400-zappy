@@ -61,6 +61,7 @@ void right(client_user_pair_t *client, char *arg);
 void left(client_user_pair_t *client, char *arg);
 void eject(client_user_pair_t *client, char *arg);
 void look(client_user_pair_t *c, char *arg);
+void inventory(client_user_pair_t *client, char *arg);
 void connect_nbr(client_user_pair_t *client, char *arg);
 
 /* utils/always_true.c */

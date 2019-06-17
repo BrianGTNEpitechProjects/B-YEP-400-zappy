@@ -56,7 +56,7 @@ const command_info_t commands[] = {
         .command = "Inventory",
         .charge_time = 1,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &inventory
     },
     {
         .code = BROADCAST,
@@ -70,7 +70,7 @@ const command_info_t commands[] = {
         .command = "Connect_nbr",
         .charge_time = 0,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &connect_nbr
     },
     {
         .code = FORK,
@@ -144,9 +144,11 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
             player->queue[ind].code = id;
             player->queue[ind].remaining_time = commands[id].charge_time;
             strcpy(player->queue[ind].arg, arg);
-            return (i);
+            printf("DEBUG: %d\n", ind);
+            return (ind);
         }
     }
+    printf("DEBUG: -1\n");
     return (-1);
 }
 
@@ -161,14 +163,15 @@ void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, si
     printf("RECEIVED: %.*s\n", (int)sz - 1, data);
 #endif
     for (i = 1; i <= COMMAND_NB; i++)
-        if (strncmp(data, commands[i].command, separator_ind) == 0)
+        if (strncmp(data, commands[i].command, \
+separator_ind) == 0)
             break;
     if (data[separator_ind] == '\n')
         arg = "";
     else
         arg = (char *)&(data[separator_ind + 1]);
     data[sz - 1] = '\0';
-    if (i <= COMMAND_NB && emplace_command((trantorian_t *)b, i, arg) < 0)
+    if (COMMAND_NB < i || emplace_command((trantorian_t *)b, i, arg) < 0)
         write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
 }
 
