@@ -12,5 +12,7 @@
 bool bct(graphical_user_t *user, network_client_t *client,
     uint8_t *data, size_t size)
 {
+    //TODO
     printf("received bct\n");
+    return (false);
 }

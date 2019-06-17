@@ -33,6 +33,13 @@ void handle_graphical_user_cmd(graphical_user_t *user,
 
 bool msz(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool bct(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool mct(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool tna(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool ppo(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool plv(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool pin(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool sgt(graphical_user_t *, network_client_t *, uint8_t *, size_t);
+bool sst(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool suc(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool sbp(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 

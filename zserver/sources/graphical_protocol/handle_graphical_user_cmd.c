@@ -13,6 +13,13 @@
 static const guser_possible_cmds_t guser_cmds[] = {
     {"msz\n", &msz},
     {"bct ", &bct},
+    {"mct\n", &mct},
+    {"tna\n", &tna},
+    {"ppo #", &ppo},
+    {"plv #", &plv},
+    {"pin #", &pin},
+    {"sgt\n", &sgt},
+    {"sst ", &sst},
     {NULL, NULL}
 };
 
