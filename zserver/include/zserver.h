@@ -81,8 +81,24 @@ bool setup_catch_signals(void);
 bool remove_sig_catch(void);
 bool running(void);
 
+/* new.c */
+trantorian_t *accept_player(zappy_t *zap);
+
 /* connection.c */
 void response_success_connection(trantorian_t *tranto, network_client_t *nc);
 void add_user_to_team(client_user_pair_t *pair, char *team);
+
+/* process_command.c */
+void process_command_on_users(zappy_t *z, network_client_user_map_t *m);
+
+static inline bool write_to_client(\
+    client_user_pair_t *client, \
+    uint8_t *data, \
+    size_t sz\
+)
+{
+    return (write_to_buffer(&client->client->cb_out, data, sz));
+}
+
 
 #endif //PSU_ZAPPY_2018_ZSERVER_H

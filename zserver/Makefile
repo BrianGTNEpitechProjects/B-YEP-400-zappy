@@ -19,6 +19,7 @@ SRC_FILES	=	\
 				gameplay/connection.c \
 				gameplay/teams.c \
 				gameplay/trantorian/new.c \
+				gameplay/process_command.c \
 				gameplay/trantorian/move.c \
 				gameplay/trantorian/neighbour.c \
 				gameplay/utils/cardinal_utils.c \
