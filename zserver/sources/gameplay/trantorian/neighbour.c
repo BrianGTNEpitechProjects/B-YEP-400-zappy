@@ -7,7 +7,7 @@
 
 #include "zworld.h"
 
-static trantorian_t *last_neighbour(trantorian_t *self)
+trantorian_t *last_neighbour(trantorian_t *self)
 {
     for (trantorian_t *tmp = self->neighbour; tmp; tmp = tmp->neighbour)
         if (tmp->neighbour == self)
@@ -15,7 +15,7 @@ static trantorian_t *last_neighbour(trantorian_t *self)
     return (NULL);
 }
 
-static trantorian_t *first_neighbour(trantorian_t *self)
+trantorian_t *first_neighbour(trantorian_t *self)
 {
     return ((self->neighbour != self) ? self->neighbour : NULL);
 }

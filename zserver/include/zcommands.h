@@ -13,6 +13,11 @@
 
 #define ARG_BUFFER_SIZE C_BUFFER_SIZE
 
+extern const uint8_t OK_MSG[];
+extern const size_t OK_MSG_LEN;
+extern const uint8_t KO_MSG[];
+extern const size_t KO_MSG_LEN;
+
 typedef enum {
     EMPTY,
     FORWARD,
@@ -46,5 +51,8 @@ extern const command_info_t commands[];
 
 /* commands (commands folder) */
 void forward(client_user_pair_t *client, char *arg);
+void right(client_user_pair_t *client, char *arg);
+void left(client_user_pair_t *client, char *arg);
+void eject(client_user_pair_t *client, char *arg);
 
 #endif //PSU_ZAPPY_2018_ZCOMMANDS_H

@@ -10,11 +10,15 @@ SRC_DIR		=	$(realpath sources)
 SRC_FILES	=	\
 				main.c \
 				utils.c \
+				global.c \
 				gameplay/zappy.c \
 				gameplay/zappy_run.c \
 				gameplay/map.c \
 				gameplay/server_running.c \
 				gameplay/arguments.c \
+				gameplay/trantorian/move.c \
+				gameplay/trantorian/neighbour.c \
+				gameplay/utils/cardinal_utils.c \
 				websockets/websocket.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \
@@ -27,6 +31,10 @@ COMMAND_DIR		=	$(realpath sources/gameplay/commands)
 
 COMMAND_FILES	=	\
 					forward.c\
+					eject.c\
+					right.c\
+					left.c\
+					look.c\
 
 NETWORK_DIR	=	$(realpath sources/network)
 
@@ -67,7 +75,7 @@ INCLUDE		=	-iquote $(realpath include) -iquote $(realpath lib/containers/include
 CFLAGS		=	-W -Wall -Wextra -Wno-unknown-pragmas -Wshadow
 CFLAGS		+=	$(INCLUDE)
 
-LDFLAGS		=	-L $(LIB_CONTAINER_PATH) -lcontainers -L $(LIB_C_BUFFER_PATH) -lcircular_buffer -lcrypto
+LDFLAGS		=	-L $(LIB_CONTAINER_PATH) -lcontainers -L $(LIB_C_BUFFER_PATH) -lcircular_buffer -lcrypto -lm
 
 TESTS_DIR	=	$(realpath tests)
 
