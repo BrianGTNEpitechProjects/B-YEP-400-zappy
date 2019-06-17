@@ -29,7 +29,7 @@ file(
 
 add_executable(zappy_server ${SOURCE_FILES} ${HEADER_FILES})
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -iquote ${HEADER_FILES_PATH} -iquote ${LIB_CIRCULAR_BUFFER_PATH}/include -iquote ${LIB_CONTAINERS_PATH}/include")
-target_link_libraries(zappy_server circular_buffer containers crypto)
+target_link_libraries(zappy_server circular_buffer containers crypto m)
 
 file(
         GLOB_RECURSE
