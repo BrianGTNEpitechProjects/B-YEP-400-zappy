@@ -1,11 +1,11 @@
-import MapObject from "path";
+import { MapObject } from "./map_object";
 
 export class Player extends MapObject {
-    constructor(posX, posY) {
-        super(posX, posY, posZ, heightPlace, foodSize * 2);
+    constructor(posX: number, posY: number) {
+        super(0, 0, 0, 0, 0);
         var height = this.getHeightCellsObject(posX, posY);
-        var load3dmodel = function(gltf) {
-            var scale = 3;
+
+        var load3dmodel = function(gltf: { scene: { scale: { x: number; y: number; z: number; }; position: { x: number; y: number; z: number; }; rotation: { x: number; }; }; }) {
             gltf.scene.scale.x = 3;
             gltf.scene.scale.y = 3;
             gltf.scene.scale.z = 3;

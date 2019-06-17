@@ -1,13 +1,26 @@
+import { PerspectiveCamera, Scene, WebGLRenderer, PlaneGeometry, Mesh, TextureLoader, MeshBasicMaterial, RepeatWrapping } from 'three';
+import { OrbitControls } from "three-orbitcontrols-ts";
+// import GLTFLoader from "three-gltf-loader";
+import {Map} from "./map"
+import { Food } from './food';
+import { MapObject } from './map_object';
+
 export class Game {
-    scene: THREE.Scene;
-    camera: THREE.PerspectiveCamera;
-    renderer: THREE.WebGLRenderer;
+    static mapObject: Array<MapObject> = new Array<MapObject>();
+    static lines:number = 10;
+    static col:number = 11;
+    static squareSize:number = 10;
+    static foodSize:number = Game.squareSize / 2;
+    static scene: Scene = new Scene();
+    camera: PerspectiveCamera;
+    renderer: WebGLRenderer;
+    controls: OrbitControls;
+    map: Map;
 
     constructor() {
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({antialias:true});
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.renderer = new WebGLRenderer({antialias:true});
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
         this.camera.position.set(50, 50, 100);
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -15,8 +28,20 @@ export class Game {
         this.controls.target.set(50, 50, 0);
         this.controls.update();
         this.animate();
-        this.map = new Map(this.scene);
+        this.map = new Map();
         this.initiateIntervalSpawnFood();
+        this.onWindowResize();
+    }
+
+    createMaterialTexture(textureName: string, repeatX: number, repeatY: number) {
+        var texture = new TextureLoader().load(textureName);
+
+        texture.wrapS = texture.wrapT = RepeatWrapping;
+        if (repeatX && repeatY) {
+            texture.offset.set(0, 0);
+            texture.repeat.set(repeatX, repeatY);
+        }
+        return new MeshBasicMaterial({map: texture});
     }
 
     onWindowResize() {
@@ -27,7 +52,7 @@ export class Game {
 
     animate() {
         requestAnimationFrame(()=>this.animate());
-        this.renderer.render(this.scene, this.camera);
+        this.renderer.render(Game.scene, this.camera);
     }
 
     initiateIntervalSpawnFood() {
@@ -40,8 +65,8 @@ export class Game {
         setInterval(function() { that.spawnFood(1, "textures/diamond_block");}, 10500);
     }
 
-    spawnFood(type, texture) {
-        var food = new Food(type, texture, this.scene);
-        mapObject.push(food);
+    spawnFood(type: number, texture: string) {
+        var food = new Food(type, texture);
+        Game.mapObject.push(food);
     }
 }

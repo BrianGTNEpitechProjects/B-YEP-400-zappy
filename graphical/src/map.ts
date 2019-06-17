@@ -1,12 +1,17 @@
-export class Map extends MapObject {
-    constructor(scene) {
-        super();
-        var geometryPlane = new THREE.PlaneGeometry(lines * squareSize, col * squareSize, 1);
-        var materialPlane = this.createMaterialTexture("assets/textures/dirt.png", lines, col);
-        var plane = new THREE.Mesh(geometryPlane, materialPlane);
+import { MapObject } from "./map_object";
+import { PlaneGeometry, Mesh, Scene } from "three";
+import { Game } from "./game";
 
-        plane.position.x = lines * squareSize / 2;
-        plane.position.y = col * squareSize / 2;
-        scene.add(plane);
+export class Map extends MapObject {
+    constructor() {
+        super(0, 0, 0, 0, 0);
+        var geometryPlane = new PlaneGeometry(Game.lines * Game.squareSize, Game.col * Game.squareSize, 1);
+        var materialPlane = this.createMaterialTexture("assets/textures/dirt.png", Game.lines, Game.col);
+        var plane = new Mesh(geometryPlane, materialPlane);
+
+        plane.position.x = Game.lines * Game.squareSize / 2;
+        plane.position.y = Game.col * Game.squareSize / 2;
+        console.log(plane.position.x, plane.position.y, plane.position.z)
+        Game.scene.add(plane);
     }
 }

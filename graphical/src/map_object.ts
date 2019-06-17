@@ -1,5 +1,11 @@
+import { TextureLoader, MeshBasicMaterial, RepeatWrapping } from "three";
+import { Game } from "./game";
+
 export class MapObject {
-    constructor(posX, posY, posZ, heightPlace, sizeZ) {
+    position: { x: number; y: number; z: number; };
+    heightPlace: number;
+    sizeZ: number;
+    constructor(posX: number, posY: number, posZ: number, heightPlace: number, sizeZ: number) {
         this.position = {
             x:posX,
             y:posY,
@@ -9,23 +15,23 @@ export class MapObject {
         this.sizeZ = sizeZ;
     }
 
-    createMaterialTexture(textureName, repeatX, repeatY) {
-        var texture = new THREE.TextureLoader().load(textureName);
+    createMaterialTexture(textureName: string, repeatX: number, repeatY: number) {
+        var texture = new TextureLoader().load(textureName);
 
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.wrapS = texture.wrapT = RepeatWrapping;
         if (repeatX && repeatY) {
             texture.offset.set(0, 0);
             texture.repeat.set(repeatX, repeatY);
         }
-        return new THREE.MeshBasicMaterial({map: texture});
+        return new MeshBasicMaterial({map: texture});
     }
 
-    getHeightCellsObject(posX, posY) {
+    getHeightCellsObject(posX: number, posY: number) {
         var height = 0;
 
-        for (var i = 0; i < mapObject.length; i++) {
-            if (mapObject[i].position.x == posX && mapObject[i].position.y == posY) {
-                height = mapObject[i].position.z + mapObject[i].sizeZ / 2;
+        for (var i = 0; i < Game.mapObject.length; i++) {
+            if (Game.mapObject[i].position.x == posX && Game.mapObject[i].position.y == posY) {
+                height = Game.mapObject[i].position.z + Game.mapObject[i].sizeZ / 2;
             }
         }
         return height;
