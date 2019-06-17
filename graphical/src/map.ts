@@ -1,5 +1,5 @@
 import { MapObject } from "./map_object";
-import { PlaneGeometry, Mesh, Scene } from "three";
+import { PlaneGeometry, Mesh } from "three";
 import { Game } from "./game";
 
 export class Map extends MapObject {
@@ -11,7 +11,6 @@ export class Map extends MapObject {
 
         plane.position.x = Game.lines * Game.squareSize / 2;
         plane.position.y = Game.col * Game.squareSize / 2;
-        console.log(plane.position.x, plane.position.y, plane.position.z)
         Game.scene.add(plane);
     }
 }
