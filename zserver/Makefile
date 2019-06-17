@@ -38,6 +38,36 @@ COMMAND_FILES	=	\
 					left.c\
 					look.c\
 
+GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
+
+GCOMMAND_FILES	=	\
+					btc.c \
+					ebo.c \
+					edi.c \
+					eht.c \
+					enw.c \
+					mct.c \
+					msz.c \
+					pbc.c \
+					pdi.c \
+					pdr.c \
+					pex.c \
+					pfk.c \
+					pgt.c \
+					pic.c \
+					pie.c \
+					pin.c \
+					plv.c \
+					pnw.c \
+					ppo.c \
+					seg.c \
+					sgt.c \
+					smg.c \
+					spb.c \
+					sst.c \
+					suc.c \
+					tna.c
+
 NETWORK_DIR	=	$(realpath sources/network)
 
 SRC_NETWORK	=	\
@@ -60,7 +90,7 @@ SRC_NETWORK	=	\
 				network_server_sync_buffer.c \
 				network_server_update.c \
 
-SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES))
+SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES)) $(addprefix $(GCOMMAND_DIR)/, $(GCOMMAND_FILES))
 
 OBJ			=	$(SRC:%.c=%.o)
 
