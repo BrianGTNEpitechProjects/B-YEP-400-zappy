@@ -15,7 +15,7 @@
 #include "network_manager.h"
 #include "zserver.h"
 
-void set_upgrade(char *extracted, struct zuser *user,
+void set_upgrade(char *extracted, zuser_ws_t *user,
         regmatch_t *regex, __attribute__((unused)) network_client_t *client)
 {
     int size;

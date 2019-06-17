@@ -15,7 +15,7 @@
 #include "network_manager.h"
 #include "zserver.h"
 
-static void send_header(struct zuser *user, network_client_t *client)
+static void send_header(zuser_ws_t *user, network_client_t *client)
 {
     char *str = user->websocket_hdr->http_version;
 
@@ -24,7 +24,7 @@ static void send_header(struct zuser *user, network_client_t *client)
     write_to_buffer(&client->cb_out, (uint8_t *) str, strlen(str));
 }
 
-static void send_upgrade(struct zuser *user, network_client_t *client)
+static void send_upgrade(zuser_ws_t *user, network_client_t *client)
 {
     char *str = "Upgrade: ";
 
@@ -34,7 +34,7 @@ static void send_upgrade(struct zuser *user, network_client_t *client)
     write_to_buffer(&client->cb_out, (uint8_t *) "\r\n", 2);
 }
 
-static void send_connection(struct zuser *user, network_client_t *client)
+static void send_connection(zuser_ws_t *user, network_client_t *client)
 {
     char *str = "Connection: ";
 
@@ -44,7 +44,7 @@ static void send_connection(struct zuser *user, network_client_t *client)
     write_to_buffer(&client->cb_out, (uint8_t *) "\r\n", 2);
 }
 
-static void send_accept(struct zuser *user, network_client_t *client)
+static void send_accept(zuser_ws_t *user, network_client_t *client)
 {
     char *magic = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
     char *key = user->websocket_hdr->key;
@@ -67,8 +67,8 @@ static void send_accept(struct zuser *user, network_client_t *client)
     free(base64);
 }
 
-void header_end(__attribute__((unused)) char *extracted, struct zuser *user,
-        __attribute__((unused)) regmatch_t *regex, network_client_t *client)
+void header_end(__attribute__((unused)) char *extracted, zuser_ws_t *user,
+    __attribute__((unused)) regmatch_t *regex, network_client_t *client)
 {
     send_header(user, client);
     if (user->websocket_hdr->upgrade)

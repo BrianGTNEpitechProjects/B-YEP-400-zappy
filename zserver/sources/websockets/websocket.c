@@ -51,7 +51,7 @@ static char *send_readed(size_t size, uint8_t *tmp, size_t *bytes_used,
     return (str);
 }
 
-static void read_ws_client_data(struct zuser *user, network_client_t *client)
+static void read_ws_client_data(zuser_ws_t *user, network_client_t *client)
 {
     uint8_t tmp[C_BUFFER_SIZE];
     size_t sz_flushed = flush_buffer(&client->cb_in, tmp);
@@ -71,28 +71,28 @@ static void read_ws_client_data(struct zuser *user, network_client_t *client)
     str = send_readed(size, tmp, &bytes_used, masking_key);
     if (str == NULL)
         return;
-    user->on_extracted((user_base_t *) user, client, (uint8_t *) str, size);
+    user->base.on_extracted((user_base_t *)user, client, (uint8_t *)str, size);
     write_to_buffer(&client->cb_in, tmp + bytes_used, sz_flushed - bytes_used);
     free(str);
 }
 
-void read_ws_clients_data(network_manager_t *nm)
+void read_ws_clients_data(network_server_t *server)
 {
-    //client_user_pair_t *pair = NULL;
-    //struct zuser *user = NULL;
-    //map_t map = nm->client_user_map->client_user_map;
-//
-    //for (map_t curr = map; curr != NULL; curr = curr->next) {
-    //    pair = curr->value;
-    //    if (pair->user == NULL)
-    //        continue;
-    //    user = (struct zuser *) pair->user;
-    //    if (user->sock_type == WEBSOCKET)
-    //        read_ws_client_data((struct zuser *) pair->user, pair->client);
-    //}
+    client_user_pair_t *pair = NULL;
+    zuser_ws_t *user = NULL;
+    map_t map = server->client_user_map->client_user_map;
+
+    for (map_t curr = map; curr != NULL; curr = curr->next) {
+        pair = curr->value;
+        if (pair->user == NULL)
+            continue;
+        user = (zuser_ws_t *)pair->user;
+        if (user->sock_type == WEBSOCKET)
+            read_ws_client_data((zuser_ws_t *)pair->user, pair->client);
+    }
 }
 
-void parse_websocket_protocol(char *extracted, struct zuser *user,
+void parse_websocket_protocol(char *extracted, zuser_ws_t *user,
         network_client_t *client)
 {
     int match = 0;
