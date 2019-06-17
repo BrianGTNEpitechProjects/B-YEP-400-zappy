@@ -23,6 +23,7 @@ SRC_FILES	=	\
 				gameplay/trantorian/move.c \
 				gameplay/trantorian/neighbour.c \
 				gameplay/utils/cardinal_utils.c \
+				gameplay/utils/always_true.c \
 				websockets/websocket.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \
