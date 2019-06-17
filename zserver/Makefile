@@ -8,7 +8,14 @@
 SRC_DIR		=	$(realpath sources)
 
 SRC_FILES	=	\
-				main.c
+				main.c \
+				websockets/websocket.c \
+				websockets/websocket_header_end.c \
+				websockets/websocket_header_start.c \
+				websockets/websocket_set_connection.c \
+				websockets/websocket_set_key.c \
+				websockets/websocket_set_upgrade.c \
+				base64.c
 
 NETWORK_DIR	=	$(realpath sources/network)
 
@@ -49,7 +56,7 @@ INCLUDE		=	-iquote $(realpath include) -iquote $(realpath lib/containers/include
 CFLAGS		=	-W -Wall -Wextra -Werror -Wno-unknown-pragmas -Wshadow
 CFLAGS		+=	$(INCLUDE)
 
-LDFLAGS		=	-L $(LIB_CONTAINER_PATH) -lcontainers -L $(LIB_C_BUFFER_PATH) -lcircular_buffer
+LDFLAGS		=	-L $(LIB_CONTAINER_PATH) -lcontainers -L $(LIB_C_BUFFER_PATH) -lcircular_buffer -lcrypto
 
 TESTS_DIR	=	$(realpath tests)
 
