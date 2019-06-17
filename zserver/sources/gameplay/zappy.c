@@ -10,6 +10,8 @@
 #include "zserver.h"
 #include "zcommands.h"
 
+//TODO: norm -> too many fx
+
 //TODO: maybe move this define elsewhere
 #define COMMAND_NB (12)
 
@@ -170,6 +172,7 @@ void on_extract_not_connected(user_base_t *b, network_client_t *c, uint8_t *data
     }
 }
 
+//TODO: norm -> too long fx
 static zappy_t *create_zappy(args_t *args)
 {
     zappy_t *res = calloc(sizeof(*res), 1);

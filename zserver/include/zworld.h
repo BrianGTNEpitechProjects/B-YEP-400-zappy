@@ -38,6 +38,7 @@ typedef union {
  * ITEM
  */
 typedef enum {
+    FOOD,
     LINEMATE,
     DERAUMERE,
     SIBUR,
@@ -124,6 +125,7 @@ tile_t *tile_forward(tile_t *tile, e_cardinal_t dir);
 /* cardinal_utils.c */
 e_cardinal_t cardinal_rotate_right(e_cardinal_t dir);
 e_cardinal_t cardinal_rotate_left(e_cardinal_t dir);
+char *cardinal_to_string(e_cardinal_t dir);
 
 extern const item_t item_map[];
 
