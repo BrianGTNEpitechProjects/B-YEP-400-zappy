@@ -4,6 +4,7 @@ import { OrbitControls } from "three-orbitcontrols-ts";
 import {Map} from "./map"
 import { Food } from './food';
 import { MapObject } from './map_object';
+import { Player } from './player';
 
 export class Game {
     static mapObject: Array<MapObject> = new Array<MapObject>();
@@ -17,7 +18,13 @@ export class Game {
     controls: OrbitControls;
     map: Map;
 
-    constructor() {
+    constructor(lineSize: number, colSize: number) {
+        if (lineSize) {
+            Game.lines = lineSize;
+        }
+        if (colSize) {
+            Game.col = colSize;
+        }
         this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new WebGLRenderer({antialias:true});
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -32,6 +39,7 @@ export class Game {
         this.map = new Map();
         new Food(1, 2, 2);
         new Food(2, 2, 2);
+        new Player(2, 2);
         // this.initiateIntervalSpawnFood();
     }
 

@@ -4,7 +4,7 @@ import { Game } from "./game";
 
 export class Map extends MapObject {
     constructor() {
-        super(0, 0, 0, 0, 0);
+        super(0, 0, 0, 0);
         var geometryPlane = new PlaneGeometry(Game.lines * Game.squareSize, Game.col * Game.squareSize, 1);
         var materialPlane = this.createMaterialTexture("assets/textures/dirt.png", Game.lines, Game.col);
         var plane = new Mesh(geometryPlane, materialPlane);

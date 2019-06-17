@@ -15,7 +15,7 @@ export class Food extends MapObject {
     type: number;
 
     constructor(type:number, x: number, y: number) {
-        super(x, y, 0, 0, Game.foodSize);
+        super(x, y, 0, Game.foodSize);
         var z = this.getHeightCellsObject(x, y) + this.sizeZ / 2;
         this.position.z = z;
         this.type = type;

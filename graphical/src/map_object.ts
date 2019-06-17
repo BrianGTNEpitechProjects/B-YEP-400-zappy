@@ -6,13 +6,12 @@ export class MapObject {
     heightPlace: number;
     sizeZ: number;
     object3D: Object3D;
-    constructor(posX: number, posY: number, posZ: number, heightPlace: number, sizeZ: number) {
+    constructor(posX: number, posY: number, posZ: number, sizeZ: number) {
         this.position = {
             x:posX,
             y:posY,
             z:posZ
         };
-        this.heightPlace = heightPlace;
         this.sizeZ = sizeZ;
     }
 
