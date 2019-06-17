@@ -10,17 +10,20 @@
 #include "zserver.h"
 #include "zcommands.h"
 
+//TODO: maybe move this define elsewhere
+#define COMMAND_NB (12)
+
 const command_info_t commands[] = {
     {.code = EMPTY, .command = NULL, .callback = NULL},
     {.code = FORWARD, .command = "Forward", .callback = &forward},
-    {.code = RIGHT, .command = "Right", .callback = NULL},
-    {.code = LEFT, .command = "Left", .callback = NULL},
+    {.code = RIGHT, .command = "Right", .callback = &right},
+    {.code = LEFT, .command = "Left", .callback = &left},
     {.code = LOOK, .command = "Look", .callback = NULL},
     {.code = INVENTORY, .command = "Inventory", .callback = NULL},
     {.code = BROADCAST, .command = "Broadcast", .callback = NULL},
     {.code = CONNECT_NBR, .command = "Connect_nbr", .callback = NULL},
     {.code = FORK, .command = "Fork", .callback = NULL},
-    {.code = EJECT, .command = "Eject", .callback = NULL},
+    {.code = EJECT, .command = "Eject", .callback = &eject},
     {.code = TAKE_OBJECT, .command = "Take", .callback = NULL},
     {.code = SET_OBJECT, .command = "Set", .callback = NULL},
     {.code = INCANTATION, .command = "Incantation", .callback = NULL},
@@ -69,15 +72,20 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
 void on_extract(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
 {
     int i;
+    client_user_pair_t pair = {c, b};
 
 #ifdef DEBUG_PRINT_RECV
-    printf("%.*s\n", (int)sz, data);
+    printf("RECEIVED: %.*s\n", (int)sz, data);
 #endif
-    for (i = 1; i <= 12; i++)
+    for (i = 1; i <= COMMAND_NB; i++)
         if (strncmp(data, commands[i].command, strcspn(data, " \n")) == 0)
             break;
-    if (i < 13 && emplace_command((trantorian_t *)b, EMPTY, "") < 0)
-        write_to_buffer(&c->cb_out, (const uint8_t *)"ko\n", 3);
+    if (i <= COMMAND_NB && emplace_command((trantorian_t *)b, EMPTY, "") < 0) {
+        write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
+    } else {
+        //TODO: need to retrieve args
+        commands[i].callback(&pair, NULL);
+    }
 }
 
 static zappy_t *create_zappy(args_t *args)

@@ -16,12 +16,15 @@
 
 #define COMMAND_QUEUE_LEN (10)
 
+/*
+ * POSITION
+ */
 typedef enum {
     NORTH,
     EAST,
     SOUTH,
     WEST
-} cardinal_t;
+} e_cardinal_t;
 
 typedef union {
     struct {
@@ -31,6 +34,9 @@ typedef union {
     int arr[2];
 } pos_t;
 
+/*
+ * ITEM
+ */
 typedef enum {
     LINEMATE,
     DERAUMERE,
@@ -41,6 +47,14 @@ typedef enum {
     TOT_ITEM_NB
 } e_item_t;
 
+typedef struct {
+    e_item_t id;
+    const uint8_t *name;
+} item_t;
+
+/*
+ * CHARACTERS
+ */
 typedef struct {
     char *name;
 } team_t;
@@ -57,7 +71,7 @@ struct trantorian_s {
     unsigned int lvl;
     tile_t *pos;
     trantorian_t *neighbour;
-    cardinal_t orientation;
+    e_cardinal_t orientation;
     unsigned int inventory[TOT_ITEM_NB];
 };
 
@@ -89,5 +103,24 @@ bool zappy(int ac, char **av);
 
 /*  map.c   */
 tile_t **create_map(int x, int y);
+
+/* neighbour.c */
+void trantorian_place_on_tile(trantorian_t *trantorian, tile_t *tile);
+int tile_population_size(tile_t *tile);
+trantorian_t *first_neighbour(trantorian_t *self);
+trantorian_t *last_neighbour(trantorian_t *self);
+
+/* move.c */
+int trantorian_move(trantorian_t *trantorian, tile_t *tile);
+int trantorian_move_dir(trantorian_t *trantorian, e_cardinal_t dir);
+int trantorian_move_forward(trantorian_t *trantorian);
+tile_t *tile_forward(tile_t *tile, e_cardinal_t dir);
+
+/* cardinal_utils.c */
+e_cardinal_t cardinal_rotate_right(e_cardinal_t dir);
+e_cardinal_t cardinal_rotate_left(e_cardinal_t dir);
+
+extern const item_t item_map[];
+
 
 #endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H
