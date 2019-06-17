@@ -14,19 +14,19 @@
 #define COMMAND_NB (12)
 
 const command_info_t commands[] = {
-    {.code = EMPTY, .command = NULL, .callback = NULL},
-    {.code = FORWARD, .command = "Forward", .callback = &forward},
-    {.code = RIGHT, .command = "Right", .callback = &right},
-    {.code = LEFT, .command = "Left", .callback = &left},
-    {.code = LOOK, .command = "Look", .callback = NULL},
-    {.code = INVENTORY, .command = "Inventory", .callback = NULL},
-    {.code = BROADCAST, .command = "Broadcast", .callback = NULL},
-    {.code = CONNECT_NBR, .command = "Connect_nbr", .callback = NULL},
-    {.code = FORK, .command = "Fork", .callback = NULL},
-    {.code = EJECT, .command = "Eject", .callback = &eject},
-    {.code = TAKE_OBJECT, .command = "Take", .callback = NULL},
-    {.code = SET_OBJECT, .command = "Set", .callback = NULL},
-    {.code = INCANTATION, .command = "Incantation", .callback = NULL},
+    {.code = EMPTY,         .command = NULL,            .callback = NULL},
+    {.code = FORWARD,       .command = "Forward",       .callback = &forward},
+    {.code = RIGHT,         .command = "Right",         .callback = &right},
+    {.code = LEFT,          .command = "Left",          .callback = &left},
+    {.code = LOOK,          .command = "Look",          .callback = &look},
+    {.code = INVENTORY,     .command = "Inventory",     .callback = NULL},
+    {.code = BROADCAST,     .command = "Broadcast",     .callback = NULL},
+    {.code = CONNECT_NBR,   .command = "Connect_nbr",   .callback = NULL},
+    {.code = FORK,          .command = "Fork",          .callback = NULL},
+    {.code = EJECT,         .command = "Eject",         .callback = &eject},
+    {.code = TAKE_OBJECT,   .command = "Take",          .callback = NULL},
+    {.code = SET_OBJECT,    .command = "Set",           .callback = NULL},
+    {.code = INCANTATION,   .command = "Incantation",   .callback = NULL},
 };
 
 void delete_zappy(zappy_t *zappy)
@@ -58,7 +58,7 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
 {
     int ind;
 
-    for (int i = 0; i <= 10; i++) {
+    for (int i = 0; i < COMMAND_QUEUE_LEN; i++) {
         ind = (player->command_ind + i) % COMMAND_QUEUE_LEN;
         if (player->queue[ind].code == EMPTY) {
             player->queue[ind].code = id;
@@ -72,20 +72,23 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
 void on_extract(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
 {
     int i;
+    size_t separator_ind = strcspn(data, " \n");
+    char *arg;
     client_user_pair_t pair = {c, b};
 
 #ifdef DEBUG_PRINT_RECV
     printf("RECEIVED: %.*s\n", (int)sz, data);
 #endif
     for (i = 1; i <= COMMAND_NB; i++)
-        if (strncmp(data, commands[i].command, strcspn(data, " \n")) == 0)
+        if (strncmp(data, commands[i].command, separator_ind) == 0)
             break;
-    if (i <= COMMAND_NB && emplace_command((trantorian_t *)b, EMPTY, "") < 0) {
+    if (data[separator_ind] == '\n')
+        arg = "";
+    else
+        arg = (char *)&(data[separator_ind + 1]);
+    data[sz - 1] = '\0';
+    if (i <= COMMAND_NB && emplace_command((trantorian_t *)b, i, arg) < 0)
         write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
-    } else {
-        //TODO: need to retrieve args
-        commands[i].callback(&pair, NULL);
-    }
 }
 
 static zappy_t *create_zappy(args_t *args)

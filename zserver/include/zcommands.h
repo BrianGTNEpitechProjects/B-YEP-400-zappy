@@ -54,5 +54,6 @@ void forward(client_user_pair_t *client, char *arg);
 void right(client_user_pair_t *client, char *arg);
 void left(client_user_pair_t *client, char *arg);
 void eject(client_user_pair_t *client, char *arg);
+void look(client_user_pair_t *c, char *arg);
 
 #endif //PSU_ZAPPY_2018_ZCOMMANDS_H
