@@ -31,5 +31,6 @@ void update_ws_server(zappy_t *zap)
     if (server == NULL)
         return;
     accept_connexions(zap, server);
+    read_ws_clients_data(server);
     extract_to_users(server, (uint8_t *)"\n", 1);
 }
