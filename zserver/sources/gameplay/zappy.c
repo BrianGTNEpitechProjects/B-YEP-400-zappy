@@ -162,8 +162,9 @@ void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, si
 void on_extract_not_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
 {
     client_user_pair_t pair = {c, b};
+    ((char *)data)[sz - 1] = 0;
 
-    add_user_to_team(&pair, data, sz);
+    add_user_to_team(&pair, (char *) data);
     if (((trantorian_t *)b)->team.name == NULL) {
         write_to_buffer(&pair.client->cb_out, KO_MSG, KO_MSG_LEN);
     } else {

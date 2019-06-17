@@ -86,7 +86,7 @@ trantorian_t *accept_player(zappy_t *zap);
 
 /* connection.c */
 void response_success_connection(trantorian_t *tranto, network_client_t *nc);
-void add_user_to_team(client_user_pair_t *pair, uint8_t *data, size_t sz);
+void add_user_to_team(client_user_pair_t *pair, char *team);
 int count_unused_slot(zappy_t *zap, char *team_name);
 
 
