@@ -1,4 +1,6 @@
 import { Color, PerspectiveCamera, Scene, WebGLRenderer, Camera } from 'three';
+import { OrbitControls } from "three-orbitcontrols-ts";
+import GLTFLoader from "three-gltf-loader";
 
 var scene: Scene = new Scene();
 var camera: Camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 10000);
