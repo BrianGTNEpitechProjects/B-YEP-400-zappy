@@ -28,6 +28,8 @@ void delete_graphical_user(graphical_user_t *user);
 
 void update_ws_server(zappy_t *zap);
 
+void send_to_all_ws_clients(zappy_t *world, uint8_t *msg, size_t len);
+
 void handle_graphical_user_cmd(graphical_user_t *user,
     network_client_t *client, uint8_t *data, size_t data_size);
 
@@ -44,5 +46,6 @@ bool suc(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool sbp(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 
 void smg(zappy_t *world, const char *msg);
+void seg(zappy_t *world, const char *team);
 
 #endif //PSU_ZAPPY_2018_GRAPHICAL_PROTOCOL_H
