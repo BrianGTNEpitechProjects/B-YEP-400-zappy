@@ -14,19 +14,84 @@
 #define COMMAND_NB (12)
 
 const command_info_t commands[] = {
-    {.code = EMPTY,         .command = NULL,            .callback = NULL},
-    {.code = FORWARD,       .command = "Forward",       .callback = &forward},
-    {.code = RIGHT,         .command = "Right",         .callback = &right},
-    {.code = LEFT,          .command = "Left",          .callback = &left},
-    {.code = LOOK,          .command = "Look",          .callback = &look},
-    {.code = INVENTORY,     .command = "Inventory",     .callback = NULL},
-    {.code = BROADCAST,     .command = "Broadcast",     .callback = NULL},
-    {.code = CONNECT_NBR,   .command = "Connect_nbr",   .callback = NULL},
-    {.code = FORK,          .command = "Fork",          .callback = NULL},
-    {.code = EJECT,         .command = "Eject",         .callback = &eject},
-    {.code = TAKE_OBJECT,   .command = "Take",          .callback = NULL},
-    {.code = SET_OBJECT,    .command = "Set",           .callback = NULL},
-    {.code = INCANTATION,   .command = "Incantation",   .callback = NULL},
+    {
+        .code = EMPTY,
+        .command = NULL,
+        .charge_time = 0,
+        .callback = NULL
+    },
+    {
+        .code = FORWARD,
+        .command = "Forward",
+        .charge_time = 7,
+        .callback = &forward
+    },
+    {
+        .code = RIGHT,
+        .command = "Right",
+        .charge_time = 7,
+        .callback = &right
+    },
+    {
+        .code = LEFT,
+        .command = "Left",
+        .charge_time = 7,
+        .callback = &left
+    },
+    {
+        .code = LOOK,
+        .command = "Look",
+        .charge_time = 7,
+        .callback = &look
+    },
+    {
+        .code = INVENTORY,
+        .command = "Inventory",
+        .charge_time = 1,
+        .callback = NULL
+    },
+    {
+        .code = BROADCAST,
+        .command = "Broadcast",
+        .charge_time = 7,
+        .callback = NULL
+    },
+    {
+        .code = CONNECT_NBR,
+        .command = "Connect_nbr",
+        .charge_time = 0,
+        .callback = NULL
+    },
+    {
+        .code = FORK,
+        .command = "Fork",
+        .charge_time = 42,
+        .callback = NULL
+    },
+    {
+        .code = EJECT,
+        .command = "Eject",
+        .charge_time = 7,
+        .callback = &eject
+    },
+    {
+        .code = TAKE_OBJECT,
+        .command = "Take",
+        .charge_time = 7,
+        .callback = NULL
+    },
+    {
+        .code = SET_OBJECT,
+        .command = "Set",
+        .charge_time = 7,
+        .callback = NULL
+    },
+    {
+        .code = INCANTATION,
+        .command = "Incantation",
+        .charge_time = 300,
+        .callback = NULL
+    }
 };
 
 void delete_zappy(zappy_t *zappy)
@@ -62,6 +127,7 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
         ind = (player->command_ind + i) % COMMAND_QUEUE_LEN;
         if (player->queue[ind].code == EMPTY) {
             player->queue[ind].code = id;
+            player->queue[ind].remaining_time = commands[id].charge_time;
             strcpy(player->queue[ind].arg, arg);
             return (i);
         }
@@ -112,6 +178,7 @@ static zappy_t *create_zappy(args_t *args)
         delete_zappy(res);
         return (NULL);
     }
+    res->time_scale = args->freq;
     res->teams = (team_t *)args->teams;
     res->map_size.x = args->x;
     res->map_size.y = args->y;
