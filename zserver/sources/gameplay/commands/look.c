@@ -12,10 +12,7 @@
 
 static int tile_look_limit(unsigned int lvl)
 {
-    if (lvl == 0)
-        return (1);
-    else
-        return (int)(pow(2, lvl) + 1);
+    return ((2 * lvl) + 1);
 }
 
 static tile_t *get_left_tile_at(tile_t *start, e_cardinal_t dir, unsigned int lvl)
