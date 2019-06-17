@@ -40,12 +40,16 @@ void delete_zappy(zappy_t *zappy)
     free(zappy);
 }
 
-static bool init_server(zappy_t *res, int port)
+static bool init_server(zappy_t *res, int port, int wsport)
 {
     res->classic_id = add_server(res->nm, port);
     if (res->classic_id == invalid_id)
         return (false);
-    //TODO Websocket server
+    if (wsport != 0) {
+        res->websocket_id = add_server(res->nm, wsport);
+        if (res->websocket_id == invalid_id)
+            return (false);
+    }
     return (true);
 }
 
@@ -108,7 +112,7 @@ static zappy_t *create_zappy(args_t *args)
         delete_zappy(res);
         return (NULL);
     }
-    if (init_server(res, args->port) == false) {
+    if (init_server(res, args->port, args->wsport) == false) {
         delete_zappy(res);
         return (NULL);
     }
@@ -120,7 +124,7 @@ static zappy_t *create_zappy(args_t *args)
 
 bool zappy(int ac, char **av)
 {
-    args_t arguments = {0};
+    args_t arguments = DEFAULT_ARGS;
     zappy_t *zap = NULL;
     bool ret = false;
 
