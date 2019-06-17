@@ -93,6 +93,7 @@ typedef struct {
     id_t websocket_id;
     trantorian_t *players;
     team_t *teams;
+    int time_scale;
 } zappy_t;
 
 /* zappy_run.c */
@@ -121,6 +122,5 @@ e_cardinal_t cardinal_rotate_right(e_cardinal_t dir);
 e_cardinal_t cardinal_rotate_left(e_cardinal_t dir);
 
 extern const item_t item_map[];
-
 
 #endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H

@@ -17,6 +17,8 @@ extern const uint8_t OK_MSG[];
 extern const size_t OK_MSG_LEN;
 extern const uint8_t KO_MSG[];
 extern const size_t KO_MSG_LEN;
+extern const uint8_t WELCOME_MSG[];
+extern const size_t WELCOME_MSG_LEN;
 
 typedef enum {
     EMPTY,
@@ -39,11 +41,13 @@ typedef void (*command_func)(client_user_pair_t *, char *);
 typedef struct {
     e_command_t code;
     char *command;
+    int charge_time;
     command_func callback;
 } command_info_t;
 
 typedef struct {
     e_command_t code;
+    double remaining_time;
     char arg[ARG_BUFFER_SIZE];
 } command_t;
 
