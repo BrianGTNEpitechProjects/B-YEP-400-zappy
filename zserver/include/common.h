@@ -18,6 +18,6 @@
 #define SUCCESS_EXIT 0
 #define UNUSED __attribute__((unused))
 
-bool data_isalnum(const uint8_t *data, size_t data_len);
+bool check_data_encoding(const uint8_t *data, size_t data_len);
 
 #endif

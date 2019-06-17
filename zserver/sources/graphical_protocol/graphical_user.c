@@ -8,14 +8,18 @@
 /* Created the 17/06/2019 at 17:00 by jfrabel */
 
 #include <stdlib.h>
+#include <string.h>
 #include "graphical_protocol.h"
 
 static void graphical_user_websocket_handshake(graphical_user_t *guser,
     network_client_t *client, uint8_t *data, size_t data_size)
 {
-    if (!data_isalnum(data, data_size))
+    char extracted_as_char[C_BUFFER_SIZE] = {0};
+
+    if (!check_data_encoding(data, data_size))
         return;
-    parse_websocket_protocol((char *)data, (zuser_ws_t *)guser, client);
+    memcpy(extracted_as_char, data, data_size);
+    parse_websocket_protocol(extracted_as_char, (zuser_ws_t *)guser, client);
 }
 
 static void graphical_user_on_extracted(user_base_t *user,
@@ -27,9 +31,6 @@ static void graphical_user_on_extracted(user_base_t *user,
     printf("[DEBUG][graphical_user_on_extracted] received from user\n[");
     for (size_t i = 0; i < data_size; ++i)
         printf("%x%s", data[i], (i + 1 == data_size) ? "" : " ");
-    printf("]\n[");
-    for (size_t i = 0; i < data_size; ++i)
-        printf("%c", data[i]);
     printf("]\n");
 #endif
     if (guser->base.sock_type == WEBSOCKET) {
@@ -65,5 +66,14 @@ graphical_user_t *create_new_graphical_user(zappy_t *world_data)
 
 void delete_graphical_user(graphical_user_t *user)
 {
+    if (user != NULL) {
+        if (user->base.websocket_hdr) {
+            free(user->base.websocket_hdr->connection);
+            free(user->base.websocket_hdr->http_version);
+            free(user->base.websocket_hdr->key);
+            free(user->base.websocket_hdr->upgrade);
+        }
+        free(user->base.websocket_hdr);
+    }
     free(user);
 }

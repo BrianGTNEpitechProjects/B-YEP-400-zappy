@@ -42,10 +42,10 @@ char *concat(char *str1, char *str2, bool free1, bool free2)
     return (res);
 }
 
-bool data_isalnum(const uint8_t *data, size_t data_len)
+bool check_data_encoding(const uint8_t *data, size_t data_len)
 {
     for (size_t i = 0; i < data_len; ++i) {
-        if (!isalnum((int)(data[i])))
+        if (data[i] > 127)
             return (false);
     }
     return (true);
