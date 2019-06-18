@@ -1,10 +1,10 @@
 import { PerspectiveCamera, Scene, WebGLRenderer, TextureLoader, MeshBasicMaterial, RepeatWrapping } from 'three';
 import { OrbitControls } from "three-orbitcontrols-ts";
-// import GLTFLoader from "three-gltf-loader";
-import {Map} from "./map"
+import { Map } from "./map"
 import { Food } from './food';
 import { MapObject } from './map_object';
 import { Player } from './player';
+const loader = require('three-gltf-loader');
 
 export class Game {
     static mapObject: Array<MapObject> = new Array<MapObject>();
@@ -13,6 +13,7 @@ export class Game {
     static squareSize:number = 10;
     static foodSize:number = Game.squareSize / 2;
     static scene: Scene = new Scene();
+    static gltfLoader = new loader();
     camera: PerspectiveCamera;
     renderer: WebGLRenderer;
     controls: OrbitControls;
@@ -40,6 +41,10 @@ export class Game {
         new Food(1, 2, 2);
         new Food(2, 2, 2);
         new Player(2, 2);
+        var that = this;
+        setTimeout(function(){that.deleteFood(1, 2, 2);}, 2000);
+        setTimeout(function(){new Food(1, 2, 2);}, 3000);
+        // new Food(1, 2, 2);
         // this.initiateIntervalSpawnFood();
     }
 
@@ -63,8 +68,6 @@ export class Game {
     animate() {
         requestAnimationFrame(()=>this.animate());
         this.renderer.render(Game.scene, this.camera);
-        var that = this;
-        setInterval(function(){that.deleteFood(1, 2, 2);}, 2000);
     }
 
     deleteFood(type: number, posX: number, posY: number) {
