@@ -7,6 +7,7 @@
 
 #include "zcommands.h"
 #include "zworld.h"
+#include "zitem.h"
 
 const uint8_t OK_MSG[] = "ok\n";
 const size_t OK_MSG_LEN = sizeof(OK_MSG);
@@ -18,11 +19,11 @@ const uint8_t WELCOME_MSG[] = "WELCOME\n";
 const size_t WELCOME_MSG_LEN = sizeof(WELCOME_MSG);
 
 const item_t item_map[TOT_ITEM_NB] = {
-    {FOOD,      (const uint8_t *)"Food"},
-    {LINEMATE,  (const uint8_t *)"Linemate"},
-    {DERAUMERE, (const uint8_t *)"Deraumere"},
-    {SIBUR,     (const uint8_t *)"Sibur"},
-    {MENDIANE,  (const uint8_t *)"Mendiane"},
-    {PHIRAS,    (const uint8_t *)"Phiras"},
-    {THYSTAME,  (const uint8_t *)"Thystame"}
+    {.id = FOOD,        .name = (const uint8_t *)"Food"},
+    {.id = LINEMATE,    .name = (const uint8_t *)"Linemate"},
+    {.id = DERAUMERE,   .name = (const uint8_t *)"Deraumere"},
+    {.id = SIBUR,       .name = (const uint8_t *)"Sibur"},
+    {.id = MENDIANE,    .name = (const uint8_t *)"Mendiane"},
+    {.id = PHIRAS,      .name = (const uint8_t *)"Phiras"},
+    {.id = THYSTAME,    .name = (const uint8_t *)"Thystame"},
 };

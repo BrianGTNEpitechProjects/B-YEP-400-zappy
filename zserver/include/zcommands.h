@@ -24,16 +24,17 @@ extern const size_t WELCOME_MSG_LEN;
 extern const command_info_t commands[];
 
 /* commands (commands folder) */
-void forward(client_user_pair_t *client, char *arg);
-void right(client_user_pair_t *client, char *arg);
-void left(client_user_pair_t *client, char *arg);
-void eject(client_user_pair_t *client, char *arg);
-void look(client_user_pair_t *c, char *arg);
-void inventory(client_user_pair_t *client, char *arg);
-void connect_nbr(client_user_pair_t *client, char *arg);
-void broadcast(client_user_pair_t *client, char *arg);
-void put_object(client_user_pair_t *client, char *arg);
-void take_object(client_user_pair_t *client, char *arg);
+void forward        (client_user_pair_t *client, char *arg);
+void right          (client_user_pair_t *client, char *arg);
+void left           (client_user_pair_t *client, char *arg);
+void eject          (client_user_pair_t *client, char *arg);
+void look           (client_user_pair_t *client, char *arg);
+void inventory      (client_user_pair_t *client, char *arg);
+void connect_nbr    (client_user_pair_t *client, char *arg);
+void broadcast      (client_user_pair_t *client, char *arg);
+void put_object     (client_user_pair_t *client, char *arg);
+void take_object    (client_user_pair_t *client, char *arg);
+void incantation    (client_user_pair_t *client, char *arg);
 
 /* --- utils --- */
 /* utils/always_true.c */

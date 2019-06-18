@@ -49,6 +49,7 @@ COMMAND_FILES	=	\
 					connect_nbr.c\
 					put_object.c\
 					take_object.c\
+					incantation.c\
 
 GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
 

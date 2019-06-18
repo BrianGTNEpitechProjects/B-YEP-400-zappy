@@ -26,9 +26,21 @@ int tile_population_size(tile_t *tile)
 
     for (trantorian_t *trantorian = tile->first; \
          trantorian && trantorian->neighbour != tile->first; \
-         trantorian = trantorian->neighbour)
-    {
+         trantorian = trantorian->neighbour) {
         ++tot;
+    }
+    return ((tile->first) ? tot : 0);
+}
+
+int tile_population_size_with_lvl(tile_t *tile, unsigned int lvl)
+{
+    int tot = 1;
+
+    for (trantorian_t *trantorian = tile->first; \
+         trantorian && trantorian->neighbour != tile->first; \
+         trantorian = trantorian->neighbour) {
+        if (trantorian->lvl == lvl)
+            ++tot;
     }
     return ((tile->first) ? tot : 0);
 }

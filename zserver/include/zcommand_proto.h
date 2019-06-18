@@ -9,6 +9,7 @@
 #define PSU_ZAPPY_2018_ZCOMMAND_PROTO_H
 
 #include "network_client_user_map.h"
+#include "zitem.h"
 
 #define ARG_BUFFER_SIZE C_BUFFER_SIZE
 
@@ -45,6 +46,11 @@ typedef struct command_s {
     double remaining_time;
     char arg[ARG_BUFFER_SIZE];
 } command_t;
+
+typedef struct {
+    int player_nb;
+    unsigned int stones[TOT_ITEM_NB];
+} incantation_requirement_t;
 
 
 #endif //PSU_ZAPPY_2018_ZCOMMAND_PROTO_H

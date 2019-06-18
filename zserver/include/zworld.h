@@ -11,30 +11,12 @@
 #include "network_manager.h"
 #include "zposition.h"
 #include "zcommand_proto.h"
+#include "zitem.h"
 
 #define ZAPPY_DELIM "\n"
 #define ZAPPY_DELIM_SIZE 1
 
 #define COMMAND_QUEUE_LEN (10)
-
-/*
- * ITEM
- */
-typedef enum {
-    FOOD,
-    LINEMATE,
-    DERAUMERE,
-    SIBUR,
-    MENDIANE,
-    PHIRAS,
-    THYSTAME,
-    TOT_ITEM_NB
-} e_item_t;
-
-typedef struct {
-    e_item_t id;
-    const uint8_t *name;
-} item_t;
 
 /*
  * CHARACTERS
@@ -107,6 +89,7 @@ int count_players_team(zappy_t *zap, char *team_name);
 /* neighbour.c */
 void trantorian_place_on_tile(trantorian_t *trantorian, tile_t *tile);
 int tile_population_size(tile_t *tile);
+int tile_population_size_with_lvl(tile_t *tile, unsigned int lvl);
 trantorian_t *first_neighbour(trantorian_t *self);
 trantorian_t *last_neighbour(trantorian_t *self);
 
@@ -123,7 +106,5 @@ char *cardinal_to_string(e_cardinal_t dir);
 
 /* get_item_id_from_name.c */
 int get_item_id_from_name(char *name);
-
-extern const item_t item_map[];
 
 #endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H

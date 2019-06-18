@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include "zworld.h"
+#include "zitem.h"
 
 int get_item_id_from_name(char *name)
 {

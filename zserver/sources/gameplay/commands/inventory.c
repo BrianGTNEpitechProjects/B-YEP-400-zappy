@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "zcommands.h"
 #include "zworld.h"
+#include "zitem.h"
 
 void inventory(client_user_pair_t *client, char *arg)
 {
