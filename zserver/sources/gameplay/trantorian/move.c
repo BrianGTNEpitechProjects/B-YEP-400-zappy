@@ -31,7 +31,7 @@ int trantorian_move(trantorian_t *trantorian, tile_t *tile)
     if (first && last) {
         last->neighbour = first;
     }
-    if (tile->first == trantorian) {
+    if (tile && tile->first == trantorian) {
         tile->first = first;
     }
     trantorian->pos = tile;

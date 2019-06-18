@@ -32,9 +32,9 @@ static void write_lvl_msg(client_user_pair_t *client, int lvl)
     write_to_client(client, (uint8_t *)"\n", 1);
 }
 
-void incantation(client_user_pair_t *client, __attribute__((unused)) char *arg)
+bool incantation_valid(client_user_pair_t *c, __attribute__((unused)) char *a)
 {
-    trantorian_t *trantorian = (trantorian_t *)client->user;
+    trantorian_t *trantorian = (trantorian_t *)c->user;
     tile_t *t = trantorian->pos;
     int pop = tile_population_size_with_lvl(t, trantorian->lvl);
     const incantation_requirement_t *req = &REQUIREMENTS[trantorian->lvl - 1];
@@ -46,7 +46,14 @@ void incantation(client_user_pair_t *client, __attribute__((unused)) char *arg)
             break;
         }
     }
-    if (is_ok) {
+    return (is_ok);
+}
+
+void incantation(client_user_pair_t *client, __attribute__((unused)) char *arg)
+{
+    trantorian_t *trantorian = (trantorian_t *)client->user;
+
+    if (incantation_valid(client, arg)) {
         trantorian->lvl += 1;
         write_lvl_msg(client, trantorian->lvl);
     } else

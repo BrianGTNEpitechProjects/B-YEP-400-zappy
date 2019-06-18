@@ -127,7 +127,7 @@ const command_info_t commands[] = {
         .command = "Incantation",
         .charge_time = 300,
         .need_arg = false,
-        .is_startable = &always_true,
+        .is_startable = &incantation_valid,
         .is_valid = &always_true,
         .callback = &incantation
     }
@@ -174,6 +174,7 @@ network_client_t *client)
     for (trantorian_t *t = trantorian->zappy->players; t; t = t->next) {
         if (t->next == trantorian) {
             t->next = trantorian->next;
+            trantorian_move(trantorian, NULL);
             free(trantorian);
             return;
         }
