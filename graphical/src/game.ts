@@ -38,14 +38,33 @@ export class Game {
         this.animate();
         this.onWindowResize();
         this.map = new Map();
-        new Food(1, 2, 2);
-        new Food(2, 2, 2);
-        new Player(2, 2);
-        var that = this;
-        setTimeout(function(){that.deleteFood(1, 2, 2);}, 2000);
-        setTimeout(function(){new Food(1, 2, 2);}, 3000);
-        // new Food(1, 2, 2);
-        // this.initiateIntervalSpawnFood();
+    }
+
+    spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string) {
+        new Player(id, x, y, level, team_name);
+    }
+
+    setPlayerPos(id: number, x: number, y: number, orientation: number) {
+        for (var i = 0; i < Game.mapObject.length; i++) {
+            var player = Game.mapObject[i] as Player;
+            if (player.id == id) {
+                this.reajustHeight(player);
+                player.moovePlayer(x, y);
+            }
+        }
+    }
+
+    addTeamName(name: string) {
+    }
+
+    setTile(x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number) {
+        var numberRessources = [res0, res1, res2, res3, res4, res5];
+
+        for (var i = 0; i < numberRessources.length; i++) {
+            for (var j = 0; j < numberRessources[i]; j++) {
+                new Food(i, x, y);
+            }
+        }
     }
 
     createMaterialTexture(textureName: string, repeatX: number, repeatY: number) {
@@ -75,14 +94,23 @@ export class Game {
             if (Game.mapObject[i].position.x == posX && Game.mapObject[i].position.y == posY && Game.mapObject[i] instanceof Food) {
                 var food = Game.mapObject[i] as Food;
                 if (food.type == type) {
-                    for (var j = 0; j < Game.mapObject.length; j++) {
-                        if (Game.mapObject[j].position.x == posX && Game.mapObject[j].position.y == posY && Game.mapObject[j].position.z > Game.mapObject[i].position.z) {
-                            Game.mapObject[j].position.z -= Game.mapObject[i].sizeZ;
-                            Game.mapObject[j].object3D.position.z -= Game.mapObject[i].sizeZ;
-                        }
-                    }
+                    this.reajustHeight(Game.mapObject[i]);
                     Game.scene.remove(food.object3D);
                     Game.mapObject.splice(i, 1);
+                }
+            }
+        }
+    }
+
+    reajustHeight(object: MapObject) {
+        for (var j = 0; j < Game.mapObject.length; j++) {
+            if (Game.mapObject[j].position.x == object.position.x && Game.mapObject[j].position.y == object.position.y && Game.mapObject[j].position.z > object.position.z) {
+                if (object instanceof Player) {
+                    Game.mapObject[j].position.z -= object.sizeZ / 2;
+                    Game.mapObject[j].object3D.position.z -= object.sizeZ / 2;
+                } else {
+                    Game.mapObject[j].position.z -= object.sizeZ;
+                    Game.mapObject[j].object3D.position.z -= object.sizeZ;
                 }
             }
         }

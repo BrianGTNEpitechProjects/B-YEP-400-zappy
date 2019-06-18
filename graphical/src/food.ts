@@ -3,12 +3,12 @@ import { MapObject } from "./map_object";
 import { Game } from "./game";
 
 var assets = [
-    "textures/iron_block",
     "textures/iron_ore",
-    "textures/gold_block",
+    "textures/iron_block",
     "textures/gold_ore",
-    "textures/diamond_block",
+    "textures/gold_block",
     "textures/diamond_ore",
+    "textures/diamond_block",
 ];
 
 export class Food extends MapObject {

@@ -31,7 +31,9 @@ export class MapObject {
 
         for (var i = 0; i < Game.mapObject.length; i++) {
             if (Game.mapObject[i].position.x == posX && Game.mapObject[i].position.y == posY) {
-                height = Game.mapObject[i].position.z + Game.mapObject[i].sizeZ / 2;
+                if (Game.mapObject[i].position.z + Game.mapObject[i].sizeZ / 2 > height) {
+                    height = Game.mapObject[i].position.z + Game.mapObject[i].sizeZ / 2;
+                }
             }
         }
         return height;
