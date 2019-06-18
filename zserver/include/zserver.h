@@ -18,6 +18,14 @@
 #include "network_manager.h"
 #include "zworld.h"
 
+#define MAX_TEAMS 50
+#define MAX_TEAM_NAME 50
+#define MAX_PLAYERS_PER_TEAM 50
+
+#define MAX_TEAMS_MSG "Maximum nuber of teams allowed: %i\n"
+#define MAX_TEAM_NAME_MSG "Maximum length of a team name: %i, %s not valid\n"
+#define MAX_PLAYERS_PER_TEAM_MSG "Maximum number of players per team: %i\n"
+
 enum socket_type {
     UNDEFINED,
     CLASSIC,
@@ -87,7 +95,6 @@ bool running(void);
 /* new.c */
 trantorian_t *accept_player(zappy_t *zap);
 void set_position_relative(trantorian_t *to_place, tile_t *tile, pos_t pos);
-void set_position(trantorian_t *to_place, tile_t *tile);
 tile_t *get_tile_relative(tile_t *tile, pos_t pos);
 trantorian_t *create_player(void);
 

@@ -9,7 +9,7 @@
 #include "zserver.h"
 #include "zworld.h"
 
-trantorian_t *get_egg_hatched(char *team, zappy_t *zap)
+trantorian_t *get_egg_hatched(const char *team, zappy_t *zap)
 {
     for (trantorian_t *curr = zap->players; curr != NULL; curr = curr->next) {
         if (curr->base.on_extracted == NULL && curr->team.name == team)
@@ -48,6 +48,7 @@ void add_user_to_team(client_user_pair_t *pair, char *team)
     dim_t position = get_random_positions(trantorian->zappy->map_size);
 
     if (count_unused_slot(trantorian->zappy, team) > 0) {
+        //TODO Egg finding and replacement
         trantorian->team.name = team;
         set_position_relative(trantorian, *trantorian->zappy->map, position);
         trantorian->next = trantorian->zappy->players;

@@ -80,9 +80,6 @@ tile_t **create_map(int x, int y);
 pos_t get_random_positions(dim_t map_size);
 void set_position(trantorian_t *to_place, tile_t *tile);
 
-/* new.c */
-trantorian_t *accept_player(zappy_t *zap);
-
 /* teams.c */
 int count_unused_slot(zappy_t *zap, char *team_name);
 int count_players_team(zappy_t *zap, char *team_name);

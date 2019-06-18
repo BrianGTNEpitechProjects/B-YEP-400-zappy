@@ -8,7 +8,24 @@
 #include <getopt.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <string.h>
 #include "zserver.h"
+
+static bool check_max_server_capacity(args_t *arguments)
+{
+    for (int i = 0; arguments->teams[i] != NULL; i++) {
+        if (i >= MAX_TEAMS) {
+            fprintf(stderr, MAX_TEAMS_MSG, MAX_TEAMS);
+            return (false);
+        }
+        if (strlen(arguments->teams[i]) >= MAX_TEAM_NAME) {
+            fprintf(stderr, MAX_TEAM_NAME_MSG, MAX_TEAM_NAME, \
+arguments->teams[i]);
+            return (false);
+        }
+    }
+    return (true);
+}
 
 static char **extract_teams(int index, char **av, int *team_count)
 {
@@ -76,5 +93,6 @@ bool parse_args(args_t *arguments, int ac, char **av)
         default: break;
         }
     }
-    return (!ret && check_args(arguments));
+    return (!ret && check_args(arguments) && \
+check_max_server_capacity(arguments));
 }
