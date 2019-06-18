@@ -62,6 +62,7 @@ void pex(zappy_t *world, trantorian_t *player_expulsing);
 void pbc(zappy_t *world, trantorian_t *player, const char *msg);
 void pic(zappy_t *world, trantorian_t *player_incanting);
 void pie(zappy_t *world, int x, int y, incantation_result_t result);
+void pfk(zappy_t *world, trantorian_t *player_laying);
 void smg(zappy_t *world, const char *msg);
 void seg(zappy_t *world, const char *team);
 
