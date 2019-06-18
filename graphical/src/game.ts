@@ -39,11 +39,11 @@ export class Game {
         this.animate();
         this.onWindowResize();
         this.map = new Map();
+        // var that = this;
         // new Player(1, 5, 1, 1, "LECUL");
-        // setTimeout(function () {new Egg(1, 5, 1);}, 1000);
-        // setTimeout(function () {new Food(1, 5, 1);}, 2000);
+        // setTimeout(function () {that.dropRessource(1, 6);}, 1000);
+        // setTimeout(function () {that.collectRessource(1, 6);}, 2000);
         // // this.setTile(1, 1, 3, 2, 1, 0, 1, 0, 1);
-        // // var that = this;
         // // setTimeout(function () {that.spawnPlayer(1, 1, 1, 1, 1, "LE CUL");}, 1000);
         // // setTimeout(function () {new Food(5, 1, 1);}, 2000);
         // var that = this;
@@ -163,5 +163,10 @@ export class Game {
     dropRessource(id: number, typeRes: number) {
         var player = this.findPlayer(id);
         new Food(typeRes, player.position.x, player.position.y);
+    }
+
+    collectRessource(id: number, typeRes: number) {
+        var player = this.findPlayer(id);
+        this.deleteFood(typeRes, player.position.x, player.position.y);
     }
 }
