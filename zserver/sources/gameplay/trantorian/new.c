@@ -30,3 +30,31 @@ trantorian_t *accept_player(zappy_t *zap) {
     res->zappy = zap;
     return (res);
 }
+
+tile_t *get_tile_relative(tile_t *tile, pos_t pos)
+{
+    for (int x = 0; x < abs(pos.x); x++)
+        tile = (pos.x > 0) ? tile->east : tile->west;
+    for (int y = 0; y < abs(pos.y); y++)
+        tile = (pos.x > 0) ? tile->north : tile->south;
+    return (tile);
+}
+
+void set_position(trantorian_t *to_place, tile_t *tile)
+{
+    trantorian_t *last = NULL;
+
+    if (tile->first == NULL) {
+        tile->first = to_place;
+        to_place->pos = tile;
+    } else {
+        for (last = tile->first; last->neighbour != NULL; last = last->neighbour);
+        last->neighbour = to_place;
+    }
+}
+
+void set_position_relative(trantorian_t *to_place, tile_t *tile, pos_t pos)
+{
+    tile = get_tile_relative(tile, pos);
+    set_position(to_place, tile);
+}

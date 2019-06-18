@@ -138,10 +138,10 @@ static bool init_server(zappy_t *res, int port, int wsport)
     network_server_t *server = NULL;
 
     res->classic_id = add_server(res->nm, port);
-    server = get_server(res->nm, res->classic_id);
-    server->default_client_disconnect_timeout = 20;
     if (res->classic_id == invalid_id)
         return (false);
+    server = get_server(res->nm, res->classic_id);
+    server->default_client_disconnect_timeout = 20;
     if (wsport != 0) {
         res->websocket_id = add_server(res->nm, wsport);
         if (res->websocket_id == invalid_id)
@@ -202,9 +202,17 @@ void on_extract_not_connected(user_base_t *b, network_client_t *c, \
 uint8_t *data, size_t sz)
 {
     client_user_pair_t pair = {c, b};
-    ((char *)data)[sz - 1] = 0;
+    char buffer[C_BUFFER_SIZE + 1] = {0};
 
-    add_user_to_team(&pair, (char *)data);
+    printf("overflow %i\n", c->has_overflow);
+    if (c->has_overflow) {
+        c->lost_connection = true;
+        return;
+    }
+
+    flush_buffer(&c->cb_in, (uint8_t *) &buffer);
+    puts(buffer);
+    add_user_to_team(&pair, (char *) &buffer);
     if (((trantorian_t *)b)->team.name == NULL) {
         write_to_buffer(&pair.client->cb_out, KO_MSG, KO_MSG_LEN);
     } else {
