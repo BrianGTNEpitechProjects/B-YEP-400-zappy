@@ -60,11 +60,8 @@ bool mct(graphical_user_t *user, network_client_t *client,
     UNUSED uint8_t *data, UNUSED size_t size)
 {
     int data_len = compute_map_length(user->world_infos);
-    uint8_t to_write = 0b10000000 + 1;
 
-    write_to_buffer(&client->cb_out, &to_write, 1);
-    to_write = data_len & 0b011111111;
-    write_to_buffer(&client->cb_out, &to_write, 1);
+    send_websocket_header(client, data_len, 1);
     for (int y = 0; y < user->world_infos->map_size.y; ++y) {
         for (int x = 0; x < user->world_infos->map_size.x; ++x) {
             write_map_tile(client, &user->world_infos->map[y][x], x, y);
