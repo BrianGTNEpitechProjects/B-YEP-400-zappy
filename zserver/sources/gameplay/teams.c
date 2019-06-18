@@ -17,16 +17,19 @@
 
 int count_unused_slot(zappy_t *zap, char *team_name)
 {
-    int tot = 0;
-    int if_no_eggs = zap->default_slots_teams;
+    int total = 0;
+    int res = zap->default_slots_teams;
 
     for (trantorian_t *node = zap->players; node; node = node->next) {
-        if (team_name == NULL || strcmp(node->team.name, team_name) == 0) {
-            tot += (node->base.on_disconnect == NULL);
-            if_no_eggs -= (node->base.on_disconnect == NULL);
+        if (strcmp(node->team.name, team_name) == 0) {
+            if (node->is_egg && node->base.on_extracted == NULL) {
+                res++;
+            } else {
+                total++;
+            }
         }
     }
-    return (tot < zap->default_slots_teams ? if_no_eggs : tot);
+    return (res - total);
 }
 
 int count_players_team(zappy_t *zap, char *team_name)
