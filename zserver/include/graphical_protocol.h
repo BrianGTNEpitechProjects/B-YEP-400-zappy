@@ -38,6 +38,13 @@ void send_to_all_ws_clients(zappy_t *world, uint8_t *msg, size_t len);
 void handle_graphical_user_cmd(graphical_user_t *user,
     network_client_t *client, uint8_t *data, size_t data_size);
 
+trantorian_t *find_trantorian_egg_by_owner_id(zappy_t *world, id_t id);
+trantorian_t *find_trantorian_egg_by_id(zappy_t *world, id_t id);
+trantorian_t *find_trantorian_by_id(zappy_t *world, id_t id);
+trantorian_t *find_trantorian_by_parent_id(zappy_t *world, id_t id);
+
+int cardinal_to_int(e_cardinal_t cardinal);
+
 bool msz(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool bct(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool mct(graphical_user_t *, network_client_t *, uint8_t *, size_t);

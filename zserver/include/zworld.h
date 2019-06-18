@@ -85,6 +85,7 @@ struct tile_s {
     tile_t *west;
     tile_t *east;
     unsigned long long broadcasted;
+    pos_t coords;
 };
 
 /* zappy_run.c */

@@ -31,6 +31,7 @@ SRC_FILES	=	\
 				websockets/websocket_set_connection.c \
 				websockets/websocket_set_key.c \
 				websockets/websocket_set_upgrade.c \
+				graphical_protocol/find_trantorian_by.c \
 				graphical_protocol/graphical_user.c \
 				graphical_protocol/handle_graphical_user_cmd.c \
 				graphical_protocol/update_ws_server.c \

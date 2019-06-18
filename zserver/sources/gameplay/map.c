@@ -10,6 +10,7 @@
 
 static void link_neighbours(tile_t **map, pos_t pos, pos_t sz)
 {
+    map[pos.y][pos.x].coords = pos;
     if (pos.y - 1 < 0)
         map[pos.y][pos.x].north = &map[sz.y - 1][pos.x];
     else
