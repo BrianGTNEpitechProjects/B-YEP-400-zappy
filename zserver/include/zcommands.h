@@ -32,6 +32,8 @@ void look(client_user_pair_t *c, char *arg);
 void inventory(client_user_pair_t *client, char *arg);
 void connect_nbr(client_user_pair_t *client, char *arg);
 void broadcast(client_user_pair_t *client, char *arg);
+void put_object(client_user_pair_t *client, char *arg);
+void take_object(client_user_pair_t *client, char *arg);
 
 /* --- utils --- */
 /* utils/always_true.c */

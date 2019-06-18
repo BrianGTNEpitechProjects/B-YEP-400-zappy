@@ -61,6 +61,8 @@ typedef struct {
 
 struct trantorian_s {
     user_base_t base;
+    id_t id;
+    id_t egg_owner;
     bool is_egg;
     zappy_t *zappy;
     unsigned char command_ind;
@@ -117,6 +119,9 @@ tile_t *tile_forward(tile_t *tile, e_cardinal_t dir);
 e_cardinal_t cardinal_rotate_right(e_cardinal_t dir);
 e_cardinal_t cardinal_rotate_left(e_cardinal_t dir);
 char *cardinal_to_string(e_cardinal_t dir);
+
+/* get_item_id_from_name.c */
+int get_item_id_from_name(char *name);
 
 extern const item_t item_map[];
 
