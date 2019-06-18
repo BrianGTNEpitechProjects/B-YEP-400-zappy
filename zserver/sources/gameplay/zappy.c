@@ -20,6 +20,7 @@ const command_info_t commands[] = {
         .code = EMPTY,
         .command = NULL,
         .charge_time = 0,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -27,6 +28,7 @@ const command_info_t commands[] = {
         .code = FORWARD,
         .command = "Forward",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &forward
     },
@@ -34,6 +36,7 @@ const command_info_t commands[] = {
         .code = RIGHT,
         .command = "Right",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &right
     },
@@ -41,6 +44,7 @@ const command_info_t commands[] = {
         .code = LEFT,
         .command = "Left",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &left
     },
@@ -48,6 +52,7 @@ const command_info_t commands[] = {
         .code = LOOK,
         .command = "Look",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &look
     },
@@ -55,6 +60,7 @@ const command_info_t commands[] = {
         .code = INVENTORY,
         .command = "Inventory",
         .charge_time = 1,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &inventory
     },
@@ -62,6 +68,7 @@ const command_info_t commands[] = {
         .code = BROADCAST,
         .command = "Broadcast",
         .charge_time = 7,
+        .need_arg = true,
         .is_valid = &always_true,
         .callback = &broadcast
     },
@@ -69,6 +76,7 @@ const command_info_t commands[] = {
         .code = CONNECT_NBR,
         .command = "Connect_nbr",
         .charge_time = 0,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &connect_nbr
     },
@@ -76,6 +84,7 @@ const command_info_t commands[] = {
         .code = FORK,
         .command = "Fork",
         .charge_time = 42,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -83,6 +92,7 @@ const command_info_t commands[] = {
         .code = EJECT,
         .command = "Eject",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &eject
     },
@@ -90,6 +100,7 @@ const command_info_t commands[] = {
         .code = TAKE_OBJECT,
         .command = "Take",
         .charge_time = 7,
+        .need_arg = true,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -97,6 +108,7 @@ const command_info_t commands[] = {
         .code = SET_OBJECT,
         .command = "Set",
         .charge_time = 7,
+        .need_arg = true,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -104,6 +116,7 @@ const command_info_t commands[] = {
         .code = INCANTATION,
         .command = "Incantation",
         .charge_time = 300,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = NULL
     }
@@ -171,7 +184,8 @@ separator_ind) == 0)
     else
         arg = (char *)&(data[separator_ind + 1]);
     data[sz - 1] = '\0';
-    if (COMMAND_NB < i || emplace_command((trantorian_t *)b, i, arg) < 0)
+    if (COMMAND_NB < i || (commands[i].need_arg && strlen(arg) == 0) || \
+emplace_command((trantorian_t *)b, i, arg) < 0)
         write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
 }
 

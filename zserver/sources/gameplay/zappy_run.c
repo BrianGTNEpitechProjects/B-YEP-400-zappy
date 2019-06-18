@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "zserver.h"
+#include "zcommands.h"
 
 static void process_welcome_procedure(zappy_t *zap, network_server_t *server)
 {

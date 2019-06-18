@@ -10,6 +10,7 @@
 #include <time.h>
 #include <math.h>
 #include "zserver.h"
+#include "zcommands.h"
 
 static void set_to_next_command(trantorian_t *trantorian)
 {
