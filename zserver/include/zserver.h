@@ -82,7 +82,9 @@ char *concat(char *str1, char *str2, bool free1, bool free2);
 
 /* zappy.c */
 void on_disconnect(user_base_t *base, network_client_t *client);
-void on_extract_not_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz);
+void on_extract_not_connected(user_base_t*, network_client_t*, \
+uint8_t*, size_t);
+void on_extract_connected(user_base_t *, network_client_t *, uint8_t *, size_t);
 
 /*  arguments.c */
 bool parse_args(args_t *arguments, int ac, char **av);

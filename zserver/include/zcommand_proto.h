@@ -37,6 +37,7 @@ typedef struct {
     char *command;
     int charge_time;
     bool need_arg;
+    validation_func is_startable;
     validation_func is_valid;
     command_func callback;
 } command_info_t;
