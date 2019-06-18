@@ -14,15 +14,23 @@
 static bool send_awnser(graphical_user_t *user,
                         network_client_t *client, long id)
 {
-    char awnser[29] = {0};
+    char awnser[125] = {0};
     size_t awnser_size = 0;
     trantorian_t *trantorian = find_trantorian_by_id(user->world_infos, id);
-    int level;
+    int x = trantorian ? trantorian->pos->coords.x : 0;
+    int y = trantorian ? trantorian->pos->coords.y : 0;
+    int food = trantorian ? trantorian->inventory[0] : 0;
+    int linemate = trantorian ? trantorian->inventory[1] : 0;
+    int deraumere = trantorian ? trantorian->inventory[2] : 0;
+    int sibur = trantorian ? trantorian->inventory[3] : 0;
+    int mendiane = trantorian ? trantorian->inventory[4] : 0;
+    int phiras = trantorian ? trantorian->inventory[5] : 0;
+    int thystame = trantorian ? trantorian->inventory[6] : 0;
 
     if (trantorian == NULL || trantorian->pos == NULL)
         return (false);
-    level = trantorian->lvl;
-    awnser_size = snprintf(awnser, 29, "plv %i %i\n", id, level);
+    awnser_size = snprintf(awnser, 125, "pin %i %i %i %i %i %i %i %i %i %i\n",
+(int)id, x, y, food, linemate, deraumere, sibur, mendiane, phiras, thystame);
     send_websocket(client, (uint8_t *)awnser, awnser_size, 1);
     return (true);
 }
@@ -35,7 +43,7 @@ static long extract_number(char *data, bool *validator)
     long nb;
     char *end_ptr = NULL;
 
-    if (regcomp(&preg, "^plv #[0-9]{1,11}\n", REG_EXTENDED))
+    if (regcomp(&preg, "^pin #[0-9]{1,11}\n", REG_EXTENDED))
         return (false);
     if (regexec(&preg, data, 10, regmatch, 0)) {
         regfree(&preg);

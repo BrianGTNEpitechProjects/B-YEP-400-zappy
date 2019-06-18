@@ -35,11 +35,11 @@ void send_websocket_header(network_client_t *client, size_t size, uint8_t op) {
     } else if (size <= USHRT_MAX) {
         to_write = 126;
         write_to_buffer(&client->cb_out, &to_write, 1);
-        write_to_buffer(&client->cb_out, &size16, 2);
+        write_to_buffer(&client->cb_out, (uint8_t *)&size16, 2);
     } else {
         to_write = 127;
         write_to_buffer(&client->cb_out, &to_write, 1);
-        write_to_buffer(&client->cb_out, &size64, 8);
+        write_to_buffer(&client->cb_out, (uint8_t *)&size64, 8);
     }
 }
 

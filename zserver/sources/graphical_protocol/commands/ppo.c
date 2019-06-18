@@ -26,7 +26,7 @@ static bool send_awnser(graphical_user_t *user,
     x = trantorian->pos->coords.x;
     y = trantorian->pos->coords.y;
     o = cardinal_to_int(trantorian->orientation);
-    awnser_size = snprintf(awnser, 52, "ppo %i %i %i %i\n", id, x, y, o);
+    awnser_size = snprintf(awnser, 52, "ppo %i %i %i %i\n", (int)id, x, y, o);
     send_websocket(client, (uint8_t *)awnser, awnser_size, 1);
     return (true);
 }

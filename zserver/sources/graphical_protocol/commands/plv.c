@@ -22,7 +22,7 @@ static bool send_awnser(graphical_user_t *user,
     if (trantorian == NULL || trantorian->pos == NULL)
         return (false);
     level = trantorian->lvl;
-    awnser_size = snprintf(awnser, 29, "plv %i %i\n", id, level);
+    awnser_size = snprintf(awnser, 29, "plv %i %i\n", (int)id, level);
     send_websocket(client, (uint8_t *)awnser, awnser_size, 1);
     return (true);
 }
