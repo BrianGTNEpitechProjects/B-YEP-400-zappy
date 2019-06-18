@@ -147,7 +147,7 @@ void on_disconnect(user_base_t *base, network_client_t *client)
     puts("client disconnect");
 }
 
-static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
+static int  emplace_command(trantorian_t *player, e_command_t id, char *arg)
 {
     int ind;
 
@@ -168,7 +168,7 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
 void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
 {
     int i;
-    size_t separator_ind = strcspn((char *) data, " \n");
+    size_t sep_ind = strcspn((char *)data, " \n");
     char *arg;
     client_user_pair_t pair = {c, b};
 
@@ -176,13 +176,12 @@ void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, si
     printf("RECEIVED: %.*s\n", (int)sz - 1, data);
 #endif
     for (i = 1; i <= COMMAND_NB; i++)
-        if (strncmp(data, commands[i].command, \
-separator_ind) == 0)
+        if (sep_ind && strncmp(data, commands[i].command, sep_ind) == 0)
             break;
-    if (data[separator_ind] == '\n')
+    if (data[sep_ind] == '\n')
         arg = "";
     else
-        arg = (char *)&(data[separator_ind + 1]);
+        arg = (char *)&(data[sep_ind + 1]);
     data[sz - 1] = '\0';
     if (COMMAND_NB < i || (commands[i].need_arg && strlen(arg) == 0) || \
 emplace_command((trantorian_t *)b, i, arg) < 0)

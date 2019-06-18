@@ -43,10 +43,9 @@ static int evaluate_tile_angle(e_cardinal_t dir, int i, int lim)
     return ((int)(((double)i / (double)lim) * 360.0 + 235) % 360 + dir * 90);
 }
 
-static void broadcast_at_lvl(client_user_pair_t *c, char *a, \
+static void broadcast_at_lvl(trantorian_t *tranto, char *a, \
 unsigned int l, unsigned long long x)
 {
-    trantorian_t *tranto = (trantorian_t *)c->user;
     tile_t *t = top_left_corner_tile_at(tranto->pos, tranto->orientation, l);
     e_cardinal_t dir = cardinal_rotate_right(tranto->orientation);
     int lim = tile_look_limit(l);
@@ -67,10 +66,13 @@ void broadcast(client_user_pair_t *client, char *arg)
 {
     static unsigned long long broadcasted_nb = 0;
     trantorian_t *trantorian = (trantorian_t *)client->user;
-    int lim = max(trantorian->zappy->map_size.x, trantorian->zappy->map_size.y);
+    int lim;
 
+    if (!trantorian)
+        return;
+    lim = max(trantorian->zappy->map_size.x, trantorian->zappy->map_size.y);
     broadcasted_nb += 1;
     for (unsigned int i = 0; (int)i < lim; i++) {
-        broadcast_at_lvl(client, arg, i, broadcasted_nb);
+        broadcast_at_lvl(trantorian, arg, i, broadcasted_nb);
     }
 }
