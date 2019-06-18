@@ -153,8 +153,20 @@ static bool init_server(zappy_t *res, int port, int wsport)
 
 void on_disconnect(user_base_t *base, network_client_t *client)
 {
-    puts("client disconnect");
-    //TODO cleanup user from zappy
+    trantorian_t *trantorian = (trantorian_t *)base;
+
+    if (trantorian->zappy->players == trantorian) {
+        trantorian->zappy->players = trantorian->next;
+        free(trantorian);
+        return;
+    }
+    for (trantorian_t *t = trantorian->zappy->players; t; t = t->next) {
+        if (t->next == trantorian) {
+            t->next = trantorian->next;
+            free(trantorian);
+            return;
+        }
+    }
 }
 
 static int emplace_command(trantorian_t *player, e_command_t id, char *arg)

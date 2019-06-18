@@ -17,4 +17,5 @@ void connect_nbr(client_user_pair_t *client, __attribute__((unused)) char *arg)
 
     snprintf(nb, 10, "%d", unused);
     write_to_buffer(&client->client->cb_out, (const uint8_t *)nb, 10);
+    write_to_buffer(&client->client->cb_out, (const uint8_t *)"\n", 1);
 }
