@@ -9,6 +9,7 @@
 #include <time.h>
 #include "zserver.h"
 #include "zcommands.h"
+#include "graphical_protocol.h"
 
 static void process_welcome_procedure(zappy_t *zap, network_server_t *server)
 {
@@ -38,6 +39,7 @@ bool run_zappy(zappy_t *zap)
         extract_to_users(server, (uint8_t *)ZAPPY_DELIM, ZAPPY_DELIM_SIZE);
         process_welcome_procedure(zap, server);
         process_command_on_users(zap, server->client_user_map);
+        update_ws_server(zap);
     }
     remove_sig_catch();
     return (true);

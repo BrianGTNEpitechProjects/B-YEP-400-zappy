@@ -30,6 +30,9 @@ SRC_FILES	=	\
 				websockets/websocket_set_connection.c \
 				websockets/websocket_set_key.c \
 				websockets/websocket_set_upgrade.c \
+				graphical_protocol/graphical_user.c \
+				graphical_protocol/handle_graphical_user_cmd.c \
+				graphical_protocol/update_ws_server.c \
 				base64.c
 
 COMMAND_DIR		=	$(realpath sources/gameplay/commands)
@@ -43,6 +46,36 @@ COMMAND_FILES	=	\
 					inventory.c\
 					broadcast.c\
 					connect_nbr.c\
+
+GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
+
+GCOMMAND_FILES	=	\
+					bct.c \
+					ebo.c \
+					edi.c \
+					eht.c \
+					enw.c \
+					mct.c \
+					msz.c \
+					pbc.c \
+					pdi.c \
+					pdr.c \
+					pex.c \
+					pfk.c \
+					pgt.c \
+					pic.c \
+					pie.c \
+					pin.c \
+					plv.c \
+					pnw.c \
+					ppo.c \
+					seg.c \
+					sgt.c \
+					smg.c \
+					spb.c \
+					sst.c \
+					suc.c \
+					tna.c
 
 NETWORK_DIR	=	$(realpath sources/network)
 
@@ -66,7 +99,7 @@ SRC_NETWORK	=	\
 				network_server_sync_buffer.c \
 				network_server_update.c \
 
-SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES))
+SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES)) $(addprefix $(GCOMMAND_DIR)/, $(GCOMMAND_FILES))
 
 OBJ			=	$(SRC:%.c=%.o)
 
@@ -139,7 +172,7 @@ fclean:		clean
 
 re:			fclean all
 
-debug:		CFLAGS += -g
+debug:		CFLAGS += -g -DGRAPHICAL_SERVER_DEBUG
 debug:		re
 
 tests_run:
