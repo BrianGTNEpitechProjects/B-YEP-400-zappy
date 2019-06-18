@@ -14,7 +14,7 @@ static void sync_client(network_client_t *client, fd_set *rfds, fd_set *wfds)
 {
     if (FD_ISSET(client->socket, rfds)) {
         if (flush_socket_to_in(client)) {
-            fprintf(stderr, "WARNING: circular buffer override, data lost\n");
+            client->has_overflow = true;
         }
     }
     if (client->cb_out.nb_buffered_bytes != 0 &&
