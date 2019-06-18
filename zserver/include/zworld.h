@@ -118,6 +118,9 @@ e_cardinal_t cardinal_rotate_right(e_cardinal_t dir);
 e_cardinal_t cardinal_rotate_left(e_cardinal_t dir);
 char *cardinal_to_string(e_cardinal_t dir);
 
+/* get_item_id_from_name.c */
+int get_item_id_from_name(char *name);
+
 extern const item_t item_map[];
 
 #endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H

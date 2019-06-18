@@ -24,6 +24,7 @@ SRC_FILES	=	\
 				gameplay/trantorian/neighbour.c \
 				gameplay/utils/cardinal_utils.c \
 				gameplay/utils/always_true.c \
+				gameplay/utils/get_item_id_from_name.c \
 				websockets/websocket.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \
@@ -46,6 +47,8 @@ COMMAND_FILES	=	\
 					inventory.c\
 					broadcast.c\
 					connect_nbr.c\
+					put_object.c\
+					take_object.c\
 
 GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
 

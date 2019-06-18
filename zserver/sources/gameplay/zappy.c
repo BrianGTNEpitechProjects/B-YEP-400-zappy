@@ -102,7 +102,7 @@ const command_info_t commands[] = {
         .charge_time = 7,
         .need_arg = true,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &take_object
     },
     {
         .code = SET_OBJECT,
@@ -110,7 +110,7 @@ const command_info_t commands[] = {
         .charge_time = 7,
         .need_arg = true,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &put_object
     },
     {
         .code = INCANTATION,
@@ -155,7 +155,7 @@ void on_disconnect(user_base_t *base, network_client_t *client)
     puts("client disconnect");
 }
 
-static int  emplace_command(trantorian_t *player, e_command_t id, char *arg)
+static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
 {
     int ind;
 
@@ -173,35 +173,38 @@ static int  emplace_command(trantorian_t *player, e_command_t id, char *arg)
     return (-1);
 }
 
-void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
+void on_extract_connected(user_base_t *b, network_client_t *c, \
+uint8_t *data, size_t sz)
 {
     int i;
     size_t sep_ind = strcspn((char *)data, " \n");
     char *arg;
-    client_user_pair_t pair = {c, b};
 
 #ifdef DEBUG_PRINT_RECV
     printf("RECEIVED: %.*s\n", (int)sz - 1, data);
 #endif
+    if (c->has_overflow) {
+        c->lost_connection = true;
+        return;
+    }
     for (i = 1; i <= COMMAND_NB; i++)
-        if (sep_ind && strncmp(data, commands[i].command, strlen(commands[i].command)) == 0)
+        if (sep_ind && \
+strncmp(data, commands[i].command, strlen(commands[i].command)) == 0)
             break;
-    if (data[sep_ind] == '\n')
-        arg = "";
-    else
-        arg = (char *)&(data[sep_ind + 1]);
+    arg = (data[sep_ind] == '\n') ? "" : (char *)&(data[sep_ind + 1]);
     data[sz - 1] = '\0';
     if (COMMAND_NB < i || (commands[i].need_arg && strlen(arg) == 0) || \
 emplace_command((trantorian_t *)b, i, arg) < 0)
         write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
 }
 
-void on_extract_not_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
+void on_extract_not_connected(user_base_t *b, network_client_t *c, \
+uint8_t *data, size_t sz)
 {
     client_user_pair_t pair = {c, b};
     ((char *)data)[sz - 1] = 0;
 
-    add_user_to_team(&pair, (char *) data);
+    add_user_to_team(&pair, (char *)data);
     if (((trantorian_t *)b)->team.name == NULL) {
         write_to_buffer(&pair.client->cb_out, KO_MSG, KO_MSG_LEN);
     } else {
