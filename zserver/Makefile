@@ -26,6 +26,7 @@ SRC_FILES	=	\
 				gameplay/utils/always_true.c \
 				gameplay/utils/get_item_id_from_name.c \
 				websockets/websocket.c \
+				websockets/websocket_send.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \
 				websockets/websocket_set_connection.c \

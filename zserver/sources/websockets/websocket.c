@@ -24,17 +24,6 @@ struct websocket_header_line header_lines[] = {
     {NULL, NULL}
 };
 
-void send_websocket(network_client_t *client, uint8_t *data,
-        size_t length, uint8_t opcode)
-{
-    uint8_t to_write = 0b10000000 + opcode;
-
-    write_to_buffer(&client->cb_out, &to_write, 1);
-    to_write = length & 0b011111111;
-    write_to_buffer(&client->cb_out, &to_write, 1);
-    write_to_buffer(&client->cb_out, data, length);
-}
-
 static char *send_readed(size_t size, uint8_t *tmp, size_t *bytes_used,
         uint8_t *masking_key)
 {
