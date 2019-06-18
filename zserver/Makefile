@@ -60,7 +60,6 @@ GCOMMAND_FILES	=	\
 					edi.c \
 					eht.c \
 					enw.c \
-					mct.c \
 					msz.c \
 					pbc.c \
 					pdi.c \
@@ -68,6 +67,7 @@ GCOMMAND_FILES	=	\
 					pex.c \
 					pfk.c \
 					pgt.c \
+					pia.c \
 					pic.c \
 					pie.c \
 					pin.c \
