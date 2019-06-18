@@ -56,7 +56,7 @@ bool ppo(graphical_user_t *user, network_client_t *client,
     uint8_t *data, size_t size)
 {
     bool is_valid_number = true;
-    char extracted[C_BUFFER_SIZE] = {0};
+    char extracted[C_BUFFER_SIZE + 1] = {0};
     long player_nb;
 
     memcpy(extracted, data, size);

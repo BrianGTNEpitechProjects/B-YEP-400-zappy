@@ -14,7 +14,7 @@
 static void graphical_user_websocket_handshake(graphical_user_t *guser,
     network_client_t *client, uint8_t *data, size_t data_size)
 {
-    char extracted_as_char[C_BUFFER_SIZE] = {0};
+    char extracted_as_char[C_BUFFER_SIZE + 1] = {0};
 
     if (!check_data_encoding(data, data_size))
         return;

@@ -43,7 +43,7 @@ static char *send_readed(size_t size, uint8_t *tmp, size_t *bytes_used,
 
 static void read_ws_client_data(zuser_ws_t *user, network_client_t *client)
 {
-    uint8_t tmp[C_BUFFER_SIZE];
+    uint8_t tmp[C_BUFFER_SIZE + 1] = {0};
     size_t sz_flushed = flush_buffer(&client->cb_in, tmp);
     size_t bytes_used = 0;
     size_t size = 0;
