@@ -78,6 +78,8 @@ typedef struct {
 
 struct trantorian_s {
     user_base_t base;
+    id_t id;
+    id_t egg_owner;
     bool is_egg;
     zappy_t *zappy;
     unsigned char command_ind;
