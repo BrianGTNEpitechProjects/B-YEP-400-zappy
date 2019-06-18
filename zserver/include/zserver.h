@@ -22,7 +22,7 @@
 #define MAX_TEAM_NAME 50
 #define MAX_PLAYERS_PER_TEAM 50
 
-#define MAX_TEAMS_MSG "Maximum nuber of teams allowed: %i\n"
+#define MAX_TEAMS_MSG "Maximum number of teams allowed: %i\n"
 #define MAX_TEAM_NAME_MSG "Maximum length of a team name: %i, %s not valid\n"
 #define MAX_PLAYERS_PER_TEAM_MSG "Maximum number of players per team: %i\n"
 
