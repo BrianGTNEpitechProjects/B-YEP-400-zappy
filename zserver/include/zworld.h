@@ -9,30 +9,13 @@
 #define PSU_ZAPPY_2018_ZAPPY_WORLD_H
 
 #include "network_manager.h"
-#include "zcommands.h"
+#include "zposition.h"
+#include "zcommand_proto.h"
 
 #define ZAPPY_DELIM "\n"
 #define ZAPPY_DELIM_SIZE 1
 
 #define COMMAND_QUEUE_LEN (10)
-
-/*
- * POSITION
- */
-typedef enum {
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
-} e_cardinal_t;
-
-typedef union {
-    struct {
-        int x;
-        int y;
-    };
-    int arr[2];
-} pos_t;
 
 /*
  * ITEM
@@ -99,6 +82,7 @@ struct tile_s {
     tile_t *south;
     tile_t *west;
     tile_t *east;
+    unsigned long long broadcasted;
 };
 
 /* zappy_run.c */

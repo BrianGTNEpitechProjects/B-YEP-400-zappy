@@ -20,6 +20,7 @@ const command_info_t commands[] = {
         .code = EMPTY,
         .command = NULL,
         .charge_time = 0,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -27,6 +28,7 @@ const command_info_t commands[] = {
         .code = FORWARD,
         .command = "Forward",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &forward
     },
@@ -34,6 +36,7 @@ const command_info_t commands[] = {
         .code = RIGHT,
         .command = "Right",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &right
     },
@@ -41,6 +44,7 @@ const command_info_t commands[] = {
         .code = LEFT,
         .command = "Left",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &left
     },
@@ -48,6 +52,7 @@ const command_info_t commands[] = {
         .code = LOOK,
         .command = "Look",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &look
     },
@@ -55,27 +60,31 @@ const command_info_t commands[] = {
         .code = INVENTORY,
         .command = "Inventory",
         .charge_time = 1,
+        .need_arg = false,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &inventory
     },
     {
         .code = BROADCAST,
         .command = "Broadcast",
         .charge_time = 7,
+        .need_arg = true,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &broadcast
     },
     {
         .code = CONNECT_NBR,
         .command = "Connect_nbr",
         .charge_time = 0,
+        .need_arg = false,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &connect_nbr
     },
     {
         .code = FORK,
         .command = "Fork",
         .charge_time = 42,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -83,6 +92,7 @@ const command_info_t commands[] = {
         .code = EJECT,
         .command = "Eject",
         .charge_time = 7,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = &eject
     },
@@ -90,6 +100,7 @@ const command_info_t commands[] = {
         .code = TAKE_OBJECT,
         .command = "Take",
         .charge_time = 7,
+        .need_arg = true,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -97,6 +108,7 @@ const command_info_t commands[] = {
         .code = SET_OBJECT,
         .command = "Set",
         .charge_time = 7,
+        .need_arg = true,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -104,6 +116,7 @@ const command_info_t commands[] = {
         .code = INCANTATION,
         .command = "Incantation",
         .charge_time = 300,
+        .need_arg = false,
         .is_valid = &always_true,
         .callback = NULL
     }
@@ -122,7 +135,11 @@ void delete_zappy(zappy_t *zappy)
 
 static bool init_server(zappy_t *res, int port, int wsport)
 {
+    network_server_t *server = NULL;
+
     res->classic_id = add_server(res->nm, port);
+    server = get_server(res->nm, res->classic_id);
+    server->default_client_disconnect_timeout = 20;
     if (res->classic_id == invalid_id)
         return (false);
     if (wsport != 0) {
@@ -138,7 +155,7 @@ void on_disconnect(user_base_t *base, network_client_t *client)
     puts("client disconnect");
 }
 
-static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
+static int  emplace_command(trantorian_t *player, e_command_t id, char *arg)
 {
     int ind;
 
@@ -148,16 +165,18 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
             player->queue[ind].code = id;
             player->queue[ind].remaining_time = commands[id].charge_time;
             strcpy(player->queue[ind].arg, arg);
-            return (i);
+            printf("DEBUG: %d\n", ind);
+            return (ind);
         }
     }
+    printf("DEBUG: -1\n");
     return (-1);
 }
 
 void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
 {
     int i;
-    size_t separator_ind = strcspn((char *) data, " \n");
+    size_t sep_ind = strcspn((char *)data, " \n");
     char *arg;
     client_user_pair_t pair = {c, b};
 
@@ -165,14 +184,15 @@ void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, si
     printf("RECEIVED: %.*s\n", (int)sz - 1, data);
 #endif
     for (i = 1; i <= COMMAND_NB; i++)
-        if (strncmp(data, commands[i].command, separator_ind) == 0)
+        if (sep_ind && strncmp(data, commands[i].command, strlen(commands[i].command)) == 0)
             break;
-    if (data[separator_ind] == '\n')
+    if (data[sep_ind] == '\n')
         arg = "";
     else
-        arg = (char *)&(data[separator_ind + 1]);
+        arg = (char *)&(data[sep_ind + 1]);
     data[sz - 1] = '\0';
-    if (i <= COMMAND_NB && emplace_command((trantorian_t *)b, i, arg) < 0)
+    if (COMMAND_NB < i || (commands[i].need_arg && strlen(arg) == 0) || \
+emplace_command((trantorian_t *)b, i, arg) < 0)
         write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
 }
 

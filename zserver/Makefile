@@ -44,6 +44,8 @@ COMMAND_FILES	=	\
 					left.c\
 					look.c\
 					inventory.c\
+					broadcast.c\
+					connect_nbr.c\
 
 GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
 
