@@ -135,7 +135,11 @@ void delete_zappy(zappy_t *zappy)
 
 static bool init_server(zappy_t *res, int port)
 {
+    network_server_t *server = NULL;
+
     res->classic_id = add_server(res->nm, port);
+    server = get_server(res->nm, res->classic_id);
+    server->default_client_disconnect_timeout = 20;
     if (res->classic_id == invalid_id)
         return (false);
     //TODO Websocket server
@@ -176,7 +180,7 @@ void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, si
     printf("RECEIVED: %.*s\n", (int)sz - 1, data);
 #endif
     for (i = 1; i <= COMMAND_NB; i++)
-        if (sep_ind && strncmp(data, commands[i].command, sep_ind) == 0)
+        if (sep_ind && strncmp(data, commands[i].command, strlen(commands[i].command)) == 0)
             break;
     if (data[sep_ind] == '\n')
         arg = "";
