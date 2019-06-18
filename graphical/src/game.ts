@@ -4,6 +4,7 @@ import { Map } from "./map"
 import { Food } from './food';
 import { MapObject } from './map_object';
 import { Player } from './player';
+import { Egg } from './egg';
 const loader = require('three-gltf-loader');
 
 export class Game {
@@ -38,6 +39,17 @@ export class Game {
         this.animate();
         this.onWindowResize();
         this.map = new Map();
+        // new Player(1, 5, 1, 1, "LECUL");
+        // setTimeout(function () {new Egg(1, 5, 1);}, 1000);
+        // setTimeout(function () {new Food(1, 5, 1);}, 2000);
+        // // this.setTile(1, 1, 3, 2, 1, 0, 1, 0, 1);
+        // // var that = this;
+        // // setTimeout(function () {that.spawnPlayer(1, 1, 1, 1, 1, "LE CUL");}, 1000);
+        // // setTimeout(function () {new Food(5, 1, 1);}, 2000);
+        // var that = this;
+        // setTimeout(function (){that.setPlayerPos(1, 2, 2, 1);}, 3000);
+        // setTimeout(function (){that.setPlayerPos(1, 5, 1, 1);}, 4000);
+        // // setTimeout(function (){that.deleteFood(1, 1, 1);}, 4000);
     }
 
     spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string) {
@@ -45,11 +57,16 @@ export class Game {
     }
 
     setPlayerPos(id: number, x: number, y: number, orientation: number) {
+        var player = this.findPlayer(id);
+        this.reajustHeight(player);
+        player.moovePlayer(x, y);
+    }
+
+    findPlayer(id: number) {
         for (var i = 0; i < Game.mapObject.length; i++) {
             var player = Game.mapObject[i] as Player;
             if (player.id == id) {
-                this.reajustHeight(player);
-                player.moovePlayer(x, y);
+                return player;
             }
         }
     }
@@ -57,8 +74,21 @@ export class Game {
     addTeamName(name: string) {
     }
 
-    setTile(x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number) {
-        var numberRessources = [res0, res1, res2, res3, res4, res5];
+    setPlayerLevel(id: number, level: number) {
+        var player = this.findPlayer(id);
+        player.setLevel(level);
+    }
+
+    setPlayerInventory(id: number, x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number, res6: number) {
+    }
+
+    expulsePlayer(id: number) {
+        var player = this.findPlayer(id);
+        Game.scene.remove(player.object3D);
+    }
+
+    setTile(x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number, res6: number) {
+        var numberRessources = [res0, res1, res2, res3, res4, res5, res6];
 
         for (var i = 0; i < numberRessources.length; i++) {
             for (var j = 0; j < numberRessources[i]; j++) {
@@ -126,8 +156,12 @@ export class Game {
     //     setInterval(function() { that.spawnFood(6, "textures/diamond_block");}, 10500);
     // }
 
-    // spawnFood(type: number, texture: string) {
-    //     var food = new Food(type, texture);
-    //     // Game.mapObject.push(food);
-    // }
+    spawnEgg(idEgg: number, idPlayer: number, x: number, y: number) {
+        new Egg(idEgg, x, y);
+    }
+
+    dropRessource(id: number, typeRes: number) {
+        var player = this.findPlayer(id);
+        new Food(typeRes, player.position.x, player.position.y);
+    }
 }

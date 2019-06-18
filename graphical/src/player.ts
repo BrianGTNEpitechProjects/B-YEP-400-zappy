@@ -37,4 +37,8 @@ export class Player extends MapObject {
         this.object3D.position.y = y * Game.squareSize + Game.squareSize / 2;
         this.object3D.position.z = height;
     }
+
+    setLevel(level: number) {
+        this.level = level;
+    }
 }

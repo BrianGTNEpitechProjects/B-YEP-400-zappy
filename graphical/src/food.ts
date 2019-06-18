@@ -3,6 +3,7 @@ import { MapObject } from "./map_object";
 import { Game } from "./game";
 
 var assets = [
+    "textures/melon_side",
     "textures/iron_ore",
     "textures/iron_block",
     "textures/gold_ore",
