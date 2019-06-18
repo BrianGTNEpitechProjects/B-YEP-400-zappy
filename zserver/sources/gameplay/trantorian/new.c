@@ -16,7 +16,8 @@ static id_t get_new_id(void)
     return (id);
 }
 
-trantorian_t *accept_player(zappy_t *zap) {
+trantorian_t *create_player(void)
+{
     trantorian_t *res = calloc(sizeof(*res), 1);
 
     if (res == NULL) {
@@ -27,6 +28,16 @@ trantorian_t *accept_player(zappy_t *zap) {
     res->id = get_new_id();
     res->base.on_disconnect = &on_disconnect;
     res->base.on_extracted = &on_extract_not_connected;
+    res->life_unit = 10;
+    return (res);
+}
+
+trantorian_t *accept_player(zappy_t *zap)
+{
+    trantorian_t *res = create_player();
+
+    if (res == NULL)
+        return (NULL);
     res->zappy = zap;
     return (res);
 }
@@ -38,27 +49,6 @@ tile_t *get_tile_relative(tile_t *tile, pos_t pos)
     for (int y = 0; y < abs(pos.y); y++)
         tile = (pos.x > 0) ? tile->north : tile->south;
     return (tile);
-}
-
-void set_position(trantorian_t *to_place, tile_t *tile)
-{
-    trantorian_t *relink = NULL;
-
-    if (to_place->pos) {
-        for (relink = to_place->pos->first; relink->neighbour != to_place; \
-relink = relink->neighbour);
-        relink->neighbour = to_place->neighbour;
-    }
-    to_place->pos = tile;
-    if (tile->first == NULL) {
-        tile->first = to_place;
-        to_place->neighbour = to_place;
-    } else {
-        to_place->neighbour = tile->first;
-        for (relink = tile->first; relink->neighbour != tile->first; \
-relink = relink->neighbour);
-        relink->neighbour = to_place;
-    }
 }
 
 void set_position_relative(trantorian_t *to_place, tile_t *tile, pos_t pos)

@@ -87,7 +87,7 @@ const command_info_t commands[] = {
         .charge_time = 42,
         .need_arg = false,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &fork
     },
     {
         .code = EJECT,

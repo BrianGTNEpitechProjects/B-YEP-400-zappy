@@ -54,3 +54,24 @@ pos_t get_random_positions(dim_t map_size)
     res.y = rand() % map_size.y;
     return (res);
 }
+
+void set_position(trantorian_t *to_place, tile_t *tile)
+{
+    trantorian_t *relink = NULL;
+
+    if (to_place->pos) {
+        for (relink = to_place->pos->first; relink->neighbour != to_place; \
+relink = relink->neighbour);
+        relink->neighbour = to_place->neighbour;
+    }
+    to_place->pos = tile;
+    if (tile->first == NULL) {
+        tile->first = to_place;
+        to_place->neighbour = to_place;
+    } else {
+        to_place->neighbour = tile->first;
+        for (relink = tile->first; relink->neighbour != tile->first; \
+relink = relink->neighbour);
+        relink->neighbour = to_place;
+    }
+}
