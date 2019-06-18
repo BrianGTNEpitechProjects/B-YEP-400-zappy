@@ -37,7 +37,7 @@ void broadcast      (client_user_pair_t *client, char *arg);
 void put_object     (client_user_pair_t *client, char *arg);
 void take_object    (client_user_pair_t *client, char *arg);
 void incantation    (client_user_pair_t *client, char *arg);
-void fork           (client_user_pair_t *client, char *arg);
+void fork_command(client_user_pair_t *client, char *arg);
 
 /* --- utils --- */
 /* utils/always_true.c */

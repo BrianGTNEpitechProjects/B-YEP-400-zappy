@@ -10,7 +10,7 @@
 #include "zworld.h"
 #include "zserver.h"
 
-void fork(client_user_pair_t *client, __attribute__((unused)) char *arg)
+void fork_command(client_user_pair_t *client, __attribute__((unused)) char *arg)
 {
     trantorian_t *trantorian = (trantorian_t *)client->user;
     trantorian_t *egg = create_player();
@@ -25,5 +25,8 @@ void fork(client_user_pair_t *client, __attribute__((unused)) char *arg)
     egg->zappy = trantorian->zappy;
     egg->team = trantorian->team;
     set_position(egg, trantorian->pos);
+    while (trantorian->next != NULL)
+        trantorian = trantorian->next;
+    trantorian->next = egg;
     write_to_buffer(&client->client->cb_out, OK_MSG, OK_MSG_LEN);
 }

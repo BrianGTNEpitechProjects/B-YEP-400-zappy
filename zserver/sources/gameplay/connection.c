@@ -12,7 +12,8 @@
 trantorian_t *get_egg_hatched(const char *team, zappy_t *zap)
 {
     for (trantorian_t *curr = zap->players; curr != NULL; curr = curr->next) {
-        if (curr->base.on_extracted == NULL && curr->team.name == team)
+        if (curr->base.on_extracted == &on_extract_connected && curr->is_egg \
+&& !strcmp(team, curr->team.name))
             return (curr);
     }
     return (NULL);
@@ -42,16 +43,23 @@ void response_success_connection(trantorian_t *tranto, network_client_t *nc)
     write_to_buffer(&nc->cb_out, (uint8_t *)buff, size);
 }
 
-void add_user_to_team(client_user_pair_t *pair, char *team)
+trantorian_t * add_user_to_team(client_user_pair_t *pair, char *team)
 {
     trantorian_t *trantorian = (trantorian_t *)pair->user;
+    trantorian_t *egg = NULL;
     dim_t position = get_random_positions(trantorian->zappy->map_size);
 
     if (count_unused_slot(trantorian->zappy, team) > 0) {
-        //TODO Egg finding and replacement
-        trantorian->team.name = team;
-        set_position_relative(trantorian, *trantorian->zappy->map, position);
-        trantorian->next = trantorian->zappy->players;
-        trantorian->zappy->players = trantorian;
+        egg = get_egg_hatched(team,trantorian->zappy);
+        if (egg == NULL) {
+            trantorian->team.name = team;
+            set_position_relative(trantorian, *trantorian->zappy->map, position);
+            trantorian->next = trantorian->zappy->players;
+            trantorian->zappy->players = trantorian;
+        } else {
+            replace_egg(trantorian, egg);
+            return (egg);
+        }
     }
+    return (trantorian);
 }

@@ -93,7 +93,7 @@ const command_info_t commands[] = {
         .need_arg = false,
         .is_startable = &always_true,
         .is_valid = &always_true,
-        .callback = &fork
+        .callback = &fork_command
     },
     {
         .code = EJECT,
@@ -161,7 +161,8 @@ static bool init_server(zappy_t *res, int port, int wsport)
     return (true);
 }
 
-void on_disconnect(user_base_t *base, network_client_t *client)
+void on_disconnect(user_base_t *base, __attribute__((unused)) \
+network_client_t *client)
 {
     trantorian_t *trantorian = (trantorian_t *)base;
 
@@ -178,7 +179,6 @@ void on_disconnect(user_base_t *base, network_client_t *client)
         }
     }
 }
-
 void on_extract_not_connected(user_base_t *b, network_client_t *c, \
 uint8_t *data, size_t sz)
 {
@@ -192,7 +192,7 @@ uint8_t *data, size_t sz)
     data[sz - 1] = 0;
     for (int i = 0; tranto->zappy->teams[i].name != NULL; i++) {
         if (strcmp((char *) data, tranto->zappy->teams[i].name) == 0)
-            add_user_to_team(&pair, tranto->zappy->teams[i].name);
+            tranto = add_user_to_team(&pair, tranto->zappy->teams[i].name);
     }
     if (tranto->team.name == NULL) {
         write_to_buffer(&pair.client->cb_out, KO_MSG, KO_MSG_LEN);
