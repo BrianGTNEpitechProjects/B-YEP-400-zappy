@@ -45,3 +45,12 @@ tile_t **create_map(int x, int y) {
     link_map(res, (dim_t){.x = x, .y = y});
     return (res);
 }
+
+pos_t get_random_positions(dim_t map_size)
+{
+    pos_t res;
+
+    res.x = rand() % map_size.x;
+    res.y = rand() % map_size.y;
+    return (res);
+}

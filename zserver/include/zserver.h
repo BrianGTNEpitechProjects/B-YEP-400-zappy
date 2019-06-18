@@ -86,6 +86,9 @@ bool running(void);
 
 /* new.c */
 trantorian_t *accept_player(zappy_t *zap);
+void set_position_relative(trantorian_t *to_place, tile_t *tile, pos_t pos);
+void set_position(trantorian_t *to_place, tile_t *tile);
+tile_t *get_tile_relative(tile_t *tile, pos_t pos);
 
 /* connection.c */
 void response_success_connection(trantorian_t *tranto, network_client_t *nc);

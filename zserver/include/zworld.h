@@ -95,6 +95,7 @@ bool zappy(int ac, char **av);
 
 /*  map.c   */
 tile_t **create_map(int x, int y);
+pos_t get_random_positions(dim_t map_size);
 
 /* new.c */
 trantorian_t *accept_player(zappy_t *zap);
