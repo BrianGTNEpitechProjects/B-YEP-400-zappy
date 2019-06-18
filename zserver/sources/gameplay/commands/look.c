@@ -8,14 +8,14 @@
 #include <math.h>
 #include <string.h>
 #include "zcommands.h"
-#include "zworld.h"
 
-static int tile_look_limit(unsigned int lvl)
+int tile_look_limit(unsigned int lvl)
 {
     return ((2 * lvl) + 1);
 }
 
-static tile_t *get_left_tile_at(tile_t *start, e_cardinal_t dir, unsigned int lvl)
+tile_t *top_left_corner_tile_at(tile_t *start, e_cardinal_t dir, \
+unsigned int lvl)
 {
     int tmp = tile_look_limit(lvl);
 
@@ -43,17 +43,17 @@ static void write_tile_out(client_user_pair_t *c, tile_t *tile)
         }
 }
 
-void look(client_user_pair_t *c, char *arg)
+void look(client_user_pair_t *c, __attribute__((unused)) char *arg)
 {
-    trantorian_t *self = (trantorian_t *)c->user;
+    trantorian_t *s = (trantorian_t *)c->user;
     int limit;
-    e_cardinal_t right_dir = cardinal_rotate_right(self->orientation);
+    e_cardinal_t right_dir = cardinal_rotate_right(s->orientation);
     tile_t *start;
 
     write_to_buffer(&c->client->cb_out, (const uint8_t *)"[", 1);
-    for (unsigned int i = 0; i < self->lvl; ++i) {
-        start = get_left_tile_at(self->pos, self->orientation, self->lvl);
-        limit = tile_look_limit(self->lvl);
+    for (unsigned int i = 0; i < s->lvl; ++i) {
+        start = top_left_corner_tile_at(s->pos, s->orientation, s->lvl);
+        limit = tile_look_limit(s->lvl);
         for (int j = 0; j < limit; ++j) {
             write_tile_out(c, start);
             write_to_buffer(&c->client->cb_out, (const uint8_t *)",", 1);

@@ -63,7 +63,7 @@ const command_info_t commands[] = {
         .command = "Broadcast",
         .charge_time = 7,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &broadcast
     },
     {
         .code = CONNECT_NBR,
