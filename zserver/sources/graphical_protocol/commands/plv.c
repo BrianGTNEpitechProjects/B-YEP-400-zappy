@@ -12,7 +12,7 @@
 #include "graphical_protocol.h"
 
 static bool send_awnser(graphical_user_t *user,
-                        network_client_t *client, long id)
+    network_client_t *client, long id)
 {
     char awnser[29] = {0};
     size_t awnser_size = 0;
