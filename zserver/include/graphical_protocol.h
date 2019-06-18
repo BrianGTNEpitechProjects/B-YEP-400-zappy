@@ -57,8 +57,9 @@ bool sst(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool suc(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool sbp(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 
+void pnw(zappy_t *world, trantorian_t *new_player);
+void pie(zappy_t *world, int x, int y, incantation_result_t result);
 void smg(zappy_t *world, const char *msg);
 void seg(zappy_t *world, const char *team);
-void pie(zappy_t *world, int x, int y, incantation_result_t result);
 
 #endif //PSU_ZAPPY_2018_GRAPHICAL_PROTOCOL_H
