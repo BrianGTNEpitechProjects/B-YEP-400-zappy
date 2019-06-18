@@ -34,10 +34,12 @@ static void graphical_user_on_extracted(user_base_t *user,
     printf("]\n");
 #endif
     if (guser->base.sock_type == WEBSOCKET) {
-        handle_graphical_user_cmd(user, client, data, data_size);
+        handle_graphical_user_cmd(guser, client, data, data_size);
     } else {
         graphical_user_websocket_handshake(guser, client, data, data_size);
     }
+    if (client->has_overflow)
+        client->lost_connection = true;
 }
 
 static void graphical_user_on_disconnected(user_base_t *user,

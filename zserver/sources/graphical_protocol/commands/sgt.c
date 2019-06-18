@@ -10,7 +10,7 @@
 #include "graphical_protocol.h"
 
 bool sgt(graphical_user_t *user, network_client_t *client,
-    uint8_t *data, size_t size)
+    UNUSED uint8_t *data, UNUSED size_t size)
 {
     char to_send[16] = {0};
     int time_scale = user->world_infos->time_scale;

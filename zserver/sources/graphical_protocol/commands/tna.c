@@ -11,7 +11,7 @@
 #include "graphical_protocol.h"
 
 bool tna(graphical_user_t *user, network_client_t *client,
-    uint8_t *data, size_t size)
+    UNUSED uint8_t *data, UNUSED size_t size)
 {
     char *name;
     size_t data_len = 0;

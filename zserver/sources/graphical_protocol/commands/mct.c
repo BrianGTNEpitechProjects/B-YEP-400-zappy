@@ -57,7 +57,7 @@ static int compute_map_length(zappy_t *world)
 
 //FIXME modify so that the ws max payload size doesn't break everything
 bool mct(graphical_user_t *user, network_client_t *client,
-    uint8_t *data, size_t size)
+    UNUSED uint8_t *data, UNUSED size_t size)
 {
     int data_len = compute_map_length(user->world_infos);
     uint8_t to_write = 0b10000000 + 1;
