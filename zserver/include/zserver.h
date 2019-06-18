@@ -54,6 +54,7 @@ unsigned int get_base64_size(size_t);
 void send_websocket(network_client_t *, uint8_t *, size_t, uint8_t);
 void read_ws_clients_data(network_server_t *server);
 
+#define DEFAULT_ARGS {0, 0, 0, 0, 100, NULL, 0, 0, false}
 
 typedef struct {
     int port;
@@ -63,6 +64,8 @@ typedef struct {
     int freq;
     char **teams;
     int tc;
+    int wsport;
+    bool set_ws;
 } args_t;
 
 /* utils.c */
