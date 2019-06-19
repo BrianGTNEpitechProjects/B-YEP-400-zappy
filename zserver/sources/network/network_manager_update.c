@@ -83,7 +83,7 @@ static void fill_fd_infos_server(fd_infos_t *infos, network_server_t *ns)
 
 bool update_manager(network_manager_t *nm)
 {
-    fd_infos_t infos = {{}, {}, invalid_socket, {0, 1}, NULL, NULL};
+    fd_infos_t infos = {{}, {}, invalid_socket, {0, 0}, NULL, NULL};
     fd_set *r_set = &infos.read_set;
     fd_set *w_set = &infos.write_set;
 
