@@ -39,28 +39,12 @@ export class Game {
         this.animate();
         this.onWindowResize();
         this.map = new Map();
-        // 
-        // var that = this;
-        // this.spawnPlayer(1, 1, 1, 0, 1, "Lecul");
-        //
-        // setTimeout(function () {that.spawnEgg(2, 1, 1, 1);}, 1000);
-        // setTimeout(function () {that.playerConnectionForEgg(2);}, 2000);
-        // new Egg(1, 5, 1, "LECUL");
-        // new Food(6, 5, 1);
-        // setTimeout(function () {new Player(1, 5, 1, 1, "LECUL");}, 1000);
-        // setTimeout(function () {that.eggDeath(1);}, 1500);
-        // setTimeout(function () {that.collectRessource(1, 6);}, 2000);
-        // // this.setTile(1, 1, 3, 2, 1, 0, 1, 0, 1);
-        // // setTimeout(function () {that.spawnPlayer(1, 1, 1, 1, 1, "LE CUL");}, 1000);
-        // // setTimeout(function () {new Food(5, 1, 1);}, 2000);
-        // var that = this;
-        // setTimeout(function (){that.setPlayerPos(1, 2, 2, 1);}, 3000);
-        // setTimeout(function (){that.setPlayerPos(1, 5, 1, 1);}, 4000);
-        // // setTimeout(function (){that.deleteFood(1, 1, 1);}, 4000);
+
+        this.spawnPlayer(1, 1, 1, 2, 1, "OUI");
     }
 
     spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string) {
-        new Player(id, x, y, level, team_name);
+        var player = new Player(id, x, y, level, team_name, orientation);
     }
 
     setPlayerPos(id: number, x: number, y: number, orientation: number) {
@@ -91,7 +75,12 @@ export class Game {
         }
     }
 
-    addTeamName(name: string) {
+    endOfGame(teamName: string) {
+        console.log("End of the game, " + teamName + " won the game");
+    }
+
+    addTeamName(teamName: string) {
+        console.log("New team: " + teamName);
     }
 
     setPlayerLevel(id: number, level: number) {
@@ -226,5 +215,8 @@ export class Game {
         var egg = this.findEgg(e);
         this.eggDeath(e);
         this.spawnPlayer(e, egg.position.x, egg.position.y, 0, 1, egg.team_name);
+    }
+
+    hatchEgg(idEgg: number) {
     }
 }
