@@ -3,4 +3,3 @@
 port = 0
 name = None
 hostname = "localhost"
-map_size = (0, 0)

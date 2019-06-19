@@ -51,23 +51,22 @@ def run(client_socket):
     pending_commands = []
     fds = [client_socket]
 
-    while 1:
-        infds, outfds, errfds = select.select(fds, fds, [], 0.1)
-        if len(infds) != 0:
-            buffer = client_socket.recv(1024).decode()
-            if len(buffer) != 0:
-                if parse_buffer(pending_commands, buffer) == "dead":
-                    break
-        if len(outfds) != 0 and len(commands) != 0:
-            client_socket.send(("".join(commands)).encode("Utf8"))
-            pending_commands = commands.copy()
-            commands.clear()
-        # TODO implement AI here
+    look("[player,,food,]")
+    # while 1:
+    infds, outfds, errfds = select.select(fds, fds, [], 0.1)
+    if len(infds) != 0:
+        buffer = client_socket.recv(1024).decode()
+        if len(buffer) != 0:
+            if parse_buffer(pending_commands, buffer) == "dead":
+                print("lol")
+    if len(outfds) != 0 and len(commands) != 0:
+        client_socket.send(("".join(commands)).encode("Utf8"))
+        pending_commands = commands.copy()
+        commands.clear()
+    commands.append(player.new_action())
 
 
 def init_client_connection(client_socket):
-    global map_size
-
     data = client_socket.recv(1024).decode()
     if data == "WELCOME\n":
         client_socket.send((name + "\n").encode("Utf8"))
@@ -75,10 +74,12 @@ def init_client_connection(client_socket):
         sys.exit(84)
     data = client_socket.recv(1024).decode()
     client_num, map_size = int(data.split('\n')[0]), (int(data.split('\n')[1].split(' ')[0]), int(data.split('\n')[1].split(' ')[1]))
-    if client_num > 0:
-        if os.fork() == 0:
-            connect_clients()
-            sys.exit(0)
+    player.set_map_size(map_size)
+    # if client_num > 0:
+    #     if os.fork() == 0:
+    #         connect_clients()
+    #         sys.exit(0)
+    player.init_map()
 
 
 def connect_clients():
