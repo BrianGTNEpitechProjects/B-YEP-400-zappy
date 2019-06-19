@@ -175,6 +175,7 @@ network_client_t *client)
 {
     trantorian_t *trantorian = (trantorian_t *)base;
 
+    trantorian_move(trantorian, NULL);
     if (trantorian->zappy->players == trantorian) {
         trantorian->zappy->players = trantorian->next;
         free(trantorian);
@@ -183,7 +184,6 @@ network_client_t *client)
     for (trantorian_t *t = trantorian->zappy->players; t; t = t->next) {
         if (t->next == trantorian) {
             t->next = trantorian->next;
-            trantorian_move(trantorian, NULL);
             free(trantorian);
             return;
         }
