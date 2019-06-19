@@ -31,7 +31,6 @@ void send_websocket_header(network_client_t *client, size_t size, uint8_t op) {
     if (size < 126) {
         to_write = size & 0b01111111;
         write_to_buffer(&client->cb_out, &to_write, 1);
-        printf("%x\n", to_write);
     } else if (size <= USHRT_MAX) {
         to_write = 126;
         write_to_buffer(&client->cb_out, &to_write, 1);
