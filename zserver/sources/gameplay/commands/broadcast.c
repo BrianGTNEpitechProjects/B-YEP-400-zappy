@@ -26,6 +26,7 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
     network_client_t *client;
     char buff[11] = {0};
     trantorian_t *p = dest->first;
+    int ang;
 
     if (!server)
         return;
@@ -33,9 +34,9 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
         client = get_client(server->client_user_map, (user_base_t *)p);
         if (!client)
             continue;
-        angle = (angle == -1) ? 0 : \
+        ang = (angle == -1) ? 0 : \
 ((((360 + (int)(p->orientation * 90.0)) - angle) * 8) / 360) % 8 + 1;
-        snprintf(buff, 10, "%d", angle);
+        snprintf(buff, 10, "%d", ang);
         write_msg(client, buff, a);
         p = p->neighbour;
     } while (p != dest->first);
