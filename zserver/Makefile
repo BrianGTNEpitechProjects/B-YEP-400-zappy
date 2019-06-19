@@ -35,6 +35,7 @@ SRC_FILES	=	\
 				graphical_protocol/handle_graphical_user_cmd.c \
 				graphical_protocol/update_ws_server.c \
 				cli/handle_stdin.c \
+				cli/prompt_and_welcome.c \
 				base64.c
 
 COMMAND_DIR		=	$(realpath sources/gameplay/commands)
@@ -46,6 +47,11 @@ COMMAND_FILES	=	\
 					left.c\
 					look.c\
 					inventory.c\
+
+CLI_COMMAND_DIR		=	$(realpath sources/cli/commands)
+
+CLI_COMMAND_FILES	=	\
+					help.c
 
 GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
 
@@ -99,7 +105,7 @@ SRC_NETWORK	=	\
 				network_server_sync_buffer.c \
 				network_server_update.c \
 
-SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES)) $(addprefix $(GCOMMAND_DIR)/, $(GCOMMAND_FILES))
+SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES)) $(addprefix $(GCOMMAND_DIR)/, $(GCOMMAND_FILES)) $(addprefix $(CLI_COMMAND_DIR)/, $(CLI_COMMAND_FILES))
 
 OBJ			=	$(SRC:%.c=%.o)
 

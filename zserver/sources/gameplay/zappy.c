@@ -125,7 +125,7 @@ static bool init_server(zappy_t *res, args_t *args)
 {
     if (args->interactive_mode) {
         res->nm->timeout_on_stdin = true;
-        print_prompt();
+        print_cli_welcome();
     }
     res->classic_id = add_server(res->nm, args->port);
     if (res->classic_id == invalid_id)

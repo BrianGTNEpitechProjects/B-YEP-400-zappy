@@ -7,15 +7,35 @@
 
 /* Created the 19/06/2019 at 03:24 by jfrabel */
 
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "cli.h"
 #include "zserver.h"
 
-void print_prompt(void)
+static const cli_cmd_pair_t cli_cmd_map[] = {
+    {"help", &cli_help},
+    {NULL, NULL}
+};
+
+static void exec_line(zappy_t *world, char *line)
 {
-    printf("ZAPPY> ");
-    fflush(stdout);
+    bool found = false;
+    bool ret = false;
+    const cli_cmd_pair_t *curr_cmd;
+
+    for (int i = 0; cli_cmd_map[i].cmd_start != NULL; i++) {
+        curr_cmd = &cli_cmd_map[i];
+        if (!strncmp(curr_cmd->cmd_start, line, strlen(curr_cmd->cmd_start))) {
+            found = true;
+            ret = curr_cmd->func(world, line);
+            break;
+        }
+    }
+    if (found && !ret)
+        printf("Error in parameters\n");
+    if (!found)
+        printf("Command not found\n");
 }
 
 void handle_stdin(zappy_t *world)
@@ -29,7 +49,10 @@ void handle_stdin(zappy_t *world)
     read = getline(&line, &len, stdin);
     if (read <= 0)
         shutdown_server();
-    printf("Got data on stdin [%s]\n", line);
+    else {
+        line[read - 1] = '\0';
+        exec_line(world, line);
+        print_prompt();
+    }
     free(line);
-    print_prompt();
 }
