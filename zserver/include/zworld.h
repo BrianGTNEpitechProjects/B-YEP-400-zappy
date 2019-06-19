@@ -91,11 +91,11 @@ int tile_population_size_with_lvl(tile_t *tile, unsigned int lvl);
 trantorian_t *first_neighbour(trantorian_t *self);
 trantorian_t *last_neighbour(trantorian_t *self);
 
-/* move.c */
+/* move.c tile.c */
+tile_t *tile_forward(tile_t *tile, e_cardinal_t dir);
 int trantorian_move(trantorian_t *trantorian, tile_t *tile);
 int trantorian_move_dir(trantorian_t *trantorian, e_cardinal_t dir);
 int trantorian_move_forward(trantorian_t *trantorian);
-tile_t *tile_forward(tile_t *tile, e_cardinal_t dir);
 
 /* cardinal_utils.c */
 e_cardinal_t cardinal_rotate_right(e_cardinal_t dir);

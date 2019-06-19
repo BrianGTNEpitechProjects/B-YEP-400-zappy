@@ -53,8 +53,8 @@ void look(client_user_pair_t *c, __attribute__((unused)) char *arg)
 
     write_to_buffer(&c->client->cb_out, (const uint8_t *)"[", 1);
     for (unsigned int i = 0; i <= s->lvl; ++i) {
-        start = top_left_corner_tile_at(s->pos, s->orientation, s->lvl);
-        limit = tile_look_limit(s->lvl);
+        start = top_left_corner_tile_at(s->pos, s->orientation, i);
+        limit = tile_look_limit(i);
         for (int j = 0; j < limit; ++j) {
             write_tile_out(c, start);
             write_to_buffer(&c->client->cb_out, (const uint8_t *)",", 1);
