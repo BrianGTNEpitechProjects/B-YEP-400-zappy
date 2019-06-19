@@ -15,10 +15,12 @@ import GraphicProtocol from "./GraphicProtocol";
 // renderer.setSize(innerWidth, innerHeight);
 // renderer.render(scene, camera);
 
-EventManager.getInstance().addListener("EventWebSocketConnected", (e: EventWebSocketConnected) => {
-    WebSocketManager.sendMessage("msz\n");
-});
+// EventManager.getInstance().addListener("EventWebSocketConnected", (e: EventWebSocketConnected) => {
+//     WebSocketManager.sendMessage("msz\n");
+// });
+//
+//
+// new GraphicProtocol();
+// WebSocketManager.connect("localhost", 4244);
 
-
-new GraphicProtocol();
-WebSocketManager.connect("localhost", 4244);
+var game = new Game(0, 0);

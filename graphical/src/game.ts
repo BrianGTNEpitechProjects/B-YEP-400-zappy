@@ -3,7 +3,7 @@ import { OrbitControls } from "three-orbitcontrols-ts";
 import { Map } from "./map"
 import { Food } from './food';
 import { MapObject } from './map_object';
-import { Player } from './player';
+import { Player, Orientation } from './player';
 import { Egg } from './egg';
 const loader = require('three-gltf-loader');
 
@@ -39,8 +39,6 @@ export class Game {
         this.animate();
         this.onWindowResize();
         this.map = new Map();
-
-        this.spawnPlayer(1, 1, 1, 2, 1, "OUI");
     }
 
     spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string) {
@@ -50,7 +48,7 @@ export class Game {
     setPlayerPos(id: number, x: number, y: number, orientation: number) {
         var player = this.findPlayer(id);
         this.reajustHeight(player);
-        player.moovePlayer(x, y);
+        player.moovePlayer(x, y, orientation);
     }
 
     findPlayer(id: number) {
@@ -92,6 +90,44 @@ export class Game {
     }
 
     expulsePlayer(id: number) {
+        var player = this.findPlayer(id);
+        var x = player.position.x;
+        var y = player.position.y;
+
+        if (player.orientation == Orientation.NORTH) {
+            if (y + 1 == Game.col) {
+                y = 0;
+            } else {
+                y++;
+            }
+        } else if (player.orientation == Orientation.SOUTH) {
+            if (y == 0) {
+                y = Game.col - 1;
+            } else {
+                y--;
+            }
+        } else if (player.orientation == Orientation.EAST) {
+            if (x + 1 == Game.lines) {
+                x = 0;
+            } else {
+                x++;
+            }
+        } else {
+            if (x == 0) {
+                x = Game.lines - 1;
+            } else {
+                x--;
+            }
+        }
+        for (var i = 0; i < Game.mapObject.length; i++) {
+            if (Game.mapObject[i] instanceof Player && Game.mapObject[i].position.x == player.position.x && Game.mapObject[i].position.x == player.position.x) {
+                var currentPlayer = Game.mapObject[i] as Player;
+                if (currentPlayer.id == id) {
+                    continue;
+                }
+                currentPlayer.moovePlayer(x, y, currentPlayer.orientation);
+            }
+        }
     }
 
     setTile(x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number, res6: number) {
