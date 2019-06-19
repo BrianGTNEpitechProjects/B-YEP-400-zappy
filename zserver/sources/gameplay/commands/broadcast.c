@@ -10,32 +10,33 @@
 #include "zcommands.h"
 #include "zworld.h"
 
-static int max(int a, int b)
+static void write_msg(network_client_t *client, char buff[10], char *a)
 {
-    return ((a < b) ? b : a);
+    write_to_buffer(&client->cb_out, (const uint8_t *)"message ", 8);
+    write_to_buffer(&client->cb_out, (const uint8_t *)buff, 10);
+    write_to_buffer(&client->cb_out, (const uint8_t *)", ", 2);
+    write_to_buffer(&client->cb_out, (const uint8_t *)a, strlen(a));
+    write_to_buffer(&client->cb_out, (const uint8_t *)"\n", 1);
 }
 
 static void broadcast_to_tile(tile_t *dest, char *a, int angle)
 {
-    trantorian_t *last = last_neighbour(dest->first);
-    network_server_t *server;
+    network_server_t *server = (dest->first) ? \
+get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
     network_client_t *client;
     char buff[11] = {0};
+    trantorian_t *p = dest->first;
 
-    if (last)
-        server = get_server(last->zappy->nm, last->zappy->classic_id);
-    else
+    if (!server)
         return;
-    for (trantorian_t *p = dest->first; p; p = p->next) {
+    do {
         client = get_client(server->client_user_map, (user_base_t *)p);
         if (!client)
             continue;
-        snprintf(buff, 10, "%d", (angle * 8 / 360) + 1);
-        write_to_buffer(&client->cb_out, (const uint8_t *)"message ", 8);
-        write_to_buffer(&client->cb_out, (const uint8_t *)", ", 2);
-        write_to_buffer(&client->cb_out, (const uint8_t *)buff, 10);
-        write_to_buffer(&client->cb_out, (const uint8_t *)"\n", 1);
-    }
+        snprintf(buff, 10, "%d", (angle == -1) ? 0 : (angle * 8 / 360) + 1);
+        write_msg(client, buff, a);
+        p = p->neighbour;
+    } while (p != dest->first);
 }
 
 static int evaluate_tile_angle(e_cardinal_t dir, int i, int lim)
@@ -43,20 +44,21 @@ static int evaluate_tile_angle(e_cardinal_t dir, int i, int lim)
     return ((int)(((double)i / (double)lim) * 360.0 + 235) % 360 + dir * 90);
 }
 
-static void broadcast_at_lvl(trantorian_t *tranto, char *a, \
+static void broadcast_at_lvl(trantorian_t *tran, char *a, \
 unsigned int l, unsigned long long x)
 {
-    tile_t *t = top_left_corner_tile_at(tranto->pos, tranto->orientation, l);
-    e_cardinal_t dir = cardinal_rotate_right(tranto->orientation);
+    tile_t *t = top_left_corner_tile_at(tran->pos, tran->orientation, l);
+    e_cardinal_t dir = cardinal_rotate_right(tran->orientation);
     int lim = tile_look_limit(l);
+    int angle;
 
     for (int i = 0; i < lim; i++) {
         if (x <= t->broadcasted)
             continue;
-        broadcast_to_tile(t, a, \
-evaluate_tile_angle(tranto->orientation, i, lim));
+        angle = (l == 0) ? -1 : evaluate_tile_angle(tran->orientation, i, lim);
+        broadcast_to_tile(t, a, angle);
         t->broadcasted = x;
-        if (i % (lim / 4) == 0)
+        if (4 <= lim && i % (lim / 4) == 0)
             dir = cardinal_rotate_right(dir);
         t = tile_forward(t, dir);
     }
@@ -70,9 +72,13 @@ void broadcast(client_user_pair_t *client, char *arg)
 
     if (!trantorian)
         return;
-    lim = max(trantorian->zappy->map_size.x, trantorian->zappy->map_size.y);
+    if (trantorian->zappy->map_size.x < trantorian->zappy->map_size.y)
+        lim = trantorian->zappy->map_size.y;
+    else
+        lim = trantorian->zappy->map_size.x;
     broadcasted_nb += 1;
-    for (unsigned int i = 0; (int)i < lim; i++) {
+    for (unsigned int i = 0; (int)i <= lim; i++) {
         broadcast_at_lvl(trantorian, arg, i, broadcasted_nb);
     }
+    write_to_buffer(&client->client->cb_out, OK_MSG, OK_MSG_LEN);
 }

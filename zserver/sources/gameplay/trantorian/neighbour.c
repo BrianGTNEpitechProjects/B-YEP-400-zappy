@@ -9,6 +9,8 @@
 
 trantorian_t *last_neighbour(trantorian_t *self)
 {
+    if (!self)
+        return (NULL);
     for (trantorian_t *tmp = self->neighbour; tmp; tmp = tmp->neighbour)
         if (tmp->neighbour == self)
             return ((tmp == self) ? NULL : tmp);
@@ -17,6 +19,8 @@ trantorian_t *last_neighbour(trantorian_t *self)
 
 trantorian_t *first_neighbour(trantorian_t *self)
 {
+    if (!self)
+        return (NULL);
     return ((self->neighbour != self) ? self->neighbour : NULL);
 }
 

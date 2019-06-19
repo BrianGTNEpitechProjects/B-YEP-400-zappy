@@ -17,7 +17,8 @@ static void add_to_tile(trantorian_t *trantorian, tile_t *tile)
             trantorian->neighbour = trantorian;
         } else {
             last = last_neighbour(tile->first);
-            trantorian->neighbour = last->neighbour;
+            trantorian->neighbour = (last) ? last->neighbour : trantorian;
+            last = (last) ? last : trantorian;
             last->neighbour = trantorian;
         }
     }
