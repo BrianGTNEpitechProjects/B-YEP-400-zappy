@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "network_client_user_map.h"
 #include "zcommands.h"
+#include "graphical_protocol.h"
 
 bool kill_player(trantorian_t *p)
 {
@@ -19,14 +20,15 @@ bool kill_player(trantorian_t *p)
     if (server == NULL)
         return (false);
     client = get_client(server->client_user_map, (user_base_t *)p);
-    write_to_buffer(&client->cb_out, DEAD_MSG, DEAD_MSG_LEN);
-    client->lost_connection = true;
-    return (true);
+    return (kill_client((client_user_pair_t *){client, p}));
 }
 
 bool kill_client(client_user_pair_t *c)
 {
+    trantorian_t *p = c->user;
+
     write_to_buffer(&c->client->cb_out, DEAD_MSG, DEAD_MSG_LEN);
     c->client->lost_connection = true;
+    pdi(p->zappy, p);
     return (true);
 }
