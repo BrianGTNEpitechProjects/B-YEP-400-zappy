@@ -10,9 +10,10 @@
 #include <stdio.h>
 #include "cli.h"
 #include "common.h"
+#include "zserver.h"
 
 bool cli_exit(UNUSED zappy_t *world, UNUSED char *cmd)
 {
-    printf("[WIP] Command exit work in progress [WIP]\n");
+    shutdown_server();
     return (true);
 }

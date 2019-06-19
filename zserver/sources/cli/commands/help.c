@@ -36,7 +36,7 @@ display the current timescale instead");
     puts("[WIP]drop r x y  : drop the resource id r at position x y");
     puts("[WIP]kill id     : kill the player with the id id");
     puts("[WIP]endgame     : end the current running game and exit");
-    puts("[WIP]exit        : exit the program");
+    puts("exit             : exit the program");
     display_ressources_ids();
     return (true);
 }

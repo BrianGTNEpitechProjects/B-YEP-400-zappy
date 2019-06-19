@@ -60,7 +60,8 @@ void handle_stdin(zappy_t *world)
     else {
         line[read - 1] = '\0';
         exec_line(world, line);
-        print_prompt();
     }
+    if (running())
+        print_prompt();
     free(line);
 }
