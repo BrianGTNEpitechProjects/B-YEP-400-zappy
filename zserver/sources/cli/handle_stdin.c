@@ -59,6 +59,7 @@ void handle_stdin(zappy_t *world)
         shutdown_server();
     else {
         line[read - 1] = '\0';
+        clear_str(line);
         exec_line(world, line);
     }
     if (running())

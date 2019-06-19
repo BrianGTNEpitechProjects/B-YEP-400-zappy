@@ -19,6 +19,8 @@ typedef struct cli_cmd_pair_s {
     cli_func func;
 } cli_cmd_pair_t;
 
+char *clear_str(char *str);
+
 void print_cli_welcome(void);
 void print_prompt(void);
 

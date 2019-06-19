@@ -36,6 +36,7 @@ SRC_FILES	=	\
 				graphical_protocol/update_ws_server.c \
 				cli/handle_stdin.c \
 				cli/prompt_and_welcome.c \
+				cli/clear_str.c \
 				base64.c
 
 COMMAND_DIR		=	$(realpath sources/gameplay/commands)
