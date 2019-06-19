@@ -52,7 +52,8 @@ network_server_t *create_server(int port, id_t id)
 
     if (ns != NULL) {
         ns->id = id;
-        ns->world_event_timeout = 0;
+        ns->world_event_timeout.tv_sec = 0;
+        ns->world_event_timeout.tv_usec = 0;
         ns->default_client_disconnect_timeout = 0;
         ns->connexion_socket = socket(AF_INET, SOCK_STREAM, 0);
         if (ns->connexion_socket == invalid_socket)

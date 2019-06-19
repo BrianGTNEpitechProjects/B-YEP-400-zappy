@@ -51,7 +51,8 @@ graphical_user_t *create_new_graphical_user(zappy_t *world_data)
     new_user->world_infos = world_data;
     new_user->base.websocket_hdr = NULL;
     new_user->base.sock_type = UNDEFINED;
-    new_user->base.base.user_event_timeout = 0;
+    new_user->base.base.user_event_timeout.tv_sec = 0;
+    new_user->base.base.user_event_timeout.tv_usec = 0;
     new_user->base.base.on_extracted = &graphical_user_on_extracted;
     new_user->base.base.on_disconnect = &graphical_user_on_disconnected;
     return (new_user);

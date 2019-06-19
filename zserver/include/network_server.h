@@ -25,7 +25,7 @@ struct network_server_s {
     id_t id;
     int connexion_socket;
     struct sockaddr_in addr;
-    time_t world_event_timeout;
+    struct timeval world_event_timeout;
     time_t default_client_disconnect_timeout;
     network_client_pool_t *client_pool;
     network_client_user_map_t *client_user_map;
