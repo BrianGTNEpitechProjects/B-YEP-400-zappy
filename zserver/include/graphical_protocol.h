@@ -67,6 +67,7 @@ void pfk(zappy_t *world, trantorian_t *player_laying);
 void pdr(zappy_t *world, trantorian_t *player_dropping, e_item_t item);
 void pgt(zappy_t *world, trantorian_t *player_getting, e_item_t item);
 void pdi(zappy_t *world, trantorian_t *player_dying);
+void enw(zappy_t *world, trantorian_t *egg);
 void smg(zappy_t *world, const char *msg);
 void seg(zappy_t *world, const char *team);
 
