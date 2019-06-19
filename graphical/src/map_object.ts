@@ -1,5 +1,5 @@
 import { TextureLoader, MeshBasicMaterial, RepeatWrapping, Object3D } from "three";
-import { Game } from "./game";
+import Game  from "./game";
 
 export class MapObject {
     position: { x: number; y: number; z: number; };

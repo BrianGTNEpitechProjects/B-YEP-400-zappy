@@ -1,6 +1,6 @@
 import { BoxGeometry, Mesh } from "three";
 import { MapObject } from "./map_object";
-import { Game } from "./game";
+import Game  from "./game";
 
 var assets = [
     "textures/melon_side",

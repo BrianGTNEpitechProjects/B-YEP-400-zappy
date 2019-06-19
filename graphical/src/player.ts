@@ -1,5 +1,5 @@
 import { MapObject } from "./map_object";
-import { Game } from "./game";
+import Game  from "./game";
 
 export enum Orientation {
     NORTH = 1,

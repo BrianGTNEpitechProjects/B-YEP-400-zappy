@@ -1,5 +1,5 @@
 import { MapObject } from "./map_object";
-import { Game } from "./game";
+import Game from "./game";
 import { Vector2, LatheBufferGeometry, Mesh } from "three";
 
 export class Egg extends MapObject {

@@ -1,6 +1,6 @@
 import { MapObject } from "./map_object";
 import { PlaneGeometry, Mesh } from "three";
-import { Game } from "./game";
+import Game  from "./game";
 
 export class Map extends MapObject {
     constructor() {

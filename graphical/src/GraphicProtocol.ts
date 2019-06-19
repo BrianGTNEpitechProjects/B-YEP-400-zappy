@@ -1,4 +1,4 @@
-import { Game } from "./game";
+import Game from "./game";
 import EventManager from "./EventManager";
 import { EventWebSocketMessage } from "./ZEvent";
 import WebSocketManager from "./WebSocketManager";
@@ -42,9 +42,9 @@ export default class GraphicProtocol {
             var commandList: Array<string> = content.split("\n");
             commandList.forEach(cmd => {
                 var args = cmd.split(" ");
-            
+
                 this.commands.forEach((value: (args: Array<string>) => void, key: string) => {
-                    if (key == args[0]) 
+                    if (key == args[0])
                         value(args);
                 });
             });
@@ -55,7 +55,7 @@ export default class GraphicProtocol {
         let width: number = parseInt(args[1]);
         let height: number = parseInt(args[2]);
         setTimeout(() => {WebSocketManager.sendMessage("mct\n"); console.log("sltr")}, 1000)
-        
+
         this.game = new Game(width, height);
     }
 
@@ -69,7 +69,7 @@ export default class GraphicProtocol {
         let q5: number = parseInt(args[7]);
         let q6: number = parseInt(args[8]);
         let q7: number = parseInt(args[9]);
-        
+
         this.game.setTile(x, y, q1, q2, q3, q4, q5, q6, q7);
     }
 
@@ -174,7 +174,7 @@ export default class GraphicProtocol {
 
     commandPfk(args: Array<string>) {
         let id: number = parseInt(args[1]);
-        
+
         // TODO (maybe)
         console.log(`Player ${id} laying an egg`);
     }
@@ -207,7 +207,7 @@ export default class GraphicProtocol {
         let playerId: number = parseInt(args[2]);
         let X: number = parseInt(args[3]);
         let Y: number = parseInt(args[4]);
-        
+
         this.game.spawnEgg(eggId, playerId, X, Y);
         console.log(`Egg with id ${eggId} was laid by the player ${playerId} at (${X}, ${Y})`);
     }
@@ -215,13 +215,13 @@ export default class GraphicProtocol {
     commandEht(args: Array<string>) {
         let eggId: number = parseInt(args[1]);
 
-        // TODO 
+        // TODO
         console.log(`An egg have hatch ${eggId}`);
     }
 
     commandEbo(args: Array<string>) {
         let id: number = parseInt(args[1]);
-        
+
         this.game.playerConnectionForEgg(id);
         console.log(`A new player is connected and take the egg ${id}`);
     }

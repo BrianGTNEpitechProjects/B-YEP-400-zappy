@@ -1,4 +1,4 @@
-import {Game} from "./game";
+import Game from "./game";
 import EventManager from "./EventManager";
 import WebSocketManager from "./WebSocketManager";
 import { EventWebSocketConnected, EventWebSocketMessage } from "./ZEvent";

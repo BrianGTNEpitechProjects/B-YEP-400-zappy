@@ -1,5 +1,5 @@
 import { Audio, AudioListener, AudioLoader } from "three";
-import { Game } from "./game";
+import Game from "./game";
 
 export enum Sound {
 }
@@ -15,9 +15,9 @@ export class SoundManager {
 
     constructor() {
         this.listener = new AudioListener();
-        Game.camera.add(this.listener);
         this.audio = new Audio(this.listener);
         Game.scene.add(this.audio);
+        Game.camera.add(this.listener);
         this.audioLoader = new AudioLoader();
         var that = this;
         this.audioLoader.load(

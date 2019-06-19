@@ -8,7 +8,7 @@ import { Egg } from './egg';
 import { SoundManager } from './sound_manager';
 const loader = require('three-gltf-loader');
 
-export class Game {
+export default class Game {
     static mapObject: Array<MapObject> = new Array<MapObject>();
     static lines:number = 10;
     static col:number = 11;
@@ -16,8 +16,8 @@ export class Game {
     static foodSize:number = Game.squareSize / 2;
     static scene: Scene = new Scene();
     static gltfLoader = new loader();
-    static soundManager = new SoundManager();
     static camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    static soundManager: SoundManager;
     renderer: WebGLRenderer;
     controls: OrbitControls;
     map: Map;
@@ -31,6 +31,7 @@ export class Game {
         }
         this.renderer = new WebGLRenderer({antialias:true});
         this.controls = new OrbitControls(Game.camera, this.renderer.domElement);
+        Game.soundManager = new SoundManager();
 
         Game.camera.position.set(50, 50, 100);
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
