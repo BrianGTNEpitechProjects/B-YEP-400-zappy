@@ -34,7 +34,7 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
         if (!client)
             continue;
         angle = (angle == -1) ? 0 : \
-(360 + (int)(p->orientation * 90) - angle) * 8 / 360;
+((((360 + (int)(p->orientation * 90.0)) - angle) * 8) / 360) % 8 + 1;
         snprintf(buff, 10, "%d", angle);
         write_msg(client, buff, a);
         p = p->neighbour;
@@ -43,26 +43,31 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
 
 static int evaluate_tile_angle(e_cardinal_t dir, int i, int lim)
 {
-    return ((int)((((double)i / (double)lim) * 360.0 + 235) + dir * 90) % 360);
+    double relative_angle = ((double)i * 360.0) / (double)lim;
+    double absolute_angle;
+
+    relative_angle = (size_t)(relative_angle + 315.0) % 360;
+    absolute_angle = relative_angle + (dir * 90.0);
+    return ((int)absolute_angle % 360);
 }
 
-static void broadcast_at_lvl(trantorian_t *tran, char *a, \
-unsigned int l, unsigned long long x)
+static void broadcast_at_lvl(trantorian_t *tran, char *arg, \
+unsigned int l, unsigned long long broadcast_nb)
 {
     tile_t *t = top_left_corner_tile_at(tran->pos, tran->orientation, l);
-    e_cardinal_t dir = cardinal_rotate_right(tran->orientation);
+    e_cardinal_t dir = tran->orientation;
     int lim = tile_look_limit(l);
     int angle;
 
-    for (int i = 0; i < lim; i++) {
-        if (x <= t->broadcasted)
-            continue;
-        angle = (l == 0) ? -1 : evaluate_tile_angle(tran->orientation, i, lim);
-        broadcast_to_tile(t, a, angle);
-        t->broadcasted = x;
-        if (4 <= lim && i % (lim / 4) == 0)
+    for (int i = 0; i < (lim - (l != 0)) * 4; i++, t = tile_forward(t, dir)) {
+        if (1 < lim && i % (lim - 1) == 0)
             dir = cardinal_rotate_right(dir);
-        t = tile_forward(t, dir);
+        if (broadcast_nb <= t->broadcasted)
+            continue;
+        angle = (l == 0) ? -1 : \
+evaluate_tile_angle(tran->orientation, i, (lim - 1) * 4);
+        broadcast_to_tile(t, arg, angle);
+        t->broadcasted = broadcast_nb;
     }
 }
 
@@ -79,8 +84,7 @@ void broadcast(client_user_pair_t *client, char *arg)
     else
         lim = trantorian->zappy->map_size.x;
     broadcasted_nb += 1;
-    for (unsigned int i = 0; (int)i <= lim; i++) {
+    for (unsigned int i = 0; (int)i <= (lim / 2) + 1; i++)
         broadcast_at_lvl(trantorian, arg, i, broadcasted_nb);
-    }
     write_to_buffer(&client->client->cb_out, OK_MSG, OK_MSG_LEN);
 }

@@ -20,7 +20,7 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
             player->queue[ind].code = id;
             player->queue[ind].remaining_time = commands[id].charge_time;
             strcpy(player->queue[ind].arg, arg);
-            printf("DEBUG: %d (life: %d) (i: %d)\n", ind, player->life_unit, i);
+            //TODO: commented code -> printf("DEBUG: %d (life: %d) (i: %d)\n", ind, player->life_unit, i);
             return (ind);
         }
     }
