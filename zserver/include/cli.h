@@ -24,6 +24,14 @@ void print_prompt(void);
 
 void handle_stdin(zappy_t *world);
 
+bool cli_cinfo(zappy_t *world, char *cmd);
+bool cli_drop(zappy_t *world, char *cmd);
+bool cli_endgame(zappy_t *world, char *cmd);
+bool cli_exit(zappy_t *world, char *cmd);
 bool cli_help(zappy_t *world, char *cmd);
+bool cli_kill(zappy_t *world, char *cmd);
+bool cli_pinfo(zappy_t *world, char *cmd);
+bool cli_timescale(zappy_t *world, char *cmd);
+bool cli_tinfo(zappy_t *world, char *cmd);
 
 #endif //PSU_ZAPPY_2018_CLI_H

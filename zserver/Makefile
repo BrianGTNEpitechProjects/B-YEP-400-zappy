@@ -51,7 +51,15 @@ COMMAND_FILES	=	\
 CLI_COMMAND_DIR		=	$(realpath sources/cli/commands)
 
 CLI_COMMAND_FILES	=	\
-					help.c
+					cinfo.c \
+					drop.c \
+					endgame.c \
+					exit.c \
+					help.c \
+					kill.c \
+					pinfo.c \
+					timescale.c \
+					tinfo.c \
 
 GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
 

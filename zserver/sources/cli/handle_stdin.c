@@ -14,7 +14,15 @@
 #include "zserver.h"
 
 static const cli_cmd_pair_t cli_cmd_map[] = {
+    {"cinfo", &cli_cinfo},
+    {"drop", &cli_drop},
+    {"endgame", &cli_endgame},
+    {"exit", &cli_exit},
     {"help", &cli_help},
+    {"kill", &cli_kill},
+    {"pinfo", &cli_pinfo},
+    {"timescale", &cli_timescale},
+    {"tinfo", &cli_tinfo},
     {NULL, NULL}
 };
 
