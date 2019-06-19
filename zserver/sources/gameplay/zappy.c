@@ -109,7 +109,7 @@ const command_info_t commands[] = {
         .command = "Take",
         .charge_time = 7,
         .need_arg = true,
-        .is_startable = &always_true,
+        .is_startable = &take_valid,
         .is_valid = &always_true,
         .callback = &take_object
     },

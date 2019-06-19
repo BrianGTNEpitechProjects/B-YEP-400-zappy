@@ -39,6 +39,7 @@ void take_object    (client_user_pair_t *client, char *arg);
 void incantation    (client_user_pair_t *client, char *arg);
 void fork_command(client_user_pair_t *client, char *arg);
 
+bool take_valid(client_user_pair_t *client, char *arg);
 bool incantation_valid(client_user_pair_t *c, char *a);
 
 

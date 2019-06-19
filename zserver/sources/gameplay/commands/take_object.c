@@ -10,6 +10,14 @@
 #include "zworld.h"
 #include "zcommands.h"
 
+bool take_valid(client_user_pair_t *client, char *arg)
+{
+    trantorian_t *trantorian = (trantorian_t *)client->user;
+    int item_id = get_item_id_from_name(arg);
+
+    return (!(item_id == -1 || trantorian->pos->content[item_id] <= 0));
+}
+
 void take_object(client_user_pair_t *client, char *arg)
 {
     trantorian_t *trantorian = (trantorian_t *)client->user;
