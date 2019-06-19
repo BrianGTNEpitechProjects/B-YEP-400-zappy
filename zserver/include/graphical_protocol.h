@@ -70,6 +70,7 @@ void pdi(zappy_t *world, trantorian_t *player_dying);
 void enw(zappy_t *world, trantorian_t *egg);
 void eht(zappy_t *world, trantorian_t *egg);
 void ebo(zappy_t *world, trantorian_t *egg);
+void edi(zappy_t *world, trantorian_t *egg);
 void smg(zappy_t *world, const char *msg);
 void seg(zappy_t *world, const char *team);
 
