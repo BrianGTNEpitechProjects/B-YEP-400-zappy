@@ -47,7 +47,6 @@ static bool command_ok(client_user_pair_t *p, char *arg, int command_ind)
     const command_info_t *command = &(commands[command_ind]);
 
     ret = ret || (command->need_arg && strlen(arg) == 0);
-    ret = ret || !command->is_startable(p, arg);
     return (ret);
 }
 

@@ -22,7 +22,7 @@ static void apply_timeout(trantorian_t *trantorian)
         min = command_info->remaining_time;
     trantorian->base.user_event_timeout.tv_sec = (__time_t)floor(min);
     trantorian->base.user_event_timeout.tv_usec = \
-(__suseconds_t)((min - (size_t)min) * pow(10, 6));
+(__suseconds_t)((min - (size_t)min) * pow(10, 8));
 }
 
 static bool command_valid(client_user_pair_t *client, command_t *command)
