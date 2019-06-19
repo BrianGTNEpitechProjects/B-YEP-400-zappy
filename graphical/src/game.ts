@@ -5,6 +5,7 @@ import { Food } from './food';
 import { MapObject } from './map_object';
 import { Player, Orientation } from './player';
 import { Egg } from './egg';
+import { SoundManager } from './sound_manager';
 const loader = require('three-gltf-loader');
 
 export class Game {
@@ -15,7 +16,8 @@ export class Game {
     static foodSize:number = Game.squareSize / 2;
     static scene: Scene = new Scene();
     static gltfLoader = new loader();
-    camera: PerspectiveCamera;
+    static soundManager = new SoundManager();
+    static camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     renderer: WebGLRenderer;
     controls: OrbitControls;
     map: Map;
@@ -27,11 +29,10 @@ export class Game {
         if (colSize) {
             Game.col = colSize;
         }
-        this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new WebGLRenderer({antialias:true});
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls = new OrbitControls(Game.camera, this.renderer.domElement);
 
-        this.camera.position.set(50, 50, 100);
+        Game.camera.position.set(50, 50, 100);
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
         document.body.appendChild(this.renderer.domElement);
         this.controls.target.set(50, 50, 0);
@@ -152,14 +153,14 @@ export class Game {
     }
 
     onWindowResize() {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
+        Game.camera.aspect = window.innerWidth / window.innerHeight;
+        Game.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
     animate() {
         requestAnimationFrame(()=>this.animate());
-        this.renderer.render(Game.scene, this.camera);
+        this.renderer.render(Game.scene, Game.camera);
     }
 
     deleteFood(type: number, posX: number, posY: number) {
