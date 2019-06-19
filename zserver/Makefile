@@ -14,6 +14,7 @@ SRC_FILES	=	\
 				gameplay/zappy.c \
 				gameplay/zappy_run.c \
 				gameplay/map.c \
+				gameplay/remove_signals.c \
 				gameplay/server_running.c \
 				gameplay/arguments.c \
 				gameplay/connection.c \
@@ -33,6 +34,7 @@ SRC_FILES	=	\
 				graphical_protocol/graphical_user.c \
 				graphical_protocol/handle_graphical_user_cmd.c \
 				graphical_protocol/update_ws_server.c \
+				cli/handle_stdin.c \
 				base64.c
 
 COMMAND_DIR		=	$(realpath sources/gameplay/commands)

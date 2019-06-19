@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "zserver.h"
+#include "cli.h"
 #include "graphical_protocol.h"
 
 static void process_welcome_procedure(zappy_t *zap, network_server_t *server)
@@ -34,7 +35,8 @@ bool run_zappy(zappy_t *zap)
         return (false);
     setup_catch_signals();
     while (running()) {
-        update_manager(zap->nm);
+        if (update_manager(zap->nm))
+            handle_stdin(zap);
         extract_to_users(server, (uint8_t *)ZAPPY_DELIM, ZAPPY_DELIM_SIZE);
         process_welcome_procedure(zap, server);
         process_command_on_users(zap, server->client_user_map);

@@ -61,7 +61,7 @@ bool parse_args(args_t *arguments, int ac, char **av)
 {
     bool ret = false;
 
-    for (int c; (c = getopt(ac, av, "p:x:y:c:f:nw:")) != -1; ) {
+    for (int c; (c = getopt(ac, av, "p:x:y:c:f:nw:i")) != -1; ) {
         switch (c) {
         case 'p': ret = ret || !extract_int(&arguments->port, optarg); break;
         case 'x': ret = ret || !extract_int(&arguments->x, optarg); break;
@@ -73,6 +73,7 @@ bool parse_args(args_t *arguments, int ac, char **av)
             break;
         case 'w': ret = ret || !extract_int(&arguments->wsport, optarg);
             arguments->set_ws = true; break;
+        case 'i': arguments->interactive_mode = true; break;
         default: break;
         }
     }

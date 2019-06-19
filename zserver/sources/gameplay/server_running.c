@@ -19,9 +19,7 @@ static bool global_bool(const bool *v)
 
 static void catch_sig()
 {
-    bool status = false;
-
-    global_bool(&status);
+    shutdown_server();
 }
 
 bool setup_catch_signals(void)
@@ -33,16 +31,15 @@ bool setup_catch_signals(void)
     return (true);
 }
 
-bool remove_sig_catch(void)
-{
-    if (signal(SIGINT, (__sighandler_t) NULL) == SIG_ERR)
-        return (handle_error_return("signal: %s\n", false));
-    if (signal(SIGTERM, (__sighandler_t) NULL) == SIG_ERR)
-        return (handle_error_return("signal: %s\n", false));
-    return (true);
-}
-
 bool running(void)
 {
     return (global_bool(NULL));
+}
+
+void shutdown_server(void)
+{
+    bool status = false;
+
+    global_bool(&status);
+    printf("Shutdown...\n");
 }
