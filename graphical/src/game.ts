@@ -39,9 +39,16 @@ export class Game {
         this.animate();
         this.onWindowResize();
         this.map = new Map();
+        // 
         // var that = this;
-        // new Player(1, 5, 1, 1, "LECUL");
-        // setTimeout(function () {that.dropRessource(1, 6);}, 1000);
+        // this.spawnPlayer(1, 1, 1, 0, 1, "Lecul");
+        //
+        // setTimeout(function () {that.spawnEgg(2, 1, 1, 1);}, 1000);
+        // setTimeout(function () {that.playerConnectionForEgg(2);}, 2000);
+        // new Egg(1, 5, 1, "LECUL");
+        // new Food(6, 5, 1);
+        // setTimeout(function () {new Player(1, 5, 1, 1, "LECUL");}, 1000);
+        // setTimeout(function () {that.eggDeath(1);}, 1500);
         // setTimeout(function () {that.collectRessource(1, 6);}, 2000);
         // // this.setTile(1, 1, 3, 2, 1, 0, 1, 0, 1);
         // // setTimeout(function () {that.spawnPlayer(1, 1, 1, 1, 1, "LE CUL");}, 1000);
@@ -64,9 +71,22 @@ export class Game {
 
     findPlayer(id: number) {
         for (var i = 0; i < Game.mapObject.length; i++) {
-            var player = Game.mapObject[i] as Player;
-            if (player.id == id) {
-                return player;
+            if (Game.mapObject[i] instanceof Player) {
+                var player = Game.mapObject[i] as Player;
+                if (player.id == id) {
+                    return player;
+                }
+            }
+        }
+    }
+
+    findEgg(id: number) {
+        for (var i = 0; i < Game.mapObject.length; i++) {
+            if (Game.mapObject[i] instanceof Egg) {
+                var egg = Game.mapObject[i] as Egg;
+                if (egg.id == id) {
+                    return egg;
+                }
             }
         }
     }
@@ -83,8 +103,6 @@ export class Game {
     }
 
     expulsePlayer(id: number) {
-        var player = this.findPlayer(id);
-        Game.scene.remove(player.object3D);
     }
 
     setTile(x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number, res6: number) {
@@ -127,6 +145,7 @@ export class Game {
                     this.reajustHeight(Game.mapObject[i]);
                     Game.scene.remove(food.object3D);
                     Game.mapObject.splice(i, 1);
+                    break;
                 }
             }
         }
@@ -157,7 +176,22 @@ export class Game {
     // }
 
     spawnEgg(idEgg: number, idPlayer: number, x: number, y: number) {
-        new Egg(idEgg, x, y);
+        var player = this.findPlayer(idPlayer);
+        new Egg(idEgg, x, y, player.team_name);
+    }
+
+    eggDeath(id: number) {
+        for (var i = 0; i < Game.mapObject.length; i++) {
+            if (Game.mapObject[i] instanceof Egg) {
+                var egg = Game.mapObject[i] as Egg;
+                if (egg.id == id) {
+                    this.reajustHeight(egg);
+                    Game.scene.remove(egg.object3D);
+                    Game.mapObject.splice(i, 1);
+                    break;
+                }
+            }
+        }
     }
 
     dropRessource(id: number, typeRes: number) {
@@ -168,5 +202,29 @@ export class Game {
     collectRessource(id: number, typeRes: number) {
         var player = this.findPlayer(id);
         this.deleteFood(typeRes, player.position.x, player.position.y);
+    }
+
+    playerDead(id: number) {
+        for (var i = 0; i < Game.mapObject.length; i++) {
+            if (Game.mapObject[i] instanceof Player) {
+                var player = Game.mapObject[i] as Player;
+                if (player.id == id) {
+                    this.reajustHeight(player);
+                    Game.scene.remove(player.object3D);
+                    Game.mapObject.splice(i, 1);
+                    break;
+                }
+            }
+        }
+    }
+
+    serverMessage(message: string) {
+        console.log(message);
+    }
+
+    playerConnectionForEgg(e: number) {
+        var egg = this.findEgg(e);
+        this.eggDeath(e);
+        this.spawnPlayer(e, egg.position.x, egg.position.y, 0, 1, egg.team_name);
     }
 }
