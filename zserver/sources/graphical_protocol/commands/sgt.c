@@ -16,7 +16,7 @@ bool sgt(graphical_user_t *user, network_client_t *client,
     int time_scale = user->world_infos->time_scale;
     int data_size = 0;
 
-    data_size = snprintf(to_send, 29, "sgt %i\n", time_scale);
+    data_size = snprintf(to_send, 16, "sgt %i\n", time_scale);
     send_websocket(client, (uint8_t *)to_send, data_size, 1);
     return (true);
 }

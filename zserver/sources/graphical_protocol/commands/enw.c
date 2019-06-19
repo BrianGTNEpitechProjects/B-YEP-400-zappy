@@ -18,7 +18,7 @@ void enw(zappy_t *world, trantorian_t *egg)
     int egg_id = egg->id;
     int player_id = egg->egg_owner;
 
-    data_len = snprintf(to_send, 52, "pic %i %i %i %i\n",
+    data_len = snprintf(to_send, 52, "enw %i %i %i %i\n",
         egg_id, player_id, x, y);
     send_to_all_ws_clients(world, (uint8_t *)to_send, data_len);
 }
