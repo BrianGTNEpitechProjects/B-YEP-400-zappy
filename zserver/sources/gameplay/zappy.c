@@ -128,7 +128,7 @@ const command_info_t commands[] = {
         .command = "Incantation",
         .charge_time = 300,
         .need_arg = false,
-        .is_startable = &incantation_valid,
+        .is_startable = &incantation_startable,
         .is_valid = &always_true,
         .callback = &incantation
     },
@@ -201,7 +201,7 @@ uint8_t *data, size_t sz)
     trantorian_t *tranto = ((trantorian_t *)b);
 
     if (c->has_overflow) {
-        c->lost_connection = true;
+        kill_client(&pair);
         return;
     }
     data[sz - 1] = 0;

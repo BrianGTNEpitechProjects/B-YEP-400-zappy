@@ -62,6 +62,7 @@ COMMAND_FILES	=	\
 					connect_nbr.c\
 					put_object.c\
 					take_object.c\
+					incantation_valid.c\
 					incantation.c\
 					fork.c\
 					hatch_egg.c\

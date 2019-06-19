@@ -59,7 +59,7 @@ uint8_t *data, size_t sz)
     client_user_pair_t pair = {.user = b, .client = c};
 
     if (c->has_overflow) {
-        c->lost_connection = true;
+        kill_client(&pair);
         return;
     }
     for (i = 1; i <= COMMAND_NB; i++)
