@@ -33,6 +33,7 @@ static void display_player(trantorian_t *player)
 
     printf("%s ", player->is_egg ? "Egg" : "Trantorian");
     printf("%i (%s)\n", player->id, player->team.name);
+    printf("-HP %i\n", player->life_unit);
     printf("-Level %i\n", player->lvl);
     printf("-Position %i %i\n", player->pos->coords.x, player->pos->coords.y);
     printf("-Orientation: %i(%c)\n", cardinal_to_int(player->orientation),
