@@ -33,7 +33,7 @@ static bool extract_positions(char *cmd, int *r, int *x, int *y)
     return (true);
 }
 
-bool cli_drop(UNUSED zappy_t *world, UNUSED char *cmd)
+bool cli_drop(UNUSED zappy_t *world, char *cmd)
 {
     int r;
     int x;
