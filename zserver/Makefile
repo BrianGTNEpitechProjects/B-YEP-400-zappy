@@ -27,6 +27,9 @@ SRC_FILES	=	\
 				gameplay/utils/cardinal_utils.c \
 				gameplay/utils/always_true.c \
 				gameplay/utils/get_item_id_from_name.c \
+				gameplay/utils/kill_client.c \
+				gameplay/utils/set_to_next_command.c \
+				gameplay/utils/apply_time.c \
 				websockets/websocket.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \

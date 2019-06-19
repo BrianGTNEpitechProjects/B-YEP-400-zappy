@@ -212,7 +212,6 @@ uint8_t *data, size_t sz)
     }
 }
 
-//TODO: norm -> too long fx
 static zappy_t *create_zappy(args_t *args)
 {
     zappy_t *res = calloc(sizeof(*res), 1);
@@ -250,7 +249,7 @@ bool zappy(int ac, char **av)
         free(arguments.teams);
         return (ret);
     }
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     ret = run_zappy(zap);
     delete_zappy(zap);
     free(arguments.teams);
