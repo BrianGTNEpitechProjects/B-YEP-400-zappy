@@ -57,8 +57,9 @@ void look(client_user_pair_t *c, __attribute__((unused)) char *arg)
         limit = tile_look_limit(i);
         for (int j = 0; j < limit; ++j) {
             write_tile_out(c, start);
-            write_to_buffer(&c->client->cb_out, (const uint8_t *)",", 1);
-            tile_forward(start, right_dir);
+            write_to_buffer(&c->client->cb_out, (const uint8_t *)",", \
+(size_t)(j + 1 < limit || i < s->lvl));
+            start = tile_forward(start, right_dir);
         }
     }
     write_to_buffer(&c->client->cb_out, (const uint8_t *)"]\n", 2);

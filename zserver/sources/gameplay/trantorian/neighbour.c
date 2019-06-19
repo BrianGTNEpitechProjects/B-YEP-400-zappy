@@ -26,14 +26,16 @@ trantorian_t *first_neighbour(trantorian_t *self)
 
 int tile_population_size(tile_t *tile)
 {
-    int tot = 1;
+    int tot = 0;
+    trantorian_t *t = tile->first;
 
-    for (trantorian_t *trantorian = tile->first; \
-         trantorian && trantorian->neighbour != tile->first; \
-         trantorian = trantorian->neighbour) {
-        ++tot;
-    }
-    return ((tile->first) ? tot : 0);
+    if (t == NULL)
+        return (0);
+    do {
+        tot++;
+        t = t->neighbour;
+    } while (t != tile->first);
+    return (tot);
 }
 
 int tile_population_size_with_lvl(tile_t *tile, unsigned int lvl)
