@@ -52,6 +52,7 @@ COMMAND_FILES	=	\
 					take_object.c\
 					incantation.c\
 					fork.c\
+					hatch_egg.c\
 
 GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
 

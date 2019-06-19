@@ -26,7 +26,8 @@ typedef enum {
     EJECT,
     TAKE_OBJECT,
     SET_OBJECT,
-    INCANTATION
+    INCANTATION,
+    HATCH
 } e_command_t;
 
 typedef void (*command_func)(client_user_pair_t *, char *);

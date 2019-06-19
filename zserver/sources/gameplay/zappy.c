@@ -130,6 +130,15 @@ const command_info_t commands[] = {
         .is_startable = &always_true,
         .is_valid = &always_true,
         .callback = &incantation
+    },
+    {
+        .code = HATCH,
+        .command = "Hatch Egg",
+        .charge_time = 600,
+        .need_arg = false,
+        .is_startable = &always_true,
+        .is_valid = &always_true,
+        .callback = &hatch_egg
     }
 };
 

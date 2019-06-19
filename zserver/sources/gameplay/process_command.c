@@ -54,19 +54,20 @@ void process_command_on_users(zappy_t *z, network_client_user_map_t *m)
 {
     static clockid_t clk = 0;
     struct timespec time;
-    trantorian_t *trantorian;
     command_t *command;
+    client_user_pair_t pair;
 
     clock_gettime(clk, &time);
-    for (map_t node = m->client_user_map; node; node = node->next) {
-        trantorian = (trantorian_t *)((client_user_pair_t *)node->value)->user;
-        command = &(trantorian->queue[trantorian->command_ind]);
+    for (trantorian_t *node = z->players; node; node = node->next) {
+        command = &(node->queue[node->command_ind]);
         if (command->code == EMPTY)
             continue;
         evaluate_time(command, &time, z->time_scale);
-        if (command_valid(node->value, command) && command->remaining_time < 0) {
-            exec_command(node->value, command);
-            set_to_next_command(trantorian);
+        pair.user = (user_base_t *)node;
+        pair.client = get_client(m, pair.user);
+        if (command_valid(&pair, command) && command->remaining_time < 0) {
+            exec_command(&pair, command);
+            set_to_next_command(node);
         }
     }
     clk = 0;
