@@ -12,9 +12,9 @@ void timeradd(struct timespec *a, struct timespec *b, struct timespec *res)
 {
     res->tv_sec = a->tv_sec + b->tv_sec;
     res->tv_nsec = a->tv_nsec+ b->tv_nsec;
-    if (res->tv_nsec >= 1000000) {
+    while (res->tv_nsec >= 1000000000) {
 	    res->tv_sec++;
-	    res->tv_nsec -= 1000000;
+	    res->tv_nsec -= 1000000000;
     }
 }
 
@@ -22,8 +22,8 @@ void timersub(struct timespec *a, struct timespec *b, struct timespec *res)
 {
     res->tv_sec = a->tv_sec - b->tv_sec;
     res->tv_nsec = (a)->tv_nsec - (b)->tv_nsec;
-    if (res->tv_nsec < 0) {
+    while (res->tv_nsec < 0) {
       res->tv_sec--;
-      res->tv_nsec += 1000000;
+      res->tv_nsec += 1000000000;
     }
 }

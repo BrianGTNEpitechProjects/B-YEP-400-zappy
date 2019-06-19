@@ -33,7 +33,7 @@ void spawn_rand_resources(zappy_t *zap, e_item_t type)
 void set_timeout(struct timespec *to, double scaled_time)
 {
     to->tv_sec = (__time_t)scaled_time;
-    to->tv_nsec = (__syscall_slong_t)((scaled_time - (size_t)scaled_time) * pow(10, 9));
+    to->tv_nsec = (__syscall_slong_t)((scaled_time - (size_t)scaled_time) * pow(10, 6));
 }
 
 void set_min_timeout(zappy_t *zap, struct timespec timeouts[TOT_ITEM_NB])
@@ -50,7 +50,7 @@ void set_min_timeout(zappy_t *zap, struct timespec timeouts[TOT_ITEM_NB])
         }
     }
     server->world_event_timeout.tv_sec = min.tv_sec;
-    server->world_event_timeout.tv_usec = min.tv_nsec;
+    server->world_event_timeout.tv_usec = min.tv_nsec / 1000;
 }
 
 void process_spawn_resources(zappy_t *zap) {
