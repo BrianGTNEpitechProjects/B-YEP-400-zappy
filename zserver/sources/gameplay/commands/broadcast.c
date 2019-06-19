@@ -6,6 +6,7 @@
 */
 
 #include <string.h>
+#include <math.h>
 #include <stdio.h>
 #include "zcommands.h"
 #include "zworld.h"
@@ -35,7 +36,8 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
         if (!client)
             continue;
         ang = (angle == -1) ? 0 : \
-((((360 + (int)(p->orientation * 90.0)) - angle) * 8) / 360) % 8 + 1;
+floor((((180 + angle - (int)(p->orientation * 90.0)) % 360) * 8) / 360) + 1;
+        printf("receiver relative angle : %d\n", (ang % 360) * 45);
         snprintf(buff, 10, "%d", ang);
         write_msg(client, buff, a);
         p = p->neighbour;
@@ -49,6 +51,7 @@ static int evaluate_tile_angle(e_cardinal_t dir, int i, int lim)
 
     relative_angle = (size_t)(relative_angle + 315.0) % 360;
     absolute_angle = relative_angle + (dir * 90.0);
+    printf("emitter absolute angle : %d\n", (int)absolute_angle % 360);
     return ((int)absolute_angle % 360);
 }
 

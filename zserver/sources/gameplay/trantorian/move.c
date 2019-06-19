@@ -9,7 +9,7 @@
 
 static void add_to_tile(trantorian_t *trantorian, tile_t *tile)
 {
-    trantorian_t * last;
+    trantorian_t *last;
 
     if (tile) {
         if (tile->first == NULL) {
@@ -33,7 +33,9 @@ static void remove_from_tile(trantorian_t *trantorian)
     if (first && last)
         last->neighbour = first;
     if (origin && origin->first == trantorian)
-        origin->first = first;
+        origin->first = (first != trantorian) ? first : NULL;
+    trantorian->neighbour = NULL;
+    trantorian->pos = NULL;
 }
 
 int trantorian_move(trantorian_t *trantorian, tile_t *tile)
