@@ -30,7 +30,7 @@ bool cli_help(UNUSED zappy_t *world, UNUSED char *cmd)
     puts("cinfo            : display information about all connected clients");
     puts("pinfo id         : display information about the player with the id \
 id, if id is not set will display info about all players");
-    puts("[WIP]tinfo x y   : display information about the tile at pos x y");
+    puts("tinfo x y        : display information about the tile at pos x y");
     puts("[WIP]timescale t : set the timescale value to t, if not set will \
 display the current timescale instead");
     puts("[WIP]drop r x y  : drop the resource id r at position x y");
