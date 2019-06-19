@@ -27,12 +27,6 @@ static void graphical_user_on_extracted(user_base_t *user,
 {
     graphical_user_t *guser = (graphical_user_t *)user;
 
-#ifdef GRAPHICAL_SERVER_DEBUG
-    printf("[DEBUG][graphical_user_on_extracted] received from user\n[");
-    for (size_t i = 0; i < data_size; ++i)
-        printf("%x%s", data[i], (i + 1 == data_size) ? "" : " ");
-    printf("]\n");
-#endif
     if (guser->base.sock_type == WEBSOCKET) {
         handle_graphical_user_cmd(guser, client, data, data_size);
     } else {
@@ -45,9 +39,6 @@ static void graphical_user_on_extracted(user_base_t *user,
 static void graphical_user_on_disconnected(user_base_t *user,
     UNUSED network_client_t *client)
 {
-#ifdef GRAPHICAL_SERVER_DEBUG
-    puts("[DEBUG][graphical_user_on_disconnected] user disconnected.");
-#endif
     delete_graphical_user((graphical_user_t *)user);
 }
 
