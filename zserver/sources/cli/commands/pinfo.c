@@ -29,12 +29,14 @@ static void display_player(trantorian_t *player)
 {
     char *item_str[] = {"food", "linemate", "deraumere", "sibur",
 "mendiane", "phiras", "thystame"};
+    char orientation[] = {'N', 'E', 'S', 'W'};
 
     printf("%s ", player->is_egg ? "Egg" : "Trantorian");
     printf("%i (%s)\n", player->id, player->team.name);
     printf("-Level %i\n", player->lvl);
     printf("-Position %i %i\n", player->pos->coords.x, player->pos->coords.y);
-    printf("-Orientation: %i\n", cardinal_to_int(player->orientation));
+    printf("-Orientation: %i(%c)\n", cardinal_to_int(player->orientation),
+orientation[player->orientation]);
     printf("Inventory:\n");
     for (int i = 0; i < 7; i++) {
         printf("-[%i](%s) => %i\n", i, item_str[i], player->inventory[i]);
