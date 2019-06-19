@@ -29,6 +29,7 @@ trantorian_t *create_player(void)
     res->base.on_disconnect = &on_disconnect;
     res->base.on_extracted = &on_extract_not_connected;
     res->life_unit = 10;
+    res->lvl = 1;
     return (res);
 }
 
