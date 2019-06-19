@@ -9,6 +9,7 @@
 #include "zcommand_proto.h"
 #include "zworld.h"
 #include "zcommands.h"
+#include "graphical_protocol.h"
 
 bool take_valid(client_user_pair_t *client, char *arg)
 {
@@ -30,4 +31,5 @@ void take_object(client_user_pair_t *client, char *arg)
     trantorian->inventory[item_id] += 1;
     trantorian->pos->content[item_id] -= 1;
     write_to_buffer(&client->client->cb_out, OK_MSG, OK_MSG_LEN);
+    pgt(trantorian->zappy, trantorian, item_id);
 }

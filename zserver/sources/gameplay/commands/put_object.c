@@ -9,6 +9,7 @@
 #include "zcommand_proto.h"
 #include "zworld.h"
 #include "zcommands.h"
+#include "graphical_protocol.h"
 
 void put_object(client_user_pair_t *client, char *arg)
 {
@@ -22,4 +23,5 @@ void put_object(client_user_pair_t *client, char *arg)
     trantorian->pos->content[item_id] += 1;
     trantorian->inventory[item_id] -= 1;
     write_to_buffer(&client->client->cb_out, OK_MSG, OK_MSG_LEN);
+    pdr(trantorian->zappy, trantorian, item_id);
 }

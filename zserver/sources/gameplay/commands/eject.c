@@ -8,6 +8,7 @@
 #include <string.h>
 #include "zcommands.h"
 #include "zworld.h"
+#include "graphical_protocol.h"
 
 #define EJECT_MSG ("eject: ")
 #define EJECT_MSG_LEN (sizeof(EJECT_MSG))
@@ -47,6 +48,7 @@ void eject(client_user_pair_t *client, __attribute__((unused)) char *arg)
         write_to_buffer(&client->client->cb_out, KO_MSG, KO_MSG_LEN);
         return;
     }
+    pex(self->zappy, self);
     for (trantorian_t *tmp = self->neighbour; tmp != self;) {
         trantorian = tmp->neighbour;
         notify_user(get_client(map, (user_base_t *)tmp), self->orientation);

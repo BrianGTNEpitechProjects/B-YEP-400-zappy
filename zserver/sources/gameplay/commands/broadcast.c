@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include "zcommands.h"
 #include "zworld.h"
+#include "graphical_protocol.h"
 
 static void write_msg(network_client_t *client, char buff[10], char *a)
 {
@@ -88,6 +89,7 @@ void broadcast(client_user_pair_t *client, char *arg)
     else
         lim = trantorian->zappy->map_size.x;
     broadcasted_nb += 1;
+    pbc(trantorian->zappy, trantorian, arg);
     for (unsigned int i = 0; (int)i <= (lim / 2) + 1; i++)
         broadcast_at_lvl(trantorian, arg, i, broadcasted_nb);
     write_to_buffer(&client->client->cb_out, OK_MSG, OK_MSG_LEN);

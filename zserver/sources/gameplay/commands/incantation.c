@@ -8,6 +8,7 @@
 #include "zcommand_proto.h"
 #include "zcommands.h"
 #include "zserver.h"
+#include "graphical_protocol.h"
 
 #define CURR_MSG ("Current level: ")
 #define CURR_MSG_LEN (sizeof(CURR_MSG))
@@ -59,6 +60,7 @@ static void notify_lvl(trantorian_t *t)
     tmp = get_client(s->client_user_map, (user_base_t *)t);
     p = (client_user_pair_t){.client = tmp, .user = (user_base_t *)t};
     write_lvl_msg(&p, t->lvl);
+    plu(t->zappy, t);
 }
 
 static void upgrade_trantorians(client_user_pair_t *c, unsigned int lvl)
@@ -83,10 +85,16 @@ static void upgrade_trantorians(client_user_pair_t *c, unsigned int lvl)
 
 void incantation(client_user_pair_t *client, __attribute__((unused)) char *arg)
 {
-    unsigned int inc_lvl = ((trantorian_t *)client->user)->lvl;
+    trantorian_t *trantorian = (trantorian_t *)client->user;
+    unsigned int inc_lvl = trantorian->lvl;
 
     if (incantation_valid(client, arg)) {
+        pie(trantorian->zappy, trantorian->pos->coords.x,
+            trantorian->pos->coords.y, GP_INCANTATION_RESULT_SUCCESS);
         upgrade_trantorians(client, inc_lvl);
-    } else
+    } else {
+        pie(trantorian->zappy, trantorian->pos->coords.x,
+            trantorian->pos->coords.y, GP_INCANTATION_RESULT_FAILURE);
         write_to_buffer(&client->client->cb_out, KO_MSG, KO_MSG_LEN);
+    }
 }
