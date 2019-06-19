@@ -33,6 +33,7 @@ SRC_FILES	=	\
 				gameplay/utils/kill_client.c \
 				gameplay/utils/set_to_next_command.c \
 				gameplay/utils/apply_time.c \
+				gameplay/utils/evaluate_tile_angle.c \
 				websockets/websocket.c \
 				websockets/websocket_send.c \
 				websockets/websocket_header_end.c \

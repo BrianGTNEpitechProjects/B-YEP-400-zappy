@@ -28,6 +28,19 @@ unsigned int lvl)
     return (start);
 }
 
+tile_t *top_right_corner_tile_at(tile_t *start, e_cardinal_t dir, \
+unsigned int lvl)
+{
+    int tmp = tile_look_limit(lvl);
+
+    for (unsigned int i = 0; i < lvl; i++)
+        start = tile_forward(start, dir);
+    dir = cardinal_rotate_right(dir);
+    for (int i = 0; i < tmp / 2; i++)
+        start = tile_forward(start, dir);
+    return (start);
+}
+
 static void write_tile_out(client_user_pair_t *c, tile_t *tile)
 {
     trantorian_t *self = (trantorian_t *)c->user;

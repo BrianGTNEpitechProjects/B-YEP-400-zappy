@@ -21,6 +21,21 @@ static void write_msg(network_client_t *client, char buff[10], char *a)
     write_to_buffer(&client->cb_out, (const uint8_t *)"\n", 1);
 }
 
+static int clkwise_to_cclkwise(int a)
+{
+    switch (a) {
+    case 1:
+    case 5: return (a);
+    case 2: return (8);
+    case 8: return (2);
+    case 3: return (7);
+    case 7: return (3);
+    case 4: return (6);
+    case 6: return (4);
+    default: return (0);
+    }
+}
+
 static void broadcast_to_tile(tile_t *dest, char *a, int angle)
 {
     network_server_t *server = (dest->first) ? \
@@ -38,22 +53,11 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
             continue;
         ang = (angle == -1) ? 0 : \
 floor((((180 + angle - (int)(p->orientation * 90.0)) % 360) * 8) / 360) + 1;
-        printf("receiver relative angle : %d\n", (ang % 360) * 45);
+        ang = clkwise_to_cclkwise(ang);
         snprintf(buff, 10, "%d", ang);
         write_msg(client, buff, a);
         p = p->neighbour;
     } while (p != dest->first);
-}
-
-static int evaluate_tile_angle(e_cardinal_t dir, int i, int lim)
-{
-    double relative_angle = ((double)i * 360.0) / (double)lim;
-    double absolute_angle;
-
-    relative_angle = (size_t)(relative_angle + 315.0) % 360;
-    absolute_angle = relative_angle + (dir * 90.0);
-    printf("emitter absolute angle : %d\n", (int)absolute_angle % 360);
-    return ((int)absolute_angle % 360);
 }
 
 static void broadcast_at_lvl(trantorian_t *tran, char *arg, \

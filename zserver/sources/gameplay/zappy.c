@@ -168,6 +168,7 @@ static bool init_server(zappy_t *res, args_t *args)
         return (false);
     server = get_server(res->nm, res->classic_id);
     server->default_client_disconnect_timeout = 60;
+    res->websocket_id = (id_t)-1;
     if (args->wsport != 0) {
         res->websocket_id = add_server(res->nm, args->wsport);
         if (res->websocket_id == invalid_id)

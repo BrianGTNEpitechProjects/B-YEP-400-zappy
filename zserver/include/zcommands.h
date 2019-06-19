@@ -53,8 +53,12 @@ bool fork_start(client_user_pair_t *pair, char *arg);
 /* utils/always_true.c */
 bool always_true(client_user_pair_t *c, char *a);
 
+/* evaluate_tile_angle.c */
+int evaluate_tile_angle(e_cardinal_t dir, int i, int lim);
+
 /* look.c */
 tile_t *top_left_corner_tile_at(tile_t *, e_cardinal_t, unsigned int);
+tile_t *top_right_corner_tile_at(tile_t *, e_cardinal_t, unsigned int);
 int tile_look_limit(unsigned int lvl);
 
 
