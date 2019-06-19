@@ -8,6 +8,7 @@
 #include <string.h>
 #include "zserver.h"
 #include "zworld.h"
+#include "graphical_protocol.h"
 
 trantorian_t *get_egg_hatched(const char *team, zappy_t *zap)
 {
@@ -56,8 +57,10 @@ trantorian_t * add_user_to_team(client_user_pair_t *pair, char *team)
             set_position_relative(trantorian, *trantorian->zappy->map, position);
             trantorian->next = trantorian->zappy->players;
             trantorian->zappy->players = trantorian;
+            pnw(trantorian->zappy, trantorian);
         } else {
             replace_egg(trantorian, egg);
+            ebo(trantorian->zappy, egg);
             return (egg);
         }
     }

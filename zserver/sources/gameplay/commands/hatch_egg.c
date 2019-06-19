@@ -10,10 +10,12 @@
 #include "zworld.h"
 #include "zserver.h"
 #include "zcommands.h"
+#include "graphical_protocol.h"
 
 void hatch_egg(client_user_pair_t *client, __attribute__((unused)) char *arg)
 {
     trantorian_t *egg = (trantorian_t *)client->user;
 
     egg->base.on_extracted = &on_extract_connected;
+    eht(egg->zappy, egg);
 }

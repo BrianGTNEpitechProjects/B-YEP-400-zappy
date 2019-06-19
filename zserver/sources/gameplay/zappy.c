@@ -11,6 +11,7 @@
 #include "zserver.h"
 #include "zcommands.h"
 #include "cli.h"
+#include "graphical_protocol.h"
 
 //TODO: norm -> too many fx
 

@@ -9,6 +9,7 @@
 #include "zcommands.h"
 #include "zworld.h"
 #include "zserver.h"
+#include "graphical_protocol.h"
 
 void fork_command(client_user_pair_t *client, __attribute__((unused)) char *arg)
 {
@@ -29,4 +30,5 @@ void fork_command(client_user_pair_t *client, __attribute__((unused)) char *arg)
         trantorian = trantorian->next;
     trantorian->next = egg;
     write_to_buffer(&client->client->cb_out, OK_MSG, OK_MSG_LEN);
+    enw(trantorian->zappy, egg);
 }
