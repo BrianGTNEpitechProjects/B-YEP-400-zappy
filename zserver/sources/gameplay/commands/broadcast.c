@@ -33,7 +33,9 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
         client = get_client(server->client_user_map, (user_base_t *)p);
         if (!client)
             continue;
-        snprintf(buff, 10, "%d", (angle == -1) ? 0 : (angle * 8 / 360) + 1);
+        angle = (angle == -1) ? 0 : \
+(360 + (int)(p->orientation * 90) - angle) * 8 / 360;
+        snprintf(buff, 10, "%d", angle);
         write_msg(client, buff, a);
         p = p->neighbour;
     } while (p != dest->first);
@@ -41,7 +43,7 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
 
 static int evaluate_tile_angle(e_cardinal_t dir, int i, int lim)
 {
-    return ((int)(((double)i / (double)lim) * 360.0 + 235) % 360 + dir * 90);
+    return ((int)((((double)i / (double)lim) * 360.0 + 235) + dir * 90) % 360);
 }
 
 static void broadcast_at_lvl(trantorian_t *tran, char *a, \
