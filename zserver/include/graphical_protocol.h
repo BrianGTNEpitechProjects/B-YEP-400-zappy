@@ -58,6 +58,7 @@ bool sst(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool suc(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 bool sbp(graphical_user_t *, network_client_t *, uint8_t *, size_t);
 
+void plu(zappy_t *world, trantorian_t *player);
 void pnw(zappy_t *world, trantorian_t *new_player);
 void pex(zappy_t *world, trantorian_t *player_expulsing);
 void pbc(zappy_t *world, trantorian_t *player, const char *msg);

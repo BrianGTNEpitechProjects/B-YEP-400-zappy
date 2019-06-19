@@ -28,7 +28,7 @@ bool pia(graphical_user_t *user, network_client_t *client,
     zappy_t *world = user->world_infos;
     char tmp[12] = {0};
     int data_size = 0;
-    char *team_name = strstr(data, " ") + 1;
+    char *team_name = strstr((char *)data, " ") + 1;
     int player_size = compute_player_ids_size(world, team_name);
     int team_name_size;
 

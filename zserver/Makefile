@@ -71,6 +71,7 @@ GCOMMAND_FILES	=	\
 					pic.c \
 					pie.c \
 					pin.c \
+					plu.c \
 					plv.c \
 					pnw.c \
 					ppo.c \
