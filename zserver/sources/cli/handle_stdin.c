@@ -34,7 +34,9 @@ static void exec_line(zappy_t *world, char *line)
 
     for (int i = 0; cli_cmd_map[i].cmd_start != NULL; i++) {
         curr_cmd = &cli_cmd_map[i];
-        if (!strncmp(curr_cmd->cmd_start, line, strlen(curr_cmd->cmd_start))) {
+        if (!strncmp(curr_cmd->cmd_start, line, strlen(curr_cmd->cmd_start))
+        && (line[strlen(curr_cmd->cmd_start)] == ' '
+        || line[strlen(curr_cmd->cmd_start)] == '\0')) {
             found = true;
             ret = curr_cmd->func(world, line);
             break;
