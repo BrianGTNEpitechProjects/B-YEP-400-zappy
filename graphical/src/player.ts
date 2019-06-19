@@ -1,6 +1,13 @@
 import { MapObject } from "./map_object";
 import { Game } from "./game";
 
+export enum Orientation {
+    NORTH = 1,
+    EAST,
+    SOUTH,
+    WEST
+}
+
 export class Player extends MapObject {
     id: number;
     level: number;
@@ -35,7 +42,7 @@ export class Player extends MapObject {
 
         Game.gltfLoader.load(
             "assets/3DModels/steveriged.gltf",
-            function(gltf) {
+            function(gltf: any) {
                 gltf.scene.scale.set(2, 2, 2);
                 gltf.scene.position.x = posX * Game.squareSize + Game.squareSize / 2;
                 gltf.scene.position.y = posY * Game.squareSize + Game.squareSize / 2;
