@@ -14,8 +14,7 @@ e_cardinal_t cardinal_rotate_right(e_cardinal_t dir)
 
 e_cardinal_t cardinal_rotate_left(e_cardinal_t dir)
 {
-    --dir;
-    return ((dir < 0) ? 3 : dir);
+    return ((dir == 0) ? 3 : dir - 1);
 }
 
 char *cardinal_to_string(e_cardinal_t dir)

@@ -22,6 +22,7 @@ SRC_FILES	=	\
 				gameplay/trantorian/new.c \
 				gameplay/process_command.c \
 				gameplay/trantorian/move.c \
+				gameplay/trantorian/tile.c \
 				gameplay/trantorian/neighbour.c \
 				gameplay/utils/cardinal_utils.c \
 				gameplay/utils/always_true.c \

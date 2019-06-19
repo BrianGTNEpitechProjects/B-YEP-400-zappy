@@ -41,6 +41,10 @@ void fork_command   (client_user_pair_t *client, char *arg);
 void hatch_egg      (client_user_pair_t *client, char *arg);
 
 
+bool take_valid(client_user_pair_t *client, char *arg);
+bool incantation_valid(client_user_pair_t *c, char *a);
+
+
 /* --- utils --- */
 /* utils/always_true.c */
 bool always_true(client_user_pair_t *c, char *a);
