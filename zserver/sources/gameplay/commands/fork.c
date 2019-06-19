@@ -11,7 +11,7 @@
 #include "zserver.h"
 #include "graphical_protocol.h"
 
-bool fork_start(client_user_pair_t *pair, char *cmd)
+bool fork_start(client_user_pair_t *pair, UNUSED char *cmd)
 {
     trantorian_t *trantorian = (trantorian_t *)pair->user;
 

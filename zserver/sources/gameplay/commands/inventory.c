@@ -10,8 +10,9 @@
 #include "zcommands.h"
 #include "zworld.h"
 #include "zitem.h"
+#include "common.h"
 
-void inventory(client_user_pair_t *client, char *arg)
+void inventory(client_user_pair_t *client, UNUSED char *arg)
 {
     trantorian_t *self = (trantorian_t *)client->user;
     char nb[11] = {0};

@@ -13,7 +13,7 @@
 bool incantation_startable(client_user_pair_t *c, \
 __attribute__((unused)) char *a)
 {
-    trantorian_t *player = c->user;
+    trantorian_t *player = (trantorian_t *)c->user;
 
     if (incantation_valid(c, a)) {
         pic(player->zappy, player);

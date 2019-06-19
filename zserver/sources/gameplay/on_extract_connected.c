@@ -40,9 +40,8 @@ static bool is_command_valid(const uint8_t *data, int command_ind)
     return (data[len] == ' ' || data[len] == '\n');
 }
 
-static bool command_ok(client_user_pair_t *p, char *arg, int command_ind)
+static bool command_ok(UNUSED client_user_pair_t *p, char *arg, int command_ind)
 {
-    trantorian_t *t = (trantorian_t *)p->user;
     bool ret = COMMAND_NB < command_ind;
     const command_info_t *command = &(commands[command_ind]);
 
