@@ -46,6 +46,7 @@ void hatch_egg      (client_user_pair_t *client, char *arg);
 bool take_valid(client_user_pair_t *client, char *arg);
 bool incantation_startable(client_user_pair_t *c, char *a);
 bool incantation_valid(client_user_pair_t *c, char *a);
+bool fork_start(client_user_pair_t *pair, char *arg);
 
 
 /* --- utils --- */

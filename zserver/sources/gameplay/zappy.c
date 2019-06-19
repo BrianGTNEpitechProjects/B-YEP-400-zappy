@@ -93,7 +93,7 @@ const command_info_t commands[] = {
         .command = "Fork",
         .charge_time = 42,
         .need_arg = false,
-        .is_startable = &always_true,
+        .is_startable = &fork_start,
         .is_valid = &always_true,
         .callback = &fork_command
     },

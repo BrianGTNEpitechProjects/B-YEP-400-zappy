@@ -11,6 +11,14 @@
 #include "zserver.h"
 #include "graphical_protocol.h"
 
+bool fork_start(client_user_pair_t *pair, char *cmd)
+{
+    trantorian_t *trantorian = (trantorian_t *)pair->user;
+
+    pfk(trantorian->zappy, trantorian);
+    return (true);
+}
+
 void fork_command(client_user_pair_t *client, __attribute__((unused)) char *arg)
 {
     trantorian_t *trantorian = (trantorian_t *)client->user;
