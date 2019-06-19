@@ -113,6 +113,7 @@ trantorian_t * add_user_to_team(client_user_pair_t *pair, char *team);
 void process_command_on_users(zappy_t *z, network_client_user_map_t *m);
 
 /* resources.c */
+void spawn_resource(tile_t *tile, e_item_t type);
 void process_spawn_resources(zappy_t *zap);
 void init_spawn_timeouts(zappy_t *res);
 

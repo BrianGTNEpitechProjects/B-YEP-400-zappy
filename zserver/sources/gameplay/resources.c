@@ -5,6 +5,7 @@
 ** Zappy
 */
 
+#include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
@@ -32,8 +33,8 @@ void spawn_rand_resources(zappy_t *zap, e_item_t type)
 
 void set_timeout(struct timespec *to, double scaled_time)
 {
-    to->tv_sec = (__time_t)scaled_time;
-    to->tv_nsec = (__syscall_slong_t)((scaled_time - (size_t)scaled_time) * pow(10, 6));
+    to->tv_sec = (long)scaled_time;
+    to->tv_nsec = (long)((scaled_time - (long)scaled_time) * pow(10, 9));
 }
 
 void set_min_timeout(zappy_t *zap, struct timespec timeouts[TOT_ITEM_NB])
@@ -57,7 +58,7 @@ void process_spawn_resources(zappy_t *zap) {
     static struct timespec last = {0};
     struct timespec now = {0};
     struct timespec delta;
-    struct timespec zero = {0};
+    struct timespec zero = {0, 0};
     double scaled = 0;
 
     if (last.tv_sec == 0 && last.tv_nsec == 0)
@@ -69,10 +70,10 @@ void process_spawn_resources(zappy_t *zap) {
         if (timercmp(zap->resources_spawn[i], zero, <=)) {
             scaled = item_map[i].spawn_frequency / zap->time_scale;
             spawn_rand_resources(zap, i);
-            set_timeout(&(zap->resources_spawn[i]), scaled);
+            set_timeout(&zap->resources_spawn[i], scaled);
         }
-        set_min_timeout(zap, zap->resources_spawn);
     }
+    set_min_timeout(zap, zap->resources_spawn);
 }
 
 void init_spawn_timeouts(zappy_t *res)

@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "cli.h"
 #include "common.h"
+#include "zserver.h"
 
 static bool extract_positions(char *cmd, int *r, int *x, int *y)
 {
@@ -45,7 +46,7 @@ bool cli_drop(UNUSED zappy_t *world, char *cmd)
         return (false);
     if (x < 0 || y < 0 || x >= world->map_size.x || y >= world->map_size.y)
         return (false);
-    //todo call lilian func
-    printf("[WIP] must spawn item of type %i at %i %i\n", r, x, y);
+    spawn_resource(&world->map[y][x], r);
+    printf("Dropped item of type %i at %i %i\n", r, x, y);
     return (true);
 }

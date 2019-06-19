@@ -27,3 +27,11 @@ void timersub(struct timespec *a, struct timespec *b, struct timespec *res)
       res->tv_nsec += 1000000000;
     }
 }
+
+void timermul(struct timespec *a, double mul, struct timespec *res)
+{
+    double value = (a->tv_sec + a->tv_nsec / 1000000000.0) * mul;
+
+    res->tv_sec = (long)value;
+    res->tv_nsec = (value - (long)value) * 1000000000;
+}

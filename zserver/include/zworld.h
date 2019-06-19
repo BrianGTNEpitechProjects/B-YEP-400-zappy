@@ -112,6 +112,7 @@ int get_item_id_from_name(char *name);
 bool apply_time(double *ref, struct timespec *delta_start, int scale);
 
 /* kill_client.c */
+bool kill_player(trantorian_t *p);
 bool kill_client(client_user_pair_t *c);
 
 /* set_to_newt_command.c */

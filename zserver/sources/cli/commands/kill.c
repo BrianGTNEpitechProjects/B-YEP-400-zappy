@@ -36,8 +36,8 @@ bool cli_kill(UNUSED zappy_t *world, char *cmd)
         player = find_trantorian_by_id(world, id);
         if (!is_valid_id || player == NULL)
             return (false);
-        //todo kill player
-        printf("[WIP] we should kill player id %i\n", id);
+        kill_player(player);
+        printf("Killed player with id %li\n", id);
     } else
         return (false);
     return (true);
