@@ -27,10 +27,13 @@ typedef enum {
     THYSTAME,
     TOT_ITEM_NB
 } e_item_t;
+
 typedef struct {
     e_item_t id;
     const uint8_t *name;
+    double spawn_frequency;
 } item_t;
+
 extern const item_t item_map[TOT_ITEM_NB];
 
 #endif //PSU_ZAPPY_2018_ZITEM_H

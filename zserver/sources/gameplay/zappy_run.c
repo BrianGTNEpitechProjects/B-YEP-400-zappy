@@ -39,6 +39,7 @@ bool run_zappy(zappy_t *zap)
         extract_to_users(server, (uint8_t *)ZAPPY_DELIM, ZAPPY_DELIM_SIZE);
         process_welcome_procedure(zap, server);
         process_command_on_users(zap, server->client_user_map);
+        process_spawn_resources(zap);
         update_ws_server(zap);
     }
     remove_sig_catch();

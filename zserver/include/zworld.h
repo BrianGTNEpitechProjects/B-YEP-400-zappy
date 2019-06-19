@@ -39,6 +39,7 @@ typedef struct {
     team_t *teams;
     int default_slots_teams;
     int time_scale;
+    struct timeval resources_spawn[TOT_ITEM_NB];
 } zappy_t;
 
 struct trantorian_s {
@@ -114,6 +115,5 @@ bool kill_client(client_user_pair_t *c);
 
 /* set_to_newt_command.c */
 void set_to_next_command(trantorian_t *trantorian);
-
 
 #endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H

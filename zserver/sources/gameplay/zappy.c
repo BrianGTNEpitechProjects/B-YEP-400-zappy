@@ -233,6 +233,7 @@ static zappy_t *create_zappy(args_t *args)
     res->teams = (team_t *)args->teams;
     res->map_size.x = args->x;
     res->map_size.y = args->y;
+    init_spawn_timeouts(res);
     return (res);
 }
 
@@ -249,7 +250,7 @@ bool zappy(int ac, char **av)
         free(arguments.teams);
         return (ret);
     }
-    srand((unsigned int)time(NULL));
+    srandom(time(NULL));
     ret = run_zappy(zap);
     delete_zappy(zap);
     free(arguments.teams);

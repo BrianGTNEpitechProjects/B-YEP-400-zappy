@@ -22,11 +22,11 @@ const uint8_t DEAD_MSG[] = "dead\n";
 const size_t DEAD_MSG_LEN = sizeof(DEAD_MSG);
 
 const item_t item_map[TOT_ITEM_NB] = {
-    {.id = FOOD,        .name = (const uint8_t *)"Food"},
-    {.id = LINEMATE,    .name = (const uint8_t *)"Linemate"},
-    {.id = DERAUMERE,   .name = (const uint8_t *)"Deraumere"},
-    {.id = SIBUR,       .name = (const uint8_t *)"Sibur"},
-    {.id = MENDIANE,    .name = (const uint8_t *)"Mendiane"},
-    {.id = PHIRAS,      .name = (const uint8_t *)"Phiras"},
-    {.id = THYSTAME,    .name = (const uint8_t *)"Thystame"},
+{.id = FOOD,        .name = (const uint8_t *)"Food", .spawn_frequency = 5},
+{.id = LINEMATE,    .name = (const uint8_t *)"Linemate", .spawn_frequency = 5},
+{.id = DERAUMERE,   .name = (const uint8_t *)"Deraumere",.spawn_frequency = 10},
+{.id = SIBUR,       .name = (const uint8_t *)"Sibur", .spawn_frequency = 20},
+{.id = MENDIANE,    .name = (const uint8_t *)"Mendiane", .spawn_frequency = 30},
+{.id = PHIRAS,      .name = (const uint8_t *)"Phiras", .spawn_frequency = 40},
+{.id = THYSTAME,    .name = (const uint8_t *)"Thystame", .spawn_frequency = 50},
 };
