@@ -59,10 +59,11 @@ void set_key(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
 void header_end(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
 char *base64_encode(unsigned char *, size_t);
 unsigned int get_base64_size(size_t);
+void send_websocket_header(network_client_t *, size_t, uint8_t);
 void send_websocket(network_client_t *, uint8_t *, size_t, uint8_t);
 void read_ws_clients_data(network_server_t *server);
 
-#define DEFAULT_ARGS {0, 0, 0, 0, 100, NULL, 0, 0, false}
+#define DEFAULT_ARGS {0, 0, 0, 0, 100, NULL, 0, 0, false, false}
 
 typedef struct {
     int port;
@@ -74,6 +75,7 @@ typedef struct {
     int tc;
     int wsport;
     bool set_ws;
+    bool interactive_mode;
 } args_t;
 
 /* utils.c */
@@ -89,10 +91,13 @@ void on_extract_connected(user_base_t *, network_client_t *, uint8_t *, size_t);
 /*  arguments.c */
 bool parse_args(args_t *arguments, int ac, char **av);
 
+/*  remove_signals.c  */
+bool remove_sig_catch(void);
+
 /*  server_running.c    */
 bool setup_catch_signals(void);
-bool remove_sig_catch(void);
 bool running(void);
+void shutdown_server(void);
 
 /* new.c */
 trantorian_t *accept_player(zappy_t *zap);

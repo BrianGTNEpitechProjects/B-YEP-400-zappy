@@ -14,7 +14,7 @@
 static void graphical_user_websocket_handshake(graphical_user_t *guser,
     network_client_t *client, uint8_t *data, size_t data_size)
 {
-    char extracted_as_char[C_BUFFER_SIZE] = {0};
+    char extracted_as_char[C_BUFFER_SIZE + 1] = {0};
 
     if (!check_data_encoding(data, data_size))
         return;
@@ -27,25 +27,18 @@ static void graphical_user_on_extracted(user_base_t *user,
 {
     graphical_user_t *guser = (graphical_user_t *)user;
 
-#ifdef GRAPHICAL_SERVER_DEBUG
-    printf("[DEBUG][graphical_user_on_extracted] received from user\n[");
-    for (size_t i = 0; i < data_size; ++i)
-        printf("%x%s", data[i], (i + 1 == data_size) ? "" : " ");
-    printf("]\n");
-#endif
     if (guser->base.sock_type == WEBSOCKET) {
-        handle_graphical_user_cmd(user, client, data, data_size);
+        handle_graphical_user_cmd(guser, client, data, data_size);
     } else {
         graphical_user_websocket_handshake(guser, client, data, data_size);
     }
+    if (client->has_overflow)
+        client->lost_connection = true;
 }
 
 static void graphical_user_on_disconnected(user_base_t *user,
     UNUSED network_client_t *client)
 {
-#ifdef GRAPHICAL_SERVER_DEBUG
-    puts("[DEBUG][graphical_user_on_disconnected] user disconnected.");
-#endif
     delete_graphical_user((graphical_user_t *)user);
 }
 

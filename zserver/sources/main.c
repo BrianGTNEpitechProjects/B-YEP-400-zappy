@@ -12,7 +12,7 @@
 static void display_usage(const char *progname)
 {
     printf("USAGE: %s -p port -x width -y height -n name1 name2 ... nameX -c \
-clientsNb [-f freq] [-w wsport]\n", progname);
+clientsNb [-f freq] [-w wsport] [-i]\n", progname);
     puts("\tport is the port number for the zappy server (must be > 0)");
     puts("\twidth is the width of the world (must be > 0)");
     puts("\theight is the height of the world (must be > 0)");
@@ -23,6 +23,7 @@ clientsNb [-f freq] [-w wsport]\n", progname);
 (must be > 0) (100 by default)");
     puts("\twsport is the port number for the ws server, \
 if not set will not open the ws server (must be > 0)");
+    puts("\ti option activate interactive mode and give access to a cli");
 }
 
 int main(int ac, char **av)

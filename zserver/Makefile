@@ -15,6 +15,7 @@ SRC_FILES	=	\
 				gameplay/zappy_run.c \
 				gameplay/on_extract_connected.c \
 				gameplay/map.c \
+				gameplay/remove_signals.c \
 				gameplay/server_running.c \
 				gameplay/arguments.c \
 				gameplay/connection.c \
@@ -33,14 +34,19 @@ SRC_FILES	=	\
 				gameplay/utils/set_to_next_command.c \
 				gameplay/utils/apply_time.c \
 				websockets/websocket.c \
+				websockets/websocket_send.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \
 				websockets/websocket_set_connection.c \
 				websockets/websocket_set_key.c \
 				websockets/websocket_set_upgrade.c \
+				graphical_protocol/find_trantorian_by.c \
 				graphical_protocol/graphical_user.c \
 				graphical_protocol/handle_graphical_user_cmd.c \
 				graphical_protocol/update_ws_server.c \
+				cli/handle_stdin.c \
+				cli/prompt_and_welcome.c \
+				cli/clear_str.c \
 				base64.c
 
 COMMAND_DIR		=	$(realpath sources/gameplay/commands)
@@ -60,6 +66,19 @@ COMMAND_FILES	=	\
 					fork.c\
 					hatch_egg.c\
 
+CLI_COMMAND_DIR		=	$(realpath sources/cli/commands)
+
+CLI_COMMAND_FILES	=	\
+					cinfo.c \
+					drop.c \
+					endgame.c \
+					exit.c \
+					help.c \
+					kill.c \
+					pinfo.c \
+					timescale.c \
+					tinfo.c \
+
 GCOMMAND_DIR	=	$(realpath sources/graphical_protocol/commands)
 
 GCOMMAND_FILES	=	\
@@ -68,7 +87,6 @@ GCOMMAND_FILES	=	\
 					edi.c \
 					eht.c \
 					enw.c \
-					mct.c \
 					msz.c \
 					pbc.c \
 					pdi.c \
@@ -76,9 +94,11 @@ GCOMMAND_FILES	=	\
 					pex.c \
 					pfk.c \
 					pgt.c \
+					pia.c \
 					pic.c \
 					pie.c \
 					pin.c \
+					plu.c \
 					plv.c \
 					pnw.c \
 					ppo.c \
@@ -112,7 +132,7 @@ SRC_NETWORK	=	\
 				network_server_sync_buffer.c \
 				network_server_update.c \
 
-SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES)) $(addprefix $(GCOMMAND_DIR)/, $(GCOMMAND_FILES))
+SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES)) $(addprefix $(NETWORK_DIR)/, $(SRC_NETWORK)) $(addprefix $(COMMAND_DIR)/, $(COMMAND_FILES)) $(addprefix $(GCOMMAND_DIR)/, $(GCOMMAND_FILES)) $(addprefix $(CLI_COMMAND_DIR)/, $(CLI_COMMAND_FILES))
 
 OBJ			=	$(SRC:%.c=%.o)
 

@@ -10,6 +10,7 @@
 #include <time.h>
 #include "zserver.h"
 #include "zcommands.h"
+#include "cli.h"
 
 //TODO: norm -> too many fx
 
@@ -153,17 +154,21 @@ void delete_zappy(zappy_t *zappy)
     free(zappy);
 }
 
-static bool init_server(zappy_t *res, int port, int wsport)
+static bool init_server(zappy_t *res, args_t *args)
 {
     network_server_t *server = NULL;
 
-    res->classic_id = add_server(res->nm, port);
+    if (args->interactive_mode) {
+        res->nm->timeout_on_stdin = true;
+        print_cli_welcome();
+    }
+    res->classic_id = add_server(res->nm, args->port);
     if (res->classic_id == invalid_id)
         return (false);
     server = get_server(res->nm, res->classic_id);
     server->default_client_disconnect_timeout = 60;
-    if (wsport != 0) {
-        res->websocket_id = add_server(res->nm, wsport);
+    if (args->wsport != 0) {
+        res->websocket_id = add_server(res->nm, args->wsport);
         if (res->websocket_id == invalid_id)
             return (false);
     }
@@ -224,7 +229,7 @@ static zappy_t *create_zappy(args_t *args)
         delete_zappy(res);
         return (NULL);
     }
-    if (init_server(res, args->port, args->wsport) == false) {
+    if (init_server(res, args) == false) {
         delete_zappy(res);
         return (NULL);
     }
