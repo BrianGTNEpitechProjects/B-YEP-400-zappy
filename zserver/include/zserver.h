@@ -51,6 +51,7 @@ void set_key(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
 void header_end(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
 char *base64_encode(unsigned char *, size_t);
 unsigned int get_base64_size(size_t);
+void send_websocket_header(network_client_t *, size_t, uint8_t);
 void send_websocket(network_client_t *, uint8_t *, size_t, uint8_t);
 void read_ws_clients_data(network_server_t *server);
 
@@ -90,6 +91,9 @@ void shutdown_server(void);
 
 /* new.c */
 trantorian_t *accept_player(zappy_t *zap);
+void set_position_relative(trantorian_t *to_place, tile_t *tile, pos_t pos);
+void set_position(trantorian_t *to_place, tile_t *tile);
+tile_t *get_tile_relative(tile_t *tile, pos_t pos);
 
 /* connection.c */
 void response_success_connection(trantorian_t *tranto, network_client_t *nc);

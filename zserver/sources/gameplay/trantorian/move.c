@@ -40,6 +40,8 @@ int trantorian_move(trantorian_t *trantorian, tile_t *tile)
 
 int trantorian_move_dir(trantorian_t *trantorian, e_cardinal_t dir)
 {
+    if (trantorian->pos == NULL)
+        return (-1);
     switch (dir) {
     case NORTH:
         return (trantorian_move(trantorian, trantorian->pos->north));

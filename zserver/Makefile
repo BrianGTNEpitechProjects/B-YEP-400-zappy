@@ -25,12 +25,15 @@ SRC_FILES	=	\
 				gameplay/trantorian/neighbour.c \
 				gameplay/utils/cardinal_utils.c \
 				gameplay/utils/always_true.c \
+				gameplay/utils/get_item_id_from_name.c \
 				websockets/websocket.c \
+				websockets/websocket_send.c \
 				websockets/websocket_header_end.c \
 				websockets/websocket_header_start.c \
 				websockets/websocket_set_connection.c \
 				websockets/websocket_set_key.c \
 				websockets/websocket_set_upgrade.c \
+				graphical_protocol/find_trantorian_by.c \
 				graphical_protocol/graphical_user.c \
 				graphical_protocol/handle_graphical_user_cmd.c \
 				graphical_protocol/update_ws_server.c \
@@ -48,6 +51,10 @@ COMMAND_FILES	=	\
 					left.c\
 					look.c\
 					inventory.c\
+					broadcast.c\
+					connect_nbr.c\
+					put_object.c\
+					take_object.c\
 
 CLI_COMMAND_DIR		=	$(realpath sources/cli/commands)
 
@@ -70,7 +77,6 @@ GCOMMAND_FILES	=	\
 					edi.c \
 					eht.c \
 					enw.c \
-					mct.c \
 					msz.c \
 					pbc.c \
 					pdi.c \
@@ -78,9 +84,11 @@ GCOMMAND_FILES	=	\
 					pex.c \
 					pfk.c \
 					pgt.c \
+					pia.c \
 					pic.c \
 					pie.c \
 					pin.c \
+					plu.c \
 					plv.c \
 					pnw.c \
 					ppo.c \

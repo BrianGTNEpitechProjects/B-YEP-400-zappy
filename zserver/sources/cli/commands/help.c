@@ -27,8 +27,8 @@ bool cli_help(UNUSED zappy_t *world, UNUSED char *cmd)
 {
     puts("Zappy interactive command line help:");
     puts("help             : display this help");
-    puts("[WIP]cinfo       : display information about all connected clients");
-    puts("[WIP]pinfo id    : display information about the player with the id \
+    puts("cinfo            : display information about all connected clients");
+    puts("pinfo id         : display information about the player with the id \
 id, if id is not set will display info about all players");
     puts("[WIP]tinfo x y   : display information about the tile at pos x y");
     puts("[WIP]timescale t : set the timescale value to t, if not set will \

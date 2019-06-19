@@ -10,7 +10,7 @@
 #include "graphical_protocol.h"
 
 bool msz(graphical_user_t *user, network_client_t *client,
-    uint8_t *data, size_t size)
+    UNUSED uint8_t *data, UNUSED size_t size)
 {
     char to_send[29] = {0};
     int map_size_x = user->world_infos->map_size.x;

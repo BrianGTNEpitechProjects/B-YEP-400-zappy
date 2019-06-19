@@ -50,7 +50,7 @@ bool bct(graphical_user_t *user, network_client_t *client,
 {
     regex_t preg = {0};
     regmatch_t regmatch[10] = {0};
-    char extracted[C_BUFFER_SIZE] = {0};
+    char extracted[C_BUFFER_SIZE + 1] = {0};
 
     memcpy(extracted, data, size);
     if (regcomp(&preg, "^bct [0-9]{1,11} [0-9]{1,11}\n", REG_EXTENDED))

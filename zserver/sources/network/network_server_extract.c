@@ -12,7 +12,7 @@
 static void run_extraction_loop(user_base_t *user, network_client_t *client,
     uint8_t *delim, size_t delim_size)
 {
-    uint8_t buffer[C_BUFFER_SIZE];
+    uint8_t buffer[C_BUFFER_SIZE + 1] = {0};
     size_t size;
 
     do {
