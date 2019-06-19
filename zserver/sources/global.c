@@ -18,6 +18,9 @@ const size_t KO_MSG_LEN = sizeof(KO_MSG);
 const uint8_t WELCOME_MSG[] = "WELCOME\n";
 const size_t WELCOME_MSG_LEN = sizeof(WELCOME_MSG);
 
+const uint8_t DEAD_MSG[] = "dead\n";
+const size_t DEAD_MSG_LEN = sizeof(DEAD_MSG);
+
 const item_t item_map[TOT_ITEM_NB] = {
     {.id = FOOD,        .name = (const uint8_t *)"Food"},
     {.id = LINEMATE,    .name = (const uint8_t *)"Linemate"},

@@ -12,14 +12,16 @@
 #include "zserver.h"
 #include "zcommands.h"
 
-static void set_to_next_command(trantorian_t *trantorian)
+static void set_timeout(trantorian_t *trantorian)
 {
-    command_t *command = &trantorian->queue[trantorian->command_ind];
+    double min = trantorian->food_time;
+    command_t *command_info = &trantorian->queue[trantorian->command_ind];
 
-    trantorian->command_ind = \
-(unsigned char)((trantorian->command_ind + 1) % COMMAND_QUEUE_LEN);
-    command->code = EMPTY;
-    memset(command->arg, 0, ARG_BUFFER_SIZE);
+    if (command_info->remaining_time < min)
+        min = command_info->remaining_time;
+    trantorian->base.user_event_timeout.tv_sec = (__time_t)min;
+    trantorian->base.user_event_timeout.tv_usec = \
+(__suseconds_t)((min - (size_t)min) * pow(10, 6));
 }
 
 static bool command_valid(client_user_pair_t *client, command_t *command)
@@ -44,31 +46,46 @@ static bool exec_command(client_user_pair_t *client, command_t *command)
     return (false);
 }
 
-static void evaluate_time(command_t *command, struct timespec *time, int scale)
+static bool evaluate_time_and_command(client_user_pair_t *c, \
+struct timespec *t, int scale)
 {
-    command->remaining_time -= time->tv_sec * scale;
-    command->remaining_time -= time->tv_nsec * ((float)scale) / pow(10, 9);
+    trantorian_t *trantorian = (trantorian_t *)c->user;
+    command_t *command;
+
+    if (apply_time(&trantorian->food_time, t, scale)) {
+        if (0 < trantorian->inventory[FOOD])
+            trantorian->inventory[FOOD] -= 1;
+        else
+            trantorian->life_unit -= 1;
+        if (trantorian->life_unit <= 0)
+            return (kill_client(c));
+        else
+            trantorian->food_time = FOOD_TTL;
+    }
+    command = &(trantorian->queue[trantorian->command_ind]);
+    if (command->code == EMPTY)
+        return (true);
+    return (!apply_time(&command->remaining_time, t, scale));
 }
 
 void process_command_on_users(zappy_t *z, network_client_user_map_t *m)
 {
-    static clockid_t clk = 0;
-    struct timespec time;
+    static struct timespec t = {0};
     command_t *command;
     client_user_pair_t pair;
 
-    clock_gettime(clk, &time);
     for (trantorian_t *node = z->players; node; node = node->next) {
+        pair = (client_user_pair_t){
+            .user = (user_base_t *)node,
+            .client = get_client(m, (user_base_t *)node)
+        };
         command = &(node->queue[node->command_ind]);
-        if (command->code == EMPTY)
+        if (evaluate_time_and_command(&pair, &t, z->time_scale)) {
+            set_timeout(node);
             continue;
-        evaluate_time(command, &time, z->time_scale);
-        pair.user = (user_base_t *)node;
-        pair.client = get_client(m, pair.user);
-        if (command_valid(&pair, command) && command->remaining_time < 0) {
-            exec_command(&pair, command);
-            set_to_next_command(node);
         }
+        if (command_valid(&pair, command) && command->remaining_time < 0)
+            exec_command(&pair, command);
     }
-    clk = 0;
+    clock_gettime(0, &t);
 }

@@ -20,7 +20,7 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
             player->queue[ind].code = id;
             player->queue[ind].remaining_time = commands[id].charge_time;
             strcpy(player->queue[ind].arg, arg);
-            printf("DEBUG: %d\n", ind);
+            printf("DEBUG: %d (life: %d) (i: %d)\n", ind, player->life_unit, i);
             return (ind);
         }
     }
@@ -40,7 +40,7 @@ static bool is_command_valid(const uint8_t *data, int command_ind)
     return (data[len] == ' ' || data[len] == '\n');
 }
 
-static bool fx(client_user_pair_t *p, char *arg, int command_ind)
+static bool command_ok(client_user_pair_t *p, char *arg, int command_ind)
 {
     trantorian_t *t = (trantorian_t *)p->user;
     bool ret = COMMAND_NB < command_ind;
@@ -68,6 +68,7 @@ uint8_t *data, size_t sz)
             break;
     arg = (data[sep_ind] == '\n') ? "" : (char *)&(data[sep_ind + 1]);
     data[sz - 1] = '\0';
-    if (fx(&pair, arg, i) || emplace_command((trantorian_t *)b, i, arg) < 0)
+    if (command_ok(&pair, arg, i) || \
+emplace_command((trantorian_t *)b, i, arg) < 0)
         write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
 }

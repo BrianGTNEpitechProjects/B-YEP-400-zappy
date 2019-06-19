@@ -57,6 +57,7 @@ struct trantorian_s {
     trantorian_t *next;
     e_cardinal_t orientation;
     uint inventory[TOT_ITEM_NB];
+    double food_time;
 };
 
 struct tile_s {
@@ -104,5 +105,15 @@ char *cardinal_to_string(e_cardinal_t dir);
 
 /* get_item_id_from_name.c */
 int get_item_id_from_name(char *name);
+
+/* apply_time.c */
+bool apply_time(double *ref, struct timespec *delta_start, int scale);
+
+/* kill_client.c */
+bool kill_client(client_user_pair_t *c);
+
+/* set_to_newt_command.c */
+void set_to_next_command(trantorian_t *trantorian);
+
 
 #endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H

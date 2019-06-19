@@ -10,9 +10,13 @@
 
 #include <stdint.h>
 
+
 /*
  * ITEM
  */
+
+#define FOOD_TTL (126.0)
+
 typedef enum {
     FOOD,
     LINEMATE,

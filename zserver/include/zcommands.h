@@ -22,6 +22,8 @@ extern const uint8_t KO_MSG[];
 extern const size_t KO_MSG_LEN;
 extern const uint8_t WELCOME_MSG[];
 extern const size_t WELCOME_MSG_LEN;
+extern const uint8_t DEAD_MSG[];
+extern const size_t DEAD_MSG_LEN;
 
 extern const command_info_t commands[];
 
