@@ -27,6 +27,7 @@ SRC_FILES	=	\
 				gameplay/trantorian/neighbour.c \
 				gameplay/utils/cardinal_utils.c \
 				gameplay/utils/always_true.c \
+				gameplay/utils/timer_operations.c \
 				gameplay/utils/get_item_id_from_name.c \
 				gameplay/utils/kill_client.c \
 				gameplay/utils/set_to_next_command.c \
