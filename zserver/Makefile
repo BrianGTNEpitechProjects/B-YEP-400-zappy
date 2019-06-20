@@ -110,7 +110,8 @@ GCOMMAND_FILES	=	\
 					spb.c \
 					sst.c \
 					suc.c \
-					tna.c
+					tna.c \
+					nrs.c
 
 NETWORK_DIR	=	$(realpath sources/network)
 

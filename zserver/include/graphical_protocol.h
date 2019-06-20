@@ -74,5 +74,6 @@ void ebo(zappy_t *world, trantorian_t *egg);
 void edi(zappy_t *world, trantorian_t *egg);
 void smg(zappy_t *world, const char *msg);
 void seg(zappy_t *world, const char *team);
+void nrs(zappy_t *world, tile_t *tile, e_item_t ressource);
 
 #endif //PSU_ZAPPY_2018_GRAPHICAL_PROTOCOL_H
