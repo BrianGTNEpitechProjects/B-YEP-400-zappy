@@ -13,17 +13,17 @@
 static void sync_client(network_client_t *client,
     fd_set *rfds, fd_set *wfds, fd_set *efds)
 {
+    if (FD_ISSET(client->socket, efds))
+        client->lost_connection = 1;
     if (FD_ISSET(client->socket, rfds) && !FD_ISSET(client->socket, efds)) {
         if (flush_socket_to_in(client)) {
             client->has_overflow = true;
         }
     }
-    if (client->cb_out.nb_buffered_bytes != 0 &&
+    if (client->cb_out.nb_buffered_bytes != 0 && !client->lost_connection &&
     FD_ISSET(client->socket, wfds) && !FD_ISSET(client->socket, efds)) {
         flush_out_to_socket(client);
     }
-    if (FD_ISSET(client->socket, efds))
-        client->lost_connection = 1;
 }
 
 static void sync_batch(network_client_pool_batch_t *batch,fd_infos_t *infos)

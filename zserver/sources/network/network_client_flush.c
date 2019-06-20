@@ -14,15 +14,16 @@
 
 bool flush_socket_to_in(network_client_t *client)
 {
-    uint8_t tmp_buff[C_BUFFER_SIZE];
+    uint8_t tmp_buff[C_BUFFER_SIZE] = {0};
     size_t bytes_readed = read(client->socket, tmp_buff, C_BUFFER_SIZE);
 
     if (bytes_readed == (size_t)-1) {
+        client->lost_connection = 1;
         return (false);
     }
     if (bytes_readed == 0) {
         client->lost_connection = 1;
-        return (0);
+        return (false);
     }
     client->last_data_in_timestamp = time(NULL);
     return (write_to_buffer(&client->cb_in, tmp_buff, bytes_readed));
