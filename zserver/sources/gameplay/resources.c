@@ -12,12 +12,14 @@
 #include <time.h>
 #include "zworld.h"
 #include "common.h"
+#include "graphical_protocol.h"
 
-void spawn_resource(tile_t *tile, e_item_t type)
+void spawn_resource(zappy_t *world, tile_t *tile, e_item_t type)
 {
     if (type >= TOT_ITEM_NB)
         return;
     tile->content[type]++;
+    nrs(world, tile, type);
 }
 
 void spawn_rand_resources(zappy_t *zap, e_item_t type)
@@ -28,7 +30,7 @@ void spawn_rand_resources(zappy_t *zap, e_item_t type)
         tile = tile->east;
     for (long y = random() % zap->map_size.y; y >= 0; y--)
         tile = tile->south;
-    spawn_resource(tile, type);
+    spawn_resource(zap, tile, type);
 }
 
 void set_timeout(struct timespec *to, double scaled_time)
