@@ -37,6 +37,7 @@ def parse_buffer(pending_commands, buffer):
     if "dead" in parse_buffer.answers:
         return "dead"
     for command, answer in zip(pending_commands, parse_buffer.answers):
+        # print("Command : " + command + "Answer : " + answer)
         for known_command in func_table:
             if command.startswith(known_command):
                 function = func_table[known_command]
@@ -47,23 +48,26 @@ def parse_buffer(pending_commands, buffer):
 
 
 def run(client_socket):
-    commands = []
+    commands = ["Forward\n"]
     pending_commands = []
     fds = [client_socket]
 
-    look("[player,,food,]")
-    # while 1:
-    infds, outfds, errfds = select.select(fds, fds, [], 0.1)
-    if len(infds) != 0:
-        buffer = client_socket.recv(1024).decode()
-        if len(buffer) != 0:
-            if parse_buffer(pending_commands, buffer) == "dead":
-                print("lol")
-    if len(outfds) != 0 and len(commands) != 0:
-        client_socket.send(("".join(commands)).encode("Utf8"))
-        pending_commands = commands.copy()
-        commands.clear()
-    commands.append(player.new_action())
+    while 1:
+        infds, outfds, errfds = select.select(fds, fds, [], 0.1)
+        if len(infds) != 0:
+            buffer = client_socket.recv(1024).decode()
+            print(buffer)
+            if len(buffer) != 0:
+                if parse_buffer(pending_commands, buffer) == "dead":
+                    sys.exit(0)
+                commands.append(player.new_action())
+        if len(outfds) != 0 and len(commands) != 0:
+            if len(commands) > 0:
+                print("Commands : " + str(commands))
+                client_socket.send(("".join(commands)).encode("Utf8"))
+                pending_commands = commands.copy()
+                commands.clear()
+            print("After clear : " + str(commands))
 
 
 def init_client_connection(client_socket):
@@ -79,7 +83,6 @@ def init_client_connection(client_socket):
     #     if os.fork() == 0:
     #         connect_clients()
     #         sys.exit(0)
-    player.init_map()
 
 
 def connect_clients():

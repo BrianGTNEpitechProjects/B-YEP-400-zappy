@@ -5,6 +5,7 @@ import os
 import re
 from main import connect_clients
 from player import player
+import math
 
 
 def forward(buffer):
@@ -23,51 +24,45 @@ def left(buffer):
 
 
 def look(buffer):
-    i = 0
+    items = [
+        "linemate",
+        "deraumere",
+        "sibur",
+        "mendiane",
+        "phiras",
+        "thystame",
+        "food"
+    ]
+    index = 0
     tile_list = buffer[1:-1].split(',')
-    if player.get_current_direction() == 0:
-        for y in range(0, -player.get_current_level() - 1, -1):
-            for x in range(player.get_current_position()[0] + y, player.get_current_position()[0] - y + 1):
-                print("slt")
-                print("X : " + str(x) + " Y : " + str(y + player.get_current_position()[1]))
-                item_list = tile_list[i].split(' ')
-                for item in item_list:
-                    player.append_item_to_map(y + player.get_current_position()[1], x, item)
-                i += 1
-    elif player.get_current_direction() == 90:
-        for y in range(0, player.get_current_level() + 1):
-            for x in range(player.get_current_position()[0] + y, player.get_current_position()[0] - y - 1, -1):
-                print("slt")
-                print("X : " + str(x) + " Y : " + str(y + player.get_current_position()[1]))
-                item_list = tile_list[i].split(' ')
-                for item in item_list:
-                    player.append_item_to_map(x, y + player.get_current_position()[1], item)
-                i += 1
-    elif player.get_current_direction() == 180:
-        for y in range(0, player.get_current_level() + 1):
-            for x in range(player.get_current_position()[0] + y, player.get_current_position()[0] - y - 1, -1):
-                print("slt")
-                print("X : " + str(x) + " Y : " + str(y + player.get_current_position()[1]))
-                item_list = tile_list[i].split(' ')
-                for item in item_list:
-                    player.append_item_to_map(y + player.get_current_position()[1], x, item)
-                i += 1
-    else:
-        for y in range(0, -player.get_current_level() - 1, -1):
-            for x in range(player.get_current_position()[0] + y, player.get_current_position()[0] - y + 1):
-                print("slt")
-                print("X : " + str(x) + " Y : " + str(y + player.get_current_position()[1]))
-                item_list = tile_list[i].split(' ')
-                for item in item_list:
-                    player.append_item_to_map(x, y + player.get_current_position()[1], item)
-                i += 1
-
-    for x in range(player.get_map_size()[0]):
-        print(player.get_map2d()[x])
+    for tile in tile_list:
+        item_list = tile.split(' ')
+        if "food" in item_list:
+            line = int(math.sqrt(index))
+            player.set_target_position([line, index - (line * (line + 1))])
+            player.set_target("food")
+            return
+        for item in item_list:
+            item = item.lstrip()
+            item = item.rstrip()
+            item = re.sub(' +', ' ', item)
+            print(item)
+            if item in items:
+                line = int(math.sqrt(index))
+                if player.set_target_position([line, index - (line * (line + 1))]):
+                    player.set_target(item)
+                return
+        index += 1
+    player.set_target_position([0, 0])
 
 
 def inventory(buffer):
-    print(buffer)
+    item_list = buffer[1:-1].split(',')
+    for item in item_list:
+        item = item.lstrip()
+        item = item.rstrip()
+        item = re.sub(' +', ' ', item)
+        player.update_item(item.split(' ')[0], int(item.split(' ')[1]))
 
 
 def broadcast(_):
