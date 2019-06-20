@@ -12,6 +12,7 @@ SRC_FILES	=	\
 				utils.c \
 				global.c \
 				gameplay/zappy.c \
+				gameplay/end_game.c \
 				gameplay/zappy_run.c \
 				gameplay/on_extract_connected.c \
 				gameplay/map.c \

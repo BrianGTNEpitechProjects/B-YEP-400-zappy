@@ -107,7 +107,7 @@ trantorian_t *create_player(void);
 
 /* connection.c */
 void response_success_connection(trantorian_t *tranto, network_client_t *nc);
-trantorian_t * add_user_to_team(client_user_pair_t *pair, char *team);
+trantorian_t * add_user_to_team(client_user_pair_t *pair, team_t *team);
 
 /* process_command.c */
 void process_command_on_users(zappy_t *z, network_client_user_map_t *m);

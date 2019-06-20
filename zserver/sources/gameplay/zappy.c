@@ -150,6 +150,8 @@ void delete_zappy(zappy_t *zappy)
         return;
     if (zappy->nm != NULL)
         delete_manager(zappy->nm);
+    if (zappy->teams != NULL)
+        free(zappy->teams);
     free(zappy->map);
     free(zappy->players);
     free(zappy);
@@ -209,14 +211,29 @@ uint8_t *data, size_t sz)
     data[sz - 1] = 0;
     for (int i = 0; tranto->zappy->teams[i].name != NULL; i++) {
         if (strcmp((char *) data, tranto->zappy->teams[i].name) == 0)
-            tranto = add_user_to_team(&pair, tranto->zappy->teams[i].name);
+            tranto = add_user_to_team(&pair, &tranto->zappy->teams[i]);
     }
-    if (tranto->team.name == NULL) {
+    if (tranto->team == NULL) {
         write_to_buffer(&pair.client->cb_out, KO_MSG, KO_MSG_LEN);
     } else {
         response_success_connection((trantorian_t *)b, c);
         b->on_extracted = &on_extract_connected;
     }
+}
+
+static bool create_teams(zappy_t *res, args_t *args) {
+    uint size = 0;
+
+    for (; args->teams[size]; size++);
+    res->teams = calloc(size + 1, sizeof(team_t));
+    if (res->teams == NULL)
+        return (handle_error_return("calloc: %s\n", 0));
+    for (id_t i = 0; i < size; i++) {
+        res->teams[i].id = i;
+        res->teams[i].name = args->teams[i];
+    }
+    res->teams[size].id = invalid_id;
+    return (true);
 }
 
 static zappy_t *create_zappy(args_t *args)
@@ -231,13 +248,12 @@ static zappy_t *create_zappy(args_t *args)
         delete_zappy(res);
         return (NULL);
     }
-    if (init_server(res, args) == false) {
+    if (init_server(res, args) == false || create_teams(res, args) == false) {
         delete_zappy(res);
         return (NULL);
     }
     res->default_slots_teams = args->ppt;
     res->time_scale = args->freq;
-    res->teams = (team_t *)args->teams;
     res->map_size.x = args->x;
     res->map_size.y = args->y;
     init_spawn_timeouts(res);

@@ -11,8 +11,8 @@
 #include "cli.h"
 #include "common.h"
 
-bool cli_endgame(UNUSED zappy_t *world, UNUSED char *cmd)
+bool cli_endgame(zappy_t *world, UNUSED char *cmd)
 {
-    printf("[WIP] Command endgame work in progress [WIP]\n");
+    end_game(world, NULL);
     return (true);
 }

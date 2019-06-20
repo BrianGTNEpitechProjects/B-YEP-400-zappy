@@ -20,6 +20,6 @@ void pnw(zappy_t *world, trantorian_t *new_player)
     int level = new_player->lvl;
 
     data_len = snprintf(to_send, 116, "pnw #%i %i %i %i %i %s\n",
-        id, x, y, o, level, new_player->team.name);
+        id, x, y, o, level, new_player->team->name);
     send_to_all_ws_clients(world, (uint8_t *)to_send, data_len);
 }

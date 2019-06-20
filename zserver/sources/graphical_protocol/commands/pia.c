@@ -16,7 +16,7 @@ static int compute_player_ids_size(zappy_t *world, const char *team)
     int data_size = 0;
 
     for (trantorian_t *curr = world->players; curr; curr = curr->next) {
-        if (strcmp(curr->team.name, team) == 0)
+        if (strcmp(curr->team->name, team) == 0)
             data_size += snprintf(tmp, 12, " %i", curr->id);
     }
     return (data_size);
@@ -39,7 +39,7 @@ bool pia(graphical_user_t *user, network_client_t *client,
     write_to_buffer(&client->cb_out, (uint8_t *)"pia ", 4);
     write_to_buffer(&client->cb_out, (uint8_t *)team_name, team_name_size);
     for (trantorian_t *curr = world->players; curr; curr = curr->next) {
-        if (strcmp(curr->team.name, team_name) == 0) {
+        if (strcmp(curr->team->name, team_name) == 0) {
             data_size = snprintf(tmp, 12, " %i", curr->id);
             write_to_buffer(&client->cb_out, (uint8_t *)tmp, data_size);
         }

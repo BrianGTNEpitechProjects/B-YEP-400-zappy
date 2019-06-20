@@ -43,6 +43,7 @@ bool run_zappy(zappy_t *zap)
         process_command_on_users(zap, server->client_user_map);
         process_spawn_resources(zap);
         update_ws_server(zap);
+        check_end_game(zap);
     }
     remove_sig_catch();
     return (true);

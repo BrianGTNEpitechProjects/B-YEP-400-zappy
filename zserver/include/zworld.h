@@ -16,6 +16,9 @@
 #define ZAPPY_DELIM "\n"
 #define ZAPPY_DELIM_SIZE 1
 
+#define MAX_LEVEL 8
+#define TEAM_PLAYERS_TO_WIN 6
+
 #define COMMAND_QUEUE_LEN (10)
 
 /*
@@ -23,6 +26,7 @@
  */
 typedef struct {
     char *name;
+    id_t id;
 } team_t;
 
 typedef struct trantorian_s trantorian_t;
@@ -50,7 +54,7 @@ struct trantorian_s {
     zappy_t *zappy;
     unsigned char command_ind;
     command_t queue[COMMAND_QUEUE_LEN];
-    team_t team;
+    team_t *team;
     unsigned int life_unit;
     unsigned int lvl;
     tile_t *pos;
@@ -86,6 +90,7 @@ void set_position(trantorian_t *to_place, tile_t *tile);
 /* teams.c */
 int count_unused_slot(zappy_t *zap, char *team_name);
 int count_players_team(zappy_t *zap, char *team_name);
+int count_teams(zappy_t *zap);
 
 /* neighbour.c */
 void trantorian_place_on_tile(trantorian_t *trantorian, tile_t *tile);
@@ -118,4 +123,8 @@ bool kill_client(client_user_pair_t *c);
 /* set_to_newt_command.c */
 void set_to_next_command(trantorian_t *t);
 
-#endif //PSU_ZAPPY_2018_ZAPPY_WORLD_H
+/* end_game.c */
+void end_game(zappy_t *zap, team_t *winners);
+void check_end_game(zappy_t *zap);
+
+#endif
