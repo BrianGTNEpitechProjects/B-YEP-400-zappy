@@ -26,7 +26,6 @@ static void graphical_user_on_extracted(user_base_t *user,
     network_client_t *client, uint8_t *data, size_t data_size)
 {
     graphical_user_t *guser = (graphical_user_t *)user;
-    client_user_pair_t pair = {.client = client, .user = user};
 
     if (guser->base.sock_type == WEBSOCKET) {
         handle_graphical_user_cmd(guser, client, data, data_size);
@@ -34,7 +33,7 @@ static void graphical_user_on_extracted(user_base_t *user,
         graphical_user_websocket_handshake(guser, client, data, data_size);
     }
     if (client->has_overflow)
-        kill_client(&pair);
+        client->lost_connection = 1;
 }
 
 static void graphical_user_on_disconnected(user_base_t *user,
