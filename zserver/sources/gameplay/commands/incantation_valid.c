@@ -11,7 +11,8 @@
 #include "zcommands.h"
 #include "graphical_protocol.h"
 
-static void force_command(trantorian_t *t, e_command_t id)
+__attribute__((unused)) static void force_command(trantorian_t *t, \
+e_command_t id)
 {
     int c_ind = t->command_ind;
 
@@ -32,7 +33,6 @@ static void force_incant_on_neighbours(network_server_t *s, trantorian_t *ref)
     do {
         if (t->lvl == ref->lvl) {
             pic(t->zappy, t);
-            force_command(t, INCANTATION);
             c = get_client(s->client_user_map, (user_base_t *)t);
             write_to_buffer(&c->cb_out, INCANT_MSG, INCANT_MSG_LEN);
             i++;
