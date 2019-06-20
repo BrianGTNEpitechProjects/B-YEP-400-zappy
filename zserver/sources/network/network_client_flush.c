@@ -15,13 +15,11 @@
 bool flush_socket_to_in(network_client_t *client)
 {
     uint8_t tmp_buff[C_BUFFER_SIZE] = {0};
-    size_t bytes_readed = read(client->socket, tmp_buff, C_BUFFER_SIZE);
+    ssize_t bytes_readed = read(client->socket, tmp_buff, C_BUFFER_SIZE);
 
-    if (bytes_readed == (size_t)-1) {
-        client->lost_connection = 1;
-        return (false);
-    }
-    if (bytes_readed == 0) {
+    if (bytes_readed == -1)
+        perror("flush_socket_to_in read");
+    if (bytes_readed <= 0) {
         client->lost_connection = 1;
         return (false);
     }

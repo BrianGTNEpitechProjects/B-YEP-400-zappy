@@ -227,14 +227,11 @@ static zappy_t *create_zappy(args_t *args)
         return (NULL);
     res->nm = create_manager();
     res->map = create_map(args->x, args->y);
-    if (res->nm == NULL || res->map == NULL) {
+    if (res->nm == NULL || res->map == NULL || !init_server(res, args)) {
         delete_zappy(res);
         return (NULL);
     }
-    if (init_server(res, args) == false) {
-        delete_zappy(res);
-        return (NULL);
-    }
+    res->natural_spawn_activated = true;
     res->default_slots_teams = args->ppt;
     res->time_scale = args->freq;
     res->teams = (team_t *)args->teams;

@@ -72,11 +72,13 @@ CLI_COMMAND_DIR		=	$(realpath sources/cli/commands)
 
 CLI_COMMAND_FILES	=	\
 					cinfo.c \
+					clear.c \
 					drop.c \
 					endgame.c \
 					exit.c \
 					help.c \
 					kill.c \
+					natural_spawn.c \
 					pinfo.c \
 					timescale.c \
 					tinfo.c \

@@ -30,7 +30,8 @@ void spawn_rand_resources(zappy_t *zap, e_item_t type)
         tile = tile->east;
     for (long y = random() % zap->map_size.y; y >= 0; y--)
         tile = tile->south;
-    spawn_resource(zap, tile, type);
+    if (zap->natural_spawn_activated)
+        spawn_resource(zap, tile, type);
 }
 
 void set_timeout(struct timespec *to, double scaled_time)
@@ -56,7 +57,8 @@ void set_min_timeout(zappy_t *zap, struct timespec timeouts[TOT_ITEM_NB])
     server->world_event_timeout.tv_usec = min.tv_nsec / 1000;
 }
 
-void process_spawn_resources(zappy_t *zap) {
+void process_spawn_resources(zappy_t *zap)
+{
     static struct timespec last = {0};
     struct timespec now = {0};
     struct timespec delta;
