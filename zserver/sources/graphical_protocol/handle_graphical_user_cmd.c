@@ -34,6 +34,8 @@ void send_to_all_ws_clients(zappy_t *world, uint8_t *msg, size_t len)
     curr = server->client_user_map->client_user_map;
     for (; curr; curr = curr->next) {
         pair = curr->value;
+        if (pair->user == NULL)
+            continue;
         if (((graphical_user_t *)pair->user)->base.sock_type == WEBSOCKET) {
             send_websocket(pair->client, msg, len, 1);
         }

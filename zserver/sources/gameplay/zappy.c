@@ -252,6 +252,7 @@ static zappy_t *create_zappy(args_t *args)
         delete_zappy(res);
         return (NULL);
     }
+    res->natural_spawn_activated = true;
     res->default_slots_teams = args->ppt;
     res->time_scale = args->freq;
     res->map_size.x = args->x;

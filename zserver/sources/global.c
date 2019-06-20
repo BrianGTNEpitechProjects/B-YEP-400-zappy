@@ -21,6 +21,12 @@ const size_t WELCOME_MSG_LEN = sizeof(WELCOME_MSG);
 const uint8_t DEAD_MSG[] = "dead\n";
 const size_t DEAD_MSG_LEN = sizeof(DEAD_MSG);
 
+const uint8_t CURR_MSG[] = "Current level: ";
+const size_t CURR_MSG_LEN = sizeof(CURR_MSG);
+
+const uint8_t INCANT_MSG[] = "Elevation underway\n";
+const size_t INCANT_MSG_LEN = sizeof(INCANT_MSG);
+
 const item_t item_map[TOT_ITEM_NB] = {
 {.id = FOOD,        .name = (const uint8_t *)"Food", .spawn_frequency = 5},
 {.id = LINEMATE,    .name = (const uint8_t *)"Linemate", .spawn_frequency = 5},

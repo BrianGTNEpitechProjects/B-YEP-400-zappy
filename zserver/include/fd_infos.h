@@ -15,6 +15,7 @@
 typedef struct fd_infos_s {
     fd_set read_set;
     fd_set write_set;
+    fd_set error_set;
     int biggest_fd;
     struct timeval to;
     network_client_t *to_disconnect_if_timeout;
