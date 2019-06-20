@@ -10,10 +10,7 @@
 #include "zserver.h"
 #include "graphical_protocol.h"
 
-#define CURR_MSG ("Current level: ")
-#define CURR_MSG_LEN (sizeof(CURR_MSG))
-
-static const incantation_requirement_t REQUIREMENTS[] = {
+const incantation_requirement_t REQUIREMENTS[] = {
     {1, {0, 1, 0, 0, 0, 0, 0}},
     {2, {0, 1, 1, 1, 0, 0, 0}},
     {2, {0, 2, 0, 1, 0, 2, 0}},
@@ -28,7 +25,7 @@ static void write_lvl_msg(client_user_pair_t *client, int lvl)
     char buff[11] = {0};
 
     snprintf(buff, 11, "%d", lvl);
-    write_to_client(client, (uint8_t *)CURR_MSG, CURR_MSG_LEN);
+    write_to_client(client, CURR_MSG, CURR_MSG_LEN);
     write_to_client(client, (uint8_t *)buff, 10);
     write_to_client(client, (uint8_t *)"\n", 1);
 }
