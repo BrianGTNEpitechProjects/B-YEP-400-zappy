@@ -45,25 +45,24 @@ static void read_ws_client_data(zuser_ws_t *user, network_client_t *client)
 {
     uint8_t tmp[C_BUFFER_SIZE + 1] = {0};
     size_t sz_flushed = flush_buffer(&client->cb_in, tmp);
-    size_t bytes_used = 0;
+    size_t bu = 0;
     size_t size = 0;
     char *str = NULL;
-    uint8_t *masking_key = NULL;
+    uint8_t *mask = NULL;
 
-    if (sz_flushed <= 0 || (tmp[0] & 0b00001111) > 2)
-        return;
-    size = tmp[1] & 0b01111111;
-    bytes_used = 2;
-    if (tmp[1] & 0b10000000) {
-        masking_key = (uint8_t[]) {tmp[2], tmp[3], tmp[4], tmp[5]};
-        bytes_used = 6;
+    while (bu < sz_flushed) {
+        if (sz_flushed <= 0 || (tmp[bu++] & 0b00001111) > 2)
+            return;
+        size = tmp[bu] & 0b01111111;
+        if (tmp[bu++] & 0b10000000)
+            mask = (uint8_t[]) {tmp[bu++], tmp[bu++], tmp[bu++], tmp[bu++]};
+        str = send_readed(size, tmp, &bu, mask);
+        if (str == NULL)
+            return;
+        user->base.on_extracted((user_base_t *)user, client, (uint8_t *)str,
+            size);
+        free(str);
     }
-    str = send_readed(size, tmp, &bytes_used, masking_key);
-    if (str == NULL)
-        return;
-    user->base.on_extracted((user_base_t *)user, client, (uint8_t *)str, size);
-    write_to_buffer(&client->cb_in, tmp + bytes_used, sz_flushed - bytes_used);
-    free(str);
 }
 
 void read_ws_clients_data(network_server_t *server)
