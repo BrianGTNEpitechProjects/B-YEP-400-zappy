@@ -24,6 +24,12 @@ extern const uint8_t WELCOME_MSG[];
 extern const size_t WELCOME_MSG_LEN;
 extern const uint8_t DEAD_MSG[];
 extern const size_t DEAD_MSG_LEN;
+extern const uint8_t CURR_MSG[];
+extern const size_t CURR_MSG_LEN;
+extern const uint8_t INCANT_MSG[];
+extern const size_t INCANT_MSG_LEN;
+
+extern const incantation_requirement_t REQUIREMENTS[];
 
 extern const command_info_t commands[];
 
