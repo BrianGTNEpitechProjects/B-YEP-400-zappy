@@ -4,11 +4,8 @@
 class Player:
     def __init__(self):
         self.map_size = [0, 0]
-        self.current_position = [5, 5]
-        self.current_direction = 0
         self.target_position = [0, 0]
         self.target = None
-        self.target_locked = False
         self.current_level = 1
         self.commands_count = 0
         self.inventory = {
@@ -22,9 +19,6 @@ class Player:
         }
         self.taken_objects = []
         self.thrown_objects = []
-
-    def get_current_direction(self):
-        return self.current_direction
 
     def get_current_level(self):
         return self.current_level
