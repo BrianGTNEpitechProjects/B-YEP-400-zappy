@@ -42,3 +42,10 @@ int count_players_team(zappy_t *zap, char *team_name)
     }
     return (players);
 }
+
+int count_teams(zappy_t *zap) {
+    int res = 0;
+
+    for (; zap->teams[res].name != NULL; res++);
+    return (res);
+}

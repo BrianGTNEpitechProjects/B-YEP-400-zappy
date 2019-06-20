@@ -15,7 +15,7 @@
  * ITEM
  */
 
-#define FOOD_TTL (126.0)
+#define FOOD_TTL (124.0)
 
 typedef enum {
     FOOD,
