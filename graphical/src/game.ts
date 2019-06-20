@@ -1,11 +1,11 @@
-import { PerspectiveCamera, Scene, WebGLRenderer, TextureLoader, MeshBasicMaterial, RepeatWrapping } from 'three';
+import { PerspectiveCamera, Scene, WebGLRenderer, TextureLoader, MeshBasicMaterial, RepeatWrapping, Color } from 'three';
 import { OrbitControls } from "three-orbitcontrols-ts";
 import { Map } from "./map"
 import { Food } from './food';
 import { MapObject } from './map_object';
 import { Player, Orientation } from './player';
 import { Egg } from './egg';
-import { SoundManager } from './sound_manager';
+import { SoundManager, Sound } from './sound_manager';
 const loader = require('three-gltf-loader');
 
 export default class Game {
@@ -17,7 +17,7 @@ export default class Game {
     static scene: Scene = new Scene();
     static gltfLoader = new loader();
     static camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    static soundManager: SoundManager;
+    soundManager: SoundManager;
     renderer: WebGLRenderer;
     controls: OrbitControls;
     map: Map;
@@ -31,7 +31,7 @@ export default class Game {
         }
         this.renderer = new WebGLRenderer({antialias:true});
         this.controls = new OrbitControls(Game.camera, this.renderer.domElement);
-        Game.soundManager = new SoundManager();
+        this.soundManager = new SoundManager();
 
         Game.camera.position.set(50, 50, 100);
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -41,10 +41,13 @@ export default class Game {
         this.animate();
         this.onWindowResize();
         this.map = new Map();
+        this.soundManager.playSound(Sound.MINECRAFT_MUSIC, true);
+        this.spawnPlayer(1, 1, 1, 1, 1, "OUI");
     }
 
     spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string) {
-        var player = new Player(id, x, y, level, team_name, orientation);
+        new Player(id, x, y, level, team_name, orientation);
+        this.soundManager.playSound(Sound.VILLAGER, false);
     }
 
     setPlayerPos(id: number, x: number, y: number, orientation: number) {
@@ -191,16 +194,6 @@ export default class Game {
             }
         }
     }
-
-    // initiateIntervalSpawnFood() {
-    //     var that = this;
-    //     setInterval(function() { that.spawnFood(1, "textures/iron_ore");}, 3000);
-    //     setInterval(function() { that.spawnFood(2, "textures/iron_block");}, 4500);
-    //     setInterval(function() { that.spawnFood(3, "textures/gold_ore");}, 6000);
-    //     setInterval(function() { that.spawnFood(4, "textures/gold_block");}, 7500);
-    //     setInterval(function() { that.spawnFood(5, "textures/diamond_ore");}, 9000);
-    //     setInterval(function() { that.spawnFood(6, "textures/diamond_block");}, 10500);
-    // }
 
     spawnEgg(idEgg: number, idPlayer: number, x: number, y: number) {
         var player = this.findPlayer(idPlayer);

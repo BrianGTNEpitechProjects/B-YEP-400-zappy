@@ -2,31 +2,34 @@ import { Audio, AudioListener, AudioLoader } from "three";
 import Game from "./game";
 
 export enum Sound {
-}
+    MINECRAFT_MUSIC = 0,
+    VILLAGER
+};
 
-var sounds = [
-    ""
+var soundsAssets = [
+    "assets/sounds/minecraft_classic.mp3",
+    "assets/sounds/villager_hum.ogg"
 ];
 
 export class SoundManager {
     listener: AudioListener;
-    audio: Audio;
     audioLoader: AudioLoader;
 
     constructor() {
         this.listener = new AudioListener();
-        this.audio = new Audio(this.listener);
-        Game.scene.add(this.audio);
         Game.camera.add(this.listener);
         this.audioLoader = new AudioLoader();
-        var that = this;
+    }
+
+    playSound(sound: number, repeat: boolean) {
+        var audio = new Audio(this.listener);
         this.audioLoader.load(
-            'assets/sounds/minecraft_classic.mp3',
+            soundsAssets[sound],
             function( audioBuffer: any) {
-                that.audio.setBuffer( audioBuffer );
-                that.audio.setLoop( true );
-                that.audio.setVolume( 0.5 );
-                that.audio.play();
+                audio.setBuffer( audioBuffer );
+                audio.setVolume( 0.5 );
+                audio.setLoop(repeat);
+                audio.play();
             },
             function ( xhr: any ) {
                 console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
@@ -35,23 +38,5 @@ export class SoundManager {
                 console.log( 'An error happened' );
             }
         );
-
-        // for (var i = 0; i < sounds.length; i++) {
-        //     this.audioLoader.load(
-        //         'sounds/ambient.ogg',
-        //         function( audioBuffer: any) {
-        //             that.audio.setBuffer( audioBuffer );
-        //             that.audio.setLoop( true );
-        //             that.audio.setVolume( 0.5 );
-        //             that.audio.play();
-        //         },
-        //         function ( xhr: any ) {
-        //             console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-        //         },
-        //         function ( err: any ) {
-        //             console.log( 'An error happened' );
-        //         }
-        //     );
-        // }
     }
 }
