@@ -13,27 +13,31 @@
 #include "zworld.h"
 #include "common.h"
 #include "graphical_protocol.h"
+#include "zcommands.h"
 
 void spawn_resource(zappy_t *world, tile_t *tile, e_item_t type)
 {
     if (type >= TOT_ITEM_NB)
         return;
-
-    time_t now = time(NULL);
-    printf("[%s]Spawning resource %i at %i %i\n", ctime(&now), type, tile->coords.x, tile->coords.y);
-
     tile->content[type]++;
     nrs(world, tile, type);
 }
 
 void spawn_rand_resources(zappy_t *zap, e_item_t type)
 {
-    long x = random() % zap->map_size.x;
-    long y = random() % zap->map_size.y;
-    tile_t *tile = &zap->map[y][x];
+    long x = 0;
+    long y = 0;
+    tile_t *tile = NULL;
+    int ratio = 0;
 
-    if (zap->natural_spawn_activated)
-        spawn_resource(zap, tile, type);
+    ratio = (int)(resources_per_tile * (zap->map_size.x * zap->map_size.y));
+    for (int i = 0; i < ratio; ++i) {
+        x = random() % zap->map_size.x;
+        y = random() % zap->map_size.y;
+        tile = &zap->map[y][x];
+        if (zap->natural_spawn_activated)
+            spawn_resource(zap, tile, type);
+    }
 }
 
 void set_timeout(struct timespec *to, double scaled_time)

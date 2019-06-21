@@ -16,6 +16,8 @@
 
 #define COMMAND_NB (12)
 
+extern const double resources_per_tile;
+
 extern const uint8_t OK_MSG[];
 extern const size_t OK_MSG_LEN;
 extern const uint8_t KO_MSG[];
