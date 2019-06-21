@@ -8,6 +8,7 @@
 #include <string.h>
 #include "zworld.h"
 #include "zserver.h"
+#include "graphical_protocol.h"
 
 static team_t *get_normal_winner(zappy_t *zap)
 {
@@ -67,10 +68,13 @@ void end_game(zappy_t *zap, team_t *winners)
 {
     if (winners == NULL)
         winners = get_default_winners(zap);
-    if (winners == NULL)
+    if (winners == NULL) {
         printf("Draw\n");
-    else
+        seg(zap, "drawn");
+    } else {
         printf("Team %s (#%i) won !!!\n", winners->name, winners->id);
+        seg(zap, winners->name);
+    }
     shutdown_server();
 }
 

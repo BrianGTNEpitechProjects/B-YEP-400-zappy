@@ -25,8 +25,6 @@ static void disconnect(
     }
     if (client)
         memcpy(client, &default_client, sizeof(default_client));
-    if (PRINT_DEBUG)
-        fprintf(stderr, "[DEBUG] Client disconnected\n");
 }
 
 void disconnect_client(network_server_t *ns, network_client_t *client)

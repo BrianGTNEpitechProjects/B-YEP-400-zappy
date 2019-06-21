@@ -39,7 +39,7 @@ display the current timescale instead");
     puts("naturalspawn b : enable/disable/display natural ressource spawning \
 (b must be enable or disable or empty)");
     puts("kill id        : kill the player with the id id");
-    puts("[WIP]endgame   : end the current running game and exit");
+    puts("endgame        : end the current running game and exit");
     puts("exit           : exit the program");
     display_ressources_ids();
     return (true);
