@@ -86,14 +86,3 @@ void process_spawn_resources(zappy_t *zap)
     last = now;
     set_min_timeout(zap, zap->resources_spawn);
 }
-
-void init_spawn_timeouts(zappy_t *res)
-{
-    double scaled;
-
-    for (e_item_t i = 0; i < TOT_ITEM_NB; i++) {
-        scaled = item_map[i].spawn_frequency / res->time_scale;
-        set_timeout(&(res->resources_spawn[i]), scaled);
-    }
-    set_min_timeout(res, res->resources_spawn);
-}

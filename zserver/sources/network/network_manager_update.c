@@ -35,7 +35,8 @@ static void fill_fd_infos_client(fd_infos_t *infos, network_client_t *client,
     time_t time_out = client->last_data_out_timestamp;
     time_t time_in = client->last_data_in_timestamp;
     time_t client_time = time_out < time_in ? time_in : time_out;
-    time_t timeout = client_time + client->user_disconnect_timeout - time(NULL);
+    time_t timeout = client_time + client->user_disconnect_timeout - \
+time(NULL);
     struct timeval to = {timeout, 0};
 
     if (client->user_disconnect_timeout != 0 &&

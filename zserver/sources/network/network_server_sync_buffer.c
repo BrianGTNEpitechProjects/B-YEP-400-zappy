@@ -40,7 +40,9 @@ static void sync_batch(network_client_pool_batch_t *batch,fd_infos_t *infos)
 
 void sync_buffers(network_server_t *ns, fd_infos_t *infos)
 {
-    for (list_t curr = ns->client_pool->batches_list; curr; curr = curr->next) {
+    list_t curr = ns->client_pool->batches_list;
+    while (curr) {
         sync_batch(curr->value, infos);
+        curr = curr->next;
     }
 }

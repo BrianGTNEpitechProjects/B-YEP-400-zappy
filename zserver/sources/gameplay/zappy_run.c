@@ -28,6 +28,17 @@ static void process_welcome_procedure(zappy_t *zap, network_server_t *server)
     } while (1);
 }
 
+void init_spawn_timeouts(zappy_t *res)
+{
+    double scaled;
+
+    for (e_item_t i = 0; i < TOT_ITEM_NB; i++) {
+        scaled = item_map[i].spawn_frequency / res->time_scale;
+        set_timeout(&(res->resources_spawn[i]), scaled);
+    }
+    set_min_timeout(res, res->resources_spawn);
+}
+
 bool run_zappy(zappy_t *zap)
 {
     network_server_t *server = get_server(zap->nm, zap->classic_id);

@@ -16,6 +16,7 @@ SRC_FILES	=	\
 				gameplay/zappy_run.c \
 				gameplay/on_extract_connected.c \
 				gameplay/map.c \
+				gameplay/on_nm_event.c \
 				gameplay/remove_signals.c \
 				gameplay/server_running.c \
 				gameplay/arguments.c \

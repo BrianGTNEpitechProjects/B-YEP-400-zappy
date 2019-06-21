@@ -30,11 +30,11 @@ const size_t INCANT_MSG_LEN = sizeof(INCANT_MSG);
 const double resources_per_tile = 1.0 / 4.0;
 
 const item_t item_map[TOT_ITEM_NB] = {
-{.id = FOOD,      .name = (const uint8_t *)"Food", .spawn_frequency = 50},
-{.id = LINEMATE,  .name = (const uint8_t *)"Linemate", .spawn_frequency = 50},
-{.id = DERAUMERE, .name = (const uint8_t *)"Deraumere", .spawn_frequency = 60},
-{.id = SIBUR,     .name = (const uint8_t *)"Sibur", .spawn_frequency = 70},
-{.id = MENDIANE,  .name = (const uint8_t *)"Mendiane", .spawn_frequency = 80},
-{.id = PHIRAS,    .name = (const uint8_t *)"Phiras", .spawn_frequency = 90},
-{.id = THYSTAME,  .name = (const uint8_t *)"Thystame", .spawn_frequency = 100},
+    {FOOD, (const uint8_t *)"Food", 50},
+    {LINEMATE, (const uint8_t *)"Linemate", 50},
+    {DERAUMERE, (const uint8_t *)"Deraumere", 60},
+    {SIBUR, (const uint8_t *)"Sibur", 70},
+    {MENDIANE, (const uint8_t *)"Mendiane", 80},
+    {PHIRAS, (const uint8_t *)"Phiras", 90},
+    {THYSTAME, (const uint8_t *)"Thystame", 100},
 };
