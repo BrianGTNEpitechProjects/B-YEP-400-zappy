@@ -24,6 +24,7 @@ arguments->teams[i]);
             return (false);
         }
     }
+
     return (true);
 }
 

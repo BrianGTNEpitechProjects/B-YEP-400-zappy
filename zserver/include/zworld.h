@@ -83,6 +83,10 @@ bool run_zappy(zappy_t *zap);
 /* zappy.c */
 bool zappy(int ac, char **av);
 
+/* resources.c */
+void set_min_timeout(zappy_t *zap, struct timespec timeouts[TOT_ITEM_NB]);
+void set_timeout(struct timespec *to, double scaled_time);
+
 /*  map.c   */
 tile_t **create_map(int x, int y);
 pos_t get_random_positions(dim_t map_size);

@@ -80,9 +80,8 @@ typedef struct {
 
 /* utils.c */
 int handle_error_return(char *s, int ret);
-char *concat(char *str1, char *str2, bool free1, bool free2);
 
-/* zappy.c */
+/* on_events */
 void on_disconnect(user_base_t *base, network_client_t *client);
 void on_extract_not_connected(user_base_t*, network_client_t*, \
 uint8_t*, size_t);

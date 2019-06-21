@@ -28,11 +28,11 @@ const uint8_t INCANT_MSG[] = "Elevation underway\n";
 const size_t INCANT_MSG_LEN = sizeof(INCANT_MSG);
 
 const item_t item_map[TOT_ITEM_NB] = {
-{.id = FOOD,        .name = (const uint8_t *)"Food", .spawn_frequency = 5},
-{.id = LINEMATE,    .name = (const uint8_t *)"Linemate", .spawn_frequency = 5},
-{.id = DERAUMERE,   .name = (const uint8_t *)"Deraumere",.spawn_frequency = 10},
-{.id = SIBUR,       .name = (const uint8_t *)"Sibur", .spawn_frequency = 20},
-{.id = MENDIANE,    .name = (const uint8_t *)"Mendiane", .spawn_frequency = 30},
-{.id = PHIRAS,      .name = (const uint8_t *)"Phiras", .spawn_frequency = 40},
-{.id = THYSTAME,    .name = (const uint8_t *)"Thystame", .spawn_frequency = 50},
+    {FOOD,      (const uint8_t *)"Food",        5},
+    {LINEMATE,  (const uint8_t *)"Linemate",    5},
+    {DERAUMERE, (const uint8_t *)"Deraumere",   10},
+    {SIBUR,     (const uint8_t *)"Sibur",       20},
+    {MENDIANE,  (const uint8_t *)"Mendiane",    30},
+    {PHIRAS,    (const uint8_t *)"Phiras",      40},
+    {THYSTAME,  (const uint8_t *)"Thystame",    50},
 };
