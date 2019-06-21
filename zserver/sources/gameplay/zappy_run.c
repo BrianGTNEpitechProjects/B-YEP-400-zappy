@@ -45,6 +45,7 @@ bool run_zappy(zappy_t *zap)
         update_ws_server(zap);
         check_end_game(zap);
     }
+    update_manager(zap->nm);
     remove_sig_catch();
     return (true);
 }
