@@ -36,6 +36,9 @@ bool cli_nscap(zappy_t *world, char *cmd)
         if (!valid_cap || new_cap <= 0)
             return (false);
         world->resources_spawn_cap = new_cap;
+        if (new_cap > 1000000)
+            printf("Warning this is a quite big number \
+it will cause lags on big maps, it's recommended to not go above 1000000\n");
         printf("Set resources spawn cap to %ld\n", world->resources_spawn_cap);
     }
     return (true);
