@@ -118,7 +118,7 @@ void init_spawn_timeouts(zappy_t *res);
 
 static inline bool write_to_client(\
     client_user_pair_t *client, \
-    uint8_t *data, \
+    const uint8_t *data, \
     size_t sz\
 )
 {

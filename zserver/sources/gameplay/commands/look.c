@@ -43,7 +43,6 @@ unsigned int lvl)
 
 static void write_tile_out(client_user_pair_t *c, tile_t *tile)
 {
-    trantorian_t *self = (trantorian_t *)c->user;
     int player_nb = tile_population_size(tile);
     unsigned int sz;
 
