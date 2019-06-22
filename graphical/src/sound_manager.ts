@@ -3,12 +3,20 @@ import Game from "./game";
 
 export enum Sound {
     MINECRAFT_MUSIC = 0,
-    VILLAGER
+    VILLAGER_HUM,
+    VILLAGER_DEATH,
+    VILLAGER_HIT,
+    LEVELUP,
+    POP_RESSOURCE
 };
 
 var soundsAssets = [
     "assets/sounds/minecraft_classic.mp3",
-    "assets/sounds/villager_hum.ogg"
+    "assets/sounds/villager_hum.mp3",
+    "assets/sounds/villager_death.mp3",
+    "assets/sounds/villager_hit.mp3",
+    "assets/sounds/levelup.mp3",
+    "assets/sounds/pop.mp3"
 ];
 
 export class SoundManager {

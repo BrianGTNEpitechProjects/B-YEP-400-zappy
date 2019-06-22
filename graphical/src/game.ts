@@ -42,12 +42,25 @@ export default class Game {
         this.onWindowResize();
         this.map = new Map();
         this.soundManager.playSound(Sound.MINECRAFT_MUSIC, true);
-        this.spawnPlayer(1, 1, 1, 1, 1, "OUI");
+
+
+
+
+        this.spawnPlayer(1, 1, 2, 1, 1, "OUI");
+
+        var that = this;
+        setTimeout(function () {that.setPlayerLevel(1, 10);}, 1500);
+        setTimeout(function () {that.spawnEgg(2, 1, 1, 1);}, 2000);
+        setTimeout(function () {that.setPlayerPos(1, 1, 1, 0);}, 1500);
+        setTimeout(function () {that.dropRessource(1, 1);}, 3000);
+        setTimeout(function () {that.spawnPlayer(3, 1, 1, 1, 1, "OUI");}, 3500);
+        setTimeout(function () {that.spawnPlayer(4, 1, 1, 1, 1, "OUI");}, 4000);
+        setTimeout(function () {that.expulsePlayer(1,);}, 5000);
     }
 
     spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string) {
         new Player(id, x, y, level, team_name, orientation);
-        this.soundManager.playSound(Sound.VILLAGER, false);
+        this.soundManager.playSound(Sound.VILLAGER_HUM, false);
     }
 
     setPlayerPos(id: number, x: number, y: number, orientation: number) {
@@ -89,6 +102,7 @@ export default class Game {
     setPlayerLevel(id: number, level: number) {
         var player = this.findPlayer(id);
         player.setLevel(level);
+        this.soundManager.playSound(Sound.LEVELUP, false);
     }
 
     setPlayerInventory(id: number, x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number, res6: number) {
@@ -131,6 +145,7 @@ export default class Game {
                     continue;
                 }
                 currentPlayer.moovePlayer(x, y, currentPlayer.orientation);
+                this.soundManager.playSound(Sound.VILLAGER_HIT, false);
             }
         }
     }
@@ -217,6 +232,7 @@ export default class Game {
     dropRessource(id: number, typeRes: number) {
         var player = this.findPlayer(id);
         new Food(typeRes, player.position.x, player.position.y);
+        this.soundManager.playSound(Sound.POP_RESSOURCE, false);
     }
 
     collectRessource(id: number, typeRes: number) {
@@ -232,6 +248,7 @@ export default class Game {
                     this.reajustHeight(player);
                     Game.scene.remove(player.object3D);
                     Game.mapObject.splice(i, 1);
+                    this.soundManager.playSound(Sound.VILLAGER_DEATH, false);
                     break;
                 }
             }
