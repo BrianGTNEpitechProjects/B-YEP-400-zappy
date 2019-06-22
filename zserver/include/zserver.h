@@ -116,6 +116,10 @@ void spawn_resource(zappy_t *world, tile_t *tile, e_item_t type);
 void process_spawn_resources(zappy_t *zap);
 void init_spawn_timeouts(zappy_t *res);
 
+/* starve.c */
+void starve(client_user_pair_t *c);
+
+
 static inline bool write_to_client(\
     client_user_pair_t *client, \
     const uint8_t *data, \

@@ -22,7 +22,7 @@ static void apply_timeout(trantorian_t *trantorian)
         min = command_info->remaining_time;
     trantorian->base.user_event_timeout.tv_sec = (__time_t)floor(min);
     trantorian->base.user_event_timeout.tv_usec = \
-(__suseconds_t)((min - (size_t)min) * pow(10, 8));
+(__suseconds_t)((min - trunc(min)) * pow(10, 6));
 }
 
 static bool command_valid(client_user_pair_t *client, command_t *command)
@@ -45,21 +45,6 @@ static bool exec_command(client_user_pair_t *client, command_t *command)
     commands[command->code].callback(client, command->arg);
     set_to_next_command(trantorian);
     return (false);
-}
-//TODO: Norm error -> too many fx
-void starve(client_user_pair_t *c)
-{
-    trantorian_t *trantorian = (trantorian_t *)c->user;
-
-    if (0 < trantorian->inventory[FOOD])
-        trantorian->inventory[FOOD] -= 1;
-    else
-        trantorian->life_unit -= 1;
-    if (trantorian->life_unit <= 0) {
-        kill_client(c);
-        return;
-    } else
-        trantorian->food_time = FOOD_TTL;
 }
 
 static bool evaluate_time_and_command(client_user_pair_t *c, \
