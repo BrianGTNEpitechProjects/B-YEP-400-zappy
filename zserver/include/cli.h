@@ -34,6 +34,7 @@ bool cli_exit(zappy_t *world, char *cmd);
 bool cli_help(zappy_t *world, char *cmd);
 bool cli_kill(zappy_t *world, char *cmd);
 bool cli_natural_spawn(zappy_t *world, char *cmd);
+bool cli_nscap(zappy_t *world, char *cmd);
 bool cli_pinfo(zappy_t *world, char *cmd);
 bool cli_timescale(zappy_t *world, char *cmd);
 bool cli_tinfo(zappy_t *world, char *cmd);

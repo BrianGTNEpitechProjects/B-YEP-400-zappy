@@ -81,6 +81,7 @@ CLI_COMMAND_FILES	=	\
 					help.c \
 					kill.c \
 					natural_spawn.c \
+					nscap.c \
 					pinfo.c \
 					timescale.c \
 					tinfo.c \

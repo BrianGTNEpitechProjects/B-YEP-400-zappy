@@ -23,9 +23,8 @@ static void display_ressources_ids(void)
     puts("6 => thystame");
 }
 
-bool cli_help(UNUSED zappy_t *world, UNUSED char *cmd)
+static void display_commands_help(void)
 {
-    puts("Zappy interactive command line help:");
     puts("help           : display this help");
     puts("cinfo          : display information about all connected clients");
     puts("clear          : clear all resources on the map \
@@ -38,9 +37,18 @@ display the current timescale instead");
     puts("drop r x y     : drop the resource id r at position x y");
     puts("naturalspawn b : enable/disable/display natural ressource spawning \
 (b must be enable or disable or empty)");
+    puts("nscap value    : set the natural resource spawn cap to value or if \
+value is not set display the current cap. \
+(warning: a large cap will make the server lag on big maps)");
     puts("kill id        : kill the player with the id id");
     puts("endgame        : end the current running game and exit");
     puts("exit           : exit the program");
+}
+
+bool cli_help(UNUSED zappy_t *world, UNUSED char *cmd)
+{
+    puts("Zappy interactive command line help:");
+    display_commands_help();
     display_ressources_ids();
     return (true);
 }
