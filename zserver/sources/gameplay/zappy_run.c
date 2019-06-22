@@ -57,6 +57,7 @@ bool run_zappy(zappy_t *zap)
         check_end_game(zap);
     }
     update_manager(zap->nm);
+    printf("Shutdown...\n");
     remove_sig_catch();
     return (true);
 }

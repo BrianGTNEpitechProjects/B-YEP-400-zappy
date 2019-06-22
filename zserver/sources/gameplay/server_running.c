@@ -41,5 +41,4 @@ void shutdown_server(void)
     bool status = false;
 
     global_bool(&status);
-    printf("Shutdown...\n");
 }

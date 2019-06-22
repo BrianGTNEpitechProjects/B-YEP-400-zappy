@@ -10,9 +10,8 @@
 #ifndef PSU_ZAPPY_2018_NETWORK_SERVER_H
 #define PSU_ZAPPY_2018_NETWORK_SERVER_H
 
-#define MAX_PENDING_CONNECTIONS 10
-
-#define PRINT_DEBUG 1
+#define MAX_PENDING_CONNECTIONS (10)
+#define MAX_EXTRACTED_SEQUENCES (100)
 
 #include "network_user_base.h"
 #include "network_client_pool.h"

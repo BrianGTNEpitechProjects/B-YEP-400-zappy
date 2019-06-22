@@ -13,13 +13,13 @@ static void run_extraction_loop(user_base_t *user, network_client_t *client,
     uint8_t *delim, size_t delim_size)
 {
     uint8_t buffer[C_BUFFER_SIZE + 1] = {0};
-    size_t size;
+    size_t size = 0;
 
-    do {
+    for (int i = 0; (size != (size_t)-1) && i < MAX_EXTRACTED_SEQUENCES; ++i) {
         size = read_from_buffer(&client->cb_in, buffer, delim, delim_size);
         if (size != (size_t)-1)
             user->on_extracted(user, client, buffer, size);
-    } while (size != (size_t)-1);
+    }
 }
 
 void extract_to_users(network_server_t *ns, uint8_t *delim, size_t delim_size)
