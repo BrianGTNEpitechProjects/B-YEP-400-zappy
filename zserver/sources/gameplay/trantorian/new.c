@@ -28,7 +28,9 @@ trantorian_t *create_player(void)
     res->id = get_new_id();
     res->base.on_disconnect = &on_disconnect;
     res->base.on_extracted = &on_extract_not_connected;
-    res->life_unit = 10;
+    res->life_unit = 1;
+    res->inventory[FOOD] = 10;
+    res->food_time = FOOD_TTL;
     res->lvl = 1;
     return (res);
 }
