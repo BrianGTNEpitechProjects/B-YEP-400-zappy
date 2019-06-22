@@ -6,6 +6,7 @@
 */
 
 #include "zworld.h"
+#include "graphical_protocol.h"
 
 static void add_to_tile(trantorian_t *trantorian, tile_t *tile)
 {
@@ -42,6 +43,7 @@ int trantorian_move(trantorian_t *trantorian, tile_t *tile)
 {
     remove_from_tile(trantorian);
     add_to_tile(trantorian, tile);
+    ppo_all(trantorian->zappy, trantorian);
     return (0);
 }
 

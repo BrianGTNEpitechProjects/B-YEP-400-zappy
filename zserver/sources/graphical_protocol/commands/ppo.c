@@ -65,3 +65,22 @@ bool ppo(graphical_user_t *user, network_client_t *client,
         return (false);
     return (send_awnser(user, client, player_nb));
 }
+
+void ppo_all(zappy_t *world, trantorian_t *player)
+{
+    char awnser[53] = {0};
+    size_t awnser_size = 0;
+    int x;
+    int y;
+    int o;
+    int id;
+
+    if (player == NULL || player->pos == NULL)
+        return;
+    id = player->id;
+    x = player->pos->coords.x;
+    y = player->pos->coords.y;
+    o = cardinal_to_int(player->orientation);
+    awnser_size = snprintf(awnser, 52, "ppo %i %i %i %i\n", (int)id, x, y, o);
+    send_to_all_ws_clients(world, (uint8_t *)awnser, awnser_size);
+}

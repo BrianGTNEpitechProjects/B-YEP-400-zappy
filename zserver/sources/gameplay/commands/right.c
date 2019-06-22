@@ -7,6 +7,7 @@
 
 #include "zcommands.h"
 #include "zworld.h"
+#include "graphical_protocol.h"
 
 void right(client_user_pair_t *client, __attribute__((unused)) char *arg)
 {
@@ -14,4 +15,5 @@ void right(client_user_pair_t *client, __attribute__((unused)) char *arg)
 
     trantorian->orientation = cardinal_rotate_right(trantorian->orientation);
     write_to_buffer(&client->client->cb_out, OK_MSG, OK_MSG_LEN);
+    ppo_all(trantorian->zappy, trantorian);
 }
