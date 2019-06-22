@@ -28,6 +28,7 @@ network_client_t *client)
             return;
         }
     }
+    free(trantorian);
 }
 
 void on_extract_not_connected(user_base_t *b, network_client_t *c, \
