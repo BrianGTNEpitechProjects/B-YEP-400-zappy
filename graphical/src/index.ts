@@ -15,12 +15,41 @@ import GraphicProtocol from "./GraphicProtocol";
 // renderer.setSize(innerWidth, innerHeight);
 // renderer.render(scene, camera);
 
-// EventManager.getInstance().addListener("EventWebSocketConnected", (e: EventWebSocketConnected) => {
-//     WebSocketManager.sendMessage("msz\n");
-// });
-//
-//
-// new GraphicProtocol();
-// WebSocketManager.connect("localhost", 4244);
+var formConnection = document.getElementById("connection");
+var waiting = document.getElementById("waiting");
+var game = document.getElementById("game");
 
-var game = new Game(0, 0);
+game.style.display = "none";
+waiting.style.display = "none";
+
+run();
+
+function run() 
+{
+    let hostElement: HTMLInputElement = <HTMLInputElement>document.getElementById("host");
+    let portElement: HTMLInputElement = <HTMLInputElement>document.getElementById("port");
+    let connectButtonElement: HTMLButtonElement = <HTMLButtonElement>document.getElementById("connectButton");
+
+    connectButtonElement.onclick = (ev: MouseEvent) => {
+        formConnection.style.display = 'none';
+        startGame(hostElement.value, parseInt(portElement.value));
+    }
+}
+
+function startGame(host: string, port: number) {
+    game.style.display = 'block';
+
+    EventManager.getInstance().addListener("EventWebSocketConnected", (e: EventWebSocketConnected) => {
+        WebSocketManager.sendMessage("msz\n");
+    });
+
+    var protocol = new GraphicProtocol();
+    let reloadMapElement: HTMLButtonElement = <HTMLButtonElement>document.getElementById("reloadMap");
+
+
+    reloadMapElement.onclick = (ev: MouseEvent) => {
+        let game: Game = protocol.getGame();
+        protocol.reloadMap();
+    }
+    WebSocketManager.connect(host, port);
+}

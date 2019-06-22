@@ -1,10 +1,12 @@
 import Game from "./game";
 import EventManager from "./EventManager";
-import { EventWebSocketMessage } from "./ZEvent";
+import { EventWebSocketMessage, GameLoadedEvent } from "./ZEvent";
 import WebSocketManager from "./WebSocketManager";
+import Logger from "./Logger";
+import { Vector, Vector2 } from "three";
 
 export default class GraphicProtocol {
-    private commands: Map<string, (args: Array<string>) => void>;
+    private commands: Map<string, (args: Array<string>, protocol: GraphicProtocol) => void>;
     private game: Game;
 
     constructor() {
@@ -17,6 +19,7 @@ export default class GraphicProtocol {
         this.commands.set("pnw", this.commandPnw);
         this.commands.set("ppo", this.commandPpo);
         this.commands.set("plv", this.commandPlv);
+        this.commands.set("plu", this.commandPlu);
         this.commands.set("pin", this.commandPin);
         this.commands.set("pex", this.commandPex);
         this.commands.set("pbc", this.commandPbc);
@@ -36,30 +39,46 @@ export default class GraphicProtocol {
         this.commands.set("smg", this.commandSmg);
         this.commands.set("suc", this.commandSuc);
         this.commands.set("sbp", this.commandSbp);
+        this.commands.set("nrs", this.commandNrs);
 
+        var that = this;
         EventManager.getInstance().addListener("EventWebSocketMessage", (e: EventWebSocketMessage) => {
             var content: string = e.content;
             var commandList: Array<string> = content.split("\n");
             commandList.forEach(cmd => {
                 var args = cmd.split(" ");
 
-                this.commands.forEach((value: (args: Array<string>) => void, key: string) => {
+                that.commands.forEach((value: (args: Array<string>, protocol: GraphicProtocol) => void, key: string) => {
                     if (key == args[0])
-                        value(args);
+                        value(args, that);
                 });
             });
         });
     }
 
-    commandMsz(args: Array<string>) {
-        let width: number = parseInt(args[1]);
-        let height: number = parseInt(args[2]);
-        setTimeout(() => {WebSocketManager.sendMessage("mct\n"); console.log("sltr")}, 1000)
-
-        this.game = new Game(width, height);
+    reloadMap() {
+        if (!this.game)
+            return;
+        this.game.clearMap();
+        this.game.visibleCase.forEach((pos: Vector2) => {
+            WebSocketManager.sendMessage(`bct ${pos.x} ${pos.y}\n`);
+        });
     }
 
-    commandBct(args: Array<string>) {
+    getGame(): Game {
+        return this.game;
+    }
+
+    commandMsz(args: Array<string>, protocol: GraphicProtocol) {
+        let width: number = parseInt(args[1]);
+        let height: number = parseInt(args[2]);
+        
+        WebSocketManager.sendMessage("tna\n");
+        protocol.game = new Game(width, height, protocol);
+        protocol.reloadMap();
+    }
+
+    commandBct(args: Array<string>, protocol: GraphicProtocol) {
         let x: number = parseInt(args[1]);
         let y: number = parseInt(args[2]);
         let q1: number = parseInt(args[3]);
@@ -70,14 +89,19 @@ export default class GraphicProtocol {
         let q6: number = parseInt(args[8]);
         let q7: number = parseInt(args[9]);
 
-        this.game.setTile(x, y, q1, q2, q3, q4, q5, q6, q7);
+        protocol.game.setTileContent(x, y, q1, q2, q3, q4, q5, q6, q7);
     }
 
-    commandTna(args: Array<string>) {
-        console.log("Team: " + args[1]);
+    commandTna(args: Array<string>, protocol: GraphicProtocol) {
+        let teams: Array<string> = new Array();
+        
+        for (let i = 1; i < args.length; i++) {
+            teams.push(args[i]);
+            Logger.logMessage("Get team: " + args[i]);
+        }
     }
 
-    commandPia(args: Array<string>) {
+    commandPia(args: Array<string>, protocol: GraphicProtocol) {
         let teamName: string = args[1];
         let playersIds: Array<number> = new Array();
 
@@ -88,37 +112,44 @@ export default class GraphicProtocol {
         console.log(`Team ${teamName} contains ${playersIds.length} players`);
     }
 
-    commandPnw(args: Array<string>) {
-        let id: number = parseInt(args[1]);
+    commandPnw(args: Array<string>, protocol: GraphicProtocol) {
+        let id: number = parseInt(args[1].split("#")[1]);
         let X: number = parseInt(args[2]);
         let Y: number = parseInt(args[3]);
         let O: number = parseInt(args[4]);
         let level: number = parseInt(args[5]);
         let teamName: string = args[6]
 
-        this.game.spawnPlayer(id, X, Y, O, level, teamName);
-        console.log(`New player connected with id: ${id} at coordinate(${X}, ${Y}) Oriented ${O} with a level of ${level} his team name is ${teamName}`);
+        Logger.logMessage(`New player connected with id: ${id} at coordinate(${X}, ${Y}) Oriented ${O} with a level of ${level} his team name is ${teamName}`)
+        protocol.game.spawnPlayer(id, X, Y, O, level, teamName);
     }
 
-    commandPpo(args: Array<string>) {
+    commandPpo(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
         let X: number = parseInt(args[2]);
         let Y: number = parseInt(args[3]);
         let O: number = parseInt(args[4]);
 
-        this.game.setPlayerPos(id, X, Y, O);
+        protocol.game.setPlayerPos(id, X, Y, O);
         console.log(`player ${id} position is (${X}, ${Y}) and orientation is ${O}`);
     }
 
-    commandPlv(args: Array<string>) {
+    commandPlv(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
         let level: number = parseInt(args[2]);
 
-        this.game.setPlayerLevel(id, level);
+        protocol.game.setPlayerLevel(id, level);
         console.log(`level of player ${id} is ${level}`);
     }
 
-    commandPin(args: Array<string>) {
+    commandPlu(args: Array<string>, protocol: GraphicProtocol) {
+        let id: number = parseInt(args[1]);
+        let level: number = parseInt(args[2]);
+
+        Logger.logMessage(`Player ${id} leveled up to ${level}`);
+    }
+
+    commandPin(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
         let x: number = parseInt(args[2]);
         let y: number = parseInt(args[3]);
@@ -130,137 +161,145 @@ export default class GraphicProtocol {
         let q6: number = parseInt(args[9]);
         let q7: number = parseInt(args[10]);
 
-        this.game.setPlayerInventory(id, x, y, q1, q2, q3, q4, q5, q6, q7);
+        protocol.game.setPlayerInventory(id, x, y, q1, q2, q3, q4, q5, q6, q7);
     }
 
-    commandPex(args: Array<string>) {
+    commandPex(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
 
-        this.game.expulsePlayer(id);
+        Logger.logMessage(`Player ${id} expulse player on his case`);
+        protocol.game.expulsePlayer(id);
     }
 
-    commandPbc(args: Array<string>) {
+    commandPbc(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
         let message: string = args[2];
 
         for (let i = 3; i < args.length; i++) {
             message += args[i];
         }
-        // TODO
+        
+        Logger.logMessage(`[BROADCAST] ${id}: ${message}`);
         console.log(`Player ${id} broadcast message ${message}`);
     }
 
-    commandPic(args: Array<string>) {
+    commandPic(args: Array<string>, protocol: GraphicProtocol) {
         let X: number = parseInt(args[1]);
         let Y: number = parseInt(args[2]);
         let level: number = parseInt(args[3]);
-        let idStarted: number = parseInt(args[4]);
-        let players: Array<number> = new Array(idStarted);
+        let id: number = parseInt(args[4]);
 
-        for (let i = 5; i < args.length; i++) {
-            players.push(parseInt(args[i]));
-        }
         // TODO
-        console.log(`Incantation started by player ${idStarted} from level ${level} at (${X}, ${Y}) with ${players.length} player`);
+        Logger.logMessage(`Player ${id} started incantation from level ${level} at (${X}, ${Y})`);
     }
 
-    commandPie(args: Array<string>) {
+    commandPie(args: Array<string>, protocol: GraphicProtocol) {
         let X: number = parseInt(args[1]);
         let Y: number = parseInt(args[2]);
 
         // TODO
-        console.log(`Incantation at (${X}, ${Y}) ended`);
+        Logger.logMessage(`Incantation at (${X}, ${Y}) ended`);
     }
 
-    commandPfk(args: Array<string>) {
+    commandPfk(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
 
         // TODO (maybe)
-        console.log(`Player ${id} laying an egg`);
+        Logger.logMessage(`Player ${id} laying an egg`);
     }
 
-    commandPdr(args: Array<string>) {
+    commandPdr(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
         let resourceId: number = parseInt(args[2]);
 
-        this.game.dropRessource(id, resourceId);
-        console.log(`Player ${id} drop resource ${resourceId}`);
+        protocol.game.dropRessource(id, resourceId);
+        Logger.logMessage(`Player ${id} drop resource ${resourceId}`);
     }
 
-    commandPgt(args: Array<string>) {
+    commandPgt(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
         let resourceId: number = parseInt(args[2]);
 
-        this.game.collectRessource(id, resourceId);
-        console.log(`Player ${id} collecting resource ${resourceId}`);
+        protocol.game.collectRessource(id, resourceId);
+        Logger.logMessage(`Player ${id} collecting resource ${resourceId}`);
     }
 
-    commandPdi(args: Array<string>) {
+    commandPdi(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
 
-        this.game.playerDead(id);
-        console.log(`player ${id} is now dead`);
+        protocol.game.playerDead(id);
+        Logger.logWarning(`player ${id} is now dead`);
     }
 
-    commandEnw(args: Array<string>) {
+    commandEnw(args: Array<string>, protocol: GraphicProtocol) {
         let eggId: number = parseInt(args[1]);
         let playerId: number = parseInt(args[2]);
         let X: number = parseInt(args[3]);
         let Y: number = parseInt(args[4]);
 
-        this.game.spawnEgg(eggId, playerId, X, Y);
-        console.log(`Egg with id ${eggId} was laid by the player ${playerId} at (${X}, ${Y})`);
+        protocol.game.spawnEgg(eggId, playerId, X, Y);
+        Logger.logMessage(`Egg with id ${eggId} was laid by the player ${playerId} at (${X}, ${Y})`);
     }
 
-    commandEht(args: Array<string>) {
+    commandEht(args: Array<string>, protocol: GraphicProtocol) {
         let eggId: number = parseInt(args[1]);
 
         // TODO
-        console.log(`An egg have hatch ${eggId}`);
+        Logger.logMessage(`An egg have hatch ${eggId}`);
     }
 
-    commandEbo(args: Array<string>) {
+    commandEbo(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
 
-        this.game.playerConnectionForEgg(id);
-        console.log(`A new player is connected and take the egg ${id}`);
+        protocol.game.playerConnectionForEgg(id);
+        Logger.logMessage(`A new player is connected and take the egg ${id}`);
     }
 
-    commandEdi(args: Array<string>) {
+    commandEdi(args: Array<string>, protocol: GraphicProtocol) {
         let id: number = parseInt(args[1]);
 
         // TODO
-        console.log(`Egg ${id} was dead`);
+        Logger.logWarning(`Egg ${id} was dead`);
     }
 
-    commandSgt(args: Array<string>) {
+    commandSgt(args: Array<string>, protocol: GraphicProtocol) {
         let timeUnit: number = parseInt(args[1]);
 
         // TODO
-        console.log(`Current time unit is: ${timeUnit}`);
+        Logger.logWarning(`Current time unit is: ${timeUnit}`);
     }
 
-    commandSst(args: Array<string>) {
+    commandSst(args: Array<string>, protocol: GraphicProtocol) {
         let timeUnit: number = parseInt(args[1]);
 
         // TODO
-        console.log(`New time unit is: ${timeUnit}`);
+        Logger.logWarning(`New time unit is: ${timeUnit}`);
     }
 
-    commandSeg(args: Array<string>) {
+    commandSeg(args: Array<string>, protocol: GraphicProtocol) {
         // TODO
-        console.log(`end of game`);
+        Logger.logWarning(`end of game`);
     }
 
-    commandSmg(args: Array<string>) {
-        console.log("[ZAPPY GRAPHICAL PROTOCOL SERVER] New message: " + args[1]);
+    commandSmg(args: Array<string>, protocol: GraphicProtocol) {
+        Logger.logError("[ZAPPY GRAPHICAL PROTOCOL SERVER] New message: " + args[1]);
     }
 
-    commandSuc(args: Array<string>) {
-        console.error("[ZAPPY GRAPHICAL PROTOCOL SERVER] Unknown Command");
+    commandSuc(args: Array<string>, protocol: GraphicProtocol) {
+        Logger.logError("[ZAPPY GRAPHICAL PROTOCOL SERVER] Unknown Command");
     }
 
-    commandSbp(args: Array<string>) {
-        console.error("[ZAPPY GRAPHICAL PROTOCOL SERVER] Invalid parameter");
+    commandSbp(args: Array<string>, protocol: GraphicProtocol) {
+        Logger.logError("[ZAPPY GRAPHICAL PROTOCOL SERVER] Invalid parameter");
     }
+
+    commandNrs(args: Array<string>, protocol: GraphicProtocol) {
+        let x: number = parseInt(args[1]);
+        let y: number = parseInt(args[2]);
+        let type: number = parseInt(args[3]);
+
+        if (protocol.game.getVisibleCases().findIndex(val => (val.x == x && val.y == y)) >= 0)
+            protocol.game.addToTile(x, y, type, 1);
+    }
+
 }

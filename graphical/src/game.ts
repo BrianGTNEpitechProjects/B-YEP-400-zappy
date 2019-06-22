@@ -1,11 +1,15 @@
-import { PerspectiveCamera, Scene, WebGLRenderer, TextureLoader, MeshBasicMaterial, RepeatWrapping, Color } from 'three';
+import { PerspectiveCamera, Scene, WebGLRenderer, TextureLoader, MeshBasicMaterial, RepeatWrapping, Color, Frustum, Matrix4, Vector3, Vector2, Fog } from 'three';
 import { OrbitControls } from "three-orbitcontrols-ts";
-import { Map } from "./map"
+import { ZMap } from "./map"
 import { Food } from './food';
 import { MapObject } from './map_object';
 import { Player, Orientation } from './player';
 import { Egg } from './egg';
 import { SoundManager, Sound } from './sound_manager';
+import EventManager from './EventManager';
+import { GameLoadedEvent } from './ZEvent';
+import GraphicProtocol from './GraphicProtocol';
+import WebSocketManager from './WebSocketManager';
 const loader = require('three-gltf-loader');
 
 export default class Game {
@@ -13,49 +17,120 @@ export default class Game {
     static lines:number = 10;
     static col:number = 11;
     static squareSize:number = 10;
-    static foodSize:number = Game.squareSize / 2;
+    static gameWidth: number = 1200;
+    static gameHeight: number = 800;
+    static foodSize:number = Game.squareSize / 4;
     static scene: Scene = new Scene();
     static gltfLoader = new loader();
-    static camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    soundManager: SoundManager;
+    static cameraSpeed = 0.8;
+    //static camera = new OrthographicCamera(Game.gameWidth / -2, Game.gameWidth / 2, Game.gameHeight / -2, Game.gameHeight / 2);    
+    static camera = new PerspectiveCamera(75, Game.gameWidth / Game.gameHeight, 0.1, 500);
+    static soundManager: SoundManager;
+    movement: number = 0;
+    zoomLevel: number = 0;
+    visibleCase: Array<Vector2>;
     renderer: WebGLRenderer;
-    controls: OrbitControls;
-    map: Map;
+    map: ZMap;
+    protocol: GraphicProtocol;
+    soundManager: SoundManager;
 
-    constructor(lineSize: number, colSize: number) {
+    constructor(lineSize: number, colSize: number, protocol: GraphicProtocol) {
         if (lineSize) {
             Game.lines = lineSize;
         }
         if (colSize) {
             Game.col = colSize;
         }
-        this.renderer = new WebGLRenderer({antialias:true});
-        this.controls = new OrbitControls(Game.camera, this.renderer.domElement);
+        this.renderer = new WebGLRenderer({antialias:true, canvas: document.getElementById("gameCanvas") as HTMLCanvasElement});
+        this.protocol = protocol;
         this.soundManager = new SoundManager();
 
         Game.camera.position.set(50, 50, 100);
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
         document.body.appendChild(this.renderer.domElement);
-        this.controls.target.set(50, 50, 0);
-        this.controls.update();
+        Game.camera.lookAt(50, 50, -10);
         this.animate();
         this.onWindowResize();
-        this.map = new Map();
-        this.soundManager.playSound(Sound.MINECRAFT_MUSIC, true);
-
-
-
-
-        this.spawnPlayer(1, 1, 2, 1, 1, "OUI");
+        this.map = new ZMap();
 
         var that = this;
-        setTimeout(function () {that.setPlayerLevel(1, 10);}, 1500);
-        setTimeout(function () {that.spawnEgg(2, 1, 1, 1);}, 2000);
-        setTimeout(function () {that.setPlayerPos(1, 1, 1, 0);}, 1500);
-        setTimeout(function () {that.dropRessource(1, 1);}, 3000);
-        setTimeout(function () {that.spawnPlayer(3, 1, 1, 1, 1, "OUI");}, 3500);
-        setTimeout(function () {that.spawnPlayer(4, 1, 1, 1, 1, "OUI");}, 4000);
-        setTimeout(function () {that.expulsePlayer(1,);}, 5000);
+        document.addEventListener("keydown", onDocumentKeyDown, false);
+        function onDocumentKeyDown(event: any) {
+            var keyCode = event.which;
+
+            if (keyCode == 83) {
+                Game.camera.position.y -= Game.cameraSpeed;
+                that.movement += Game.cameraSpeed;
+            }
+            if (keyCode == 90) {
+                Game.camera.position.y += Game.cameraSpeed;
+                that.movement += Game.cameraSpeed;            
+            }
+            if (keyCode == 81) {
+                Game.camera.position.x -= Game.cameraSpeed;
+                that.movement += Game.cameraSpeed;
+            }
+            if (keyCode == 68) {
+                Game.camera.position.x += Game.cameraSpeed;
+                that.movement += Game.cameraSpeed;
+            }
+            if (keyCode == 32) {
+                if (that.zoomLevel + Game.cameraSpeed <= 30) {
+                    Game.camera.position.z += Game.cameraSpeed;
+                    that.zoomLevel += Game.cameraSpeed;
+                }
+            }
+            if (keyCode == 78) {
+                if (that.zoomLevel - Game.cameraSpeed >= 0) {
+                    Game.camera.position.z -= Game.cameraSpeed;
+                    that.zoomLevel -= Game.cameraSpeed;
+                }
+            }
+            console.log(that.movement, that.zoomLevel);
+            if (that.movement >= 10) {
+                that.movement = 0;
+                let visibles = that.getCurrentVisisble();
+                let removed = that.visibleCase.filter(val => visibles.findIndex((elem: Vector2) => {return elem.x == val.x && elem.y == val.y}) < 0);
+                let added = visibles.filter(val => that.visibleCase.findIndex((elem: Vector2) => {return elem.x == val.x && elem.y == val.y}) < 0);
+
+                removed.forEach((pos: Vector2) => {
+                    that.clearCoordinate(pos.x, pos.y);
+                });
+                added.forEach((pos: Vector2) => {
+                    WebSocketManager.sendMessage(`bct ${pos.x} ${pos.y}\n`);
+                });
+                that.visibleCase = visibles;
+            }
+            
+        }
+        
+        this.soundManager.playSound(Sound.MINECRAFT_MUSIC, true);
+        this.reloadVisible();
+        EventManager.getInstance().emit(new GameLoadedEvent());
+    }
+
+    getProtocol(): GraphicProtocol {
+        return this.protocol;
+    }
+
+    getVisibleCases(): Array<Vector2> {
+        return this.visibleCase;
+    }
+
+    reloadVisible() {
+        this.visibleCase = this.getCurrentVisisble();
+    }
+
+    getCurrentVisisble(): Array<Vector2> {
+        let cases: Array<Vector2> = new Array<Vector2>();
+        for (let x : number = 0; x < Game.lines; x++) {
+            for (let y : number = 0; y < Game.col; y++) {
+                if (Game.isCameraVisible(x, y)) {
+                    cases.push(new Vector2(x, y));
+                }
+            }
+        }
+        return cases;
     }
 
     spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string) {
@@ -150,7 +225,7 @@ export default class Game {
         }
     }
 
-    setTile(x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number, res6: number) {
+    setTileContent(x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number, res6: number) {
         var numberRessources = [res0, res1, res2, res3, res4, res5, res6];
 
         for (var i = 0; i < numberRessources.length; i++) {
@@ -158,6 +233,11 @@ export default class Game {
                 new Food(i, x, y);
             }
         }
+    }
+    
+    addToTile(x: number, y: number, type: number, qty: number) {
+        for (let i: number = 0; i < qty; i++)
+            new Food(type, x, y);
     }
 
     createMaterialTexture(textureName: string, repeatX: number, repeatY: number) {
@@ -172,9 +252,25 @@ export default class Game {
     }
 
     onWindowResize() {
-        Game.camera.aspect = window.innerWidth / window.innerHeight;
+        Game.camera.aspect = Game.gameWidth / Game.gameHeight;
         Game.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(Game.gameWidth, Game.gameHeight);
+    }
+
+    static isCameraVisible(x: number, y: number): boolean {
+        let frustum = new Frustum();
+        var cameraProjectionMatrix = new Matrix4();
+
+        Game.camera.updateMatrixWorld();
+        Game.camera.matrixWorldInverse.getInverse(Game.camera.matrixWorld);
+        cameraProjectionMatrix.multiplyMatrices(Game.camera.projectionMatrix, Game.camera.matrixWorldInverse)
+        frustum.setFromMatrix(cameraProjectionMatrix);
+
+        if (frustum.containsPoint(new Vector3(x * Game.squareSize, y * Game.squareSize, 1))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     animate() {
@@ -266,5 +362,22 @@ export default class Game {
     }
 
     hatchEgg(idEgg: number) {
+    }
+
+    clearMap() {
+        Game.mapObject.forEach((val: MapObject) => {
+            Game.scene.remove(val.object3D);
+        });
+        Game.mapObject = new Array<MapObject>();
+    }
+    
+    clearCoordinate(x: number, y: number) {
+        let index = Game.mapObject.findIndex((elem: MapObject) => {return elem.position.x == x && elem.position.y == y});
+
+        while (index >= 0) {
+            Game.scene.remove(Game.mapObject[index].object3D);
+            Game.mapObject.splice(index, 1);
+            index = Game.mapObject.findIndex((elem: MapObject) => {return elem.position.x == x && elem.position.y == y});
+        }
     }
 }

@@ -2,7 +2,7 @@ import { MapObject } from "./map_object";
 import { PlaneGeometry, Mesh } from "three";
 import Game  from "./game";
 
-export class Map extends MapObject {
+export class ZMap extends MapObject {
     constructor() {
         super(0, 0, 0, 0);
         var geometryPlane = new PlaneGeometry(Game.lines * Game.squareSize, Game.col * Game.squareSize, 1);

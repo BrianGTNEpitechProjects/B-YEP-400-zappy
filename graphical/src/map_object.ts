@@ -1,17 +1,17 @@
-import { TextureLoader, MeshBasicMaterial, RepeatWrapping, Object3D } from "three";
+import { TextureLoader, MeshBasicMaterial, RepeatWrapping, Object3D, Vector3 } from "three";
 import Game  from "./game";
 
 export class MapObject {
-    position: { x: number; y: number; z: number; };
+    position: Vector3;
     heightPlace: number;
     sizeZ: number;
     object3D: Object3D;
     constructor(posX: number, posY: number, posZ: number, sizeZ: number) {
-        this.position = {
-            x:posX,
-            y:posY,
-            z:posZ
-        };
+        this.position = new Vector3(
+            posX,
+            posY,
+            posZ
+        );
         this.sizeZ = sizeZ;
     }
 

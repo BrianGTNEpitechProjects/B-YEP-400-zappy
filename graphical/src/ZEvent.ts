@@ -26,3 +26,9 @@ export class EventWebSocketMessage extends ZEvent {
         return "EventWebSocketMessage";
     }
 }
+
+export class GameLoadedEvent extends ZEvent {
+    getName(): string {
+        return "GameLoadedEvent";
+    }
+}
