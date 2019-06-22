@@ -27,13 +27,13 @@ static void force_incant_on_neighbours(network_server_t *s, trantorian_t *ref)
     trantorian_t *t = ref->neighbour;
     int lim = REQUIREMENTS[ref->lvl - 1].player_nb;
     int i = 0;
-    network_client_t *c = get_client(s->client_user_map, (user_base_t *)ref);
+    network_client_t *c;
 
-    write_to_buffer(&c->cb_out, INCANT_MSG, INCANT_MSG_LEN);
+    pic(t->zappy, t);
     do {
         if (t->lvl == ref->lvl) {
-            pic(t->zappy, t);
             c = get_client(s->client_user_map, (user_base_t *)t);
+            pic(t->zappy, t);
             write_to_buffer(&c->cb_out, INCANT_MSG, INCANT_MSG_LEN);
             i++;
         }
@@ -48,7 +48,6 @@ __attribute__((unused)) char *a)
     network_server_t *server = get_server(t->zappy->nm, t->zappy->classic_id);
 
     if (incantation_valid(c, a)) {
-        pic(t->zappy, t);
         force_incant_on_neighbours(server, t);
         return (true);
     } else {

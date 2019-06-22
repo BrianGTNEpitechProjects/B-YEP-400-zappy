@@ -48,12 +48,13 @@ static void write_tile_out(client_user_pair_t *c, tile_t *tile)
 
     for (int i = 0; i < player_nb; ++i)
         write_to_buffer(&c->client->cb_out, (const uint8_t *)"player ", 7);
-    for (int i = 0; i < TOT_ITEM_NB; ++i)
+    for (int i = 0; i < TOT_ITEM_NB; ++i) {
         for (unsigned int j = 0; j < tile->content[i]; ++j) {
             sz = (unsigned int)strlen((const char *)item_map[i].name);
             write_to_buffer(&c->client->cb_out, item_map[i].name, sz);
             write_to_buffer(&c->client->cb_out, (const uint8_t *)" ", 1);
         }
+    }
 }
 
 void look(client_user_pair_t *c, __attribute__((unused)) char *arg)

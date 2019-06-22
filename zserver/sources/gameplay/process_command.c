@@ -46,6 +46,21 @@ static bool exec_command(client_user_pair_t *client, command_t *command)
     set_to_next_command(trantorian);
     return (false);
 }
+//TODO: Norm error -> too many fx
+void starve(client_user_pair_t *c)
+{
+    trantorian_t *trantorian = (trantorian_t *)c->user;
+
+    if (0 < trantorian->inventory[FOOD])
+        trantorian->inventory[FOOD] -= 1;
+    else
+        trantorian->life_unit -= 1;
+    if (trantorian->life_unit <= 0) {
+        kill_client(c);
+        return;
+    } else
+        trantorian->food_time = FOOD_TTL;
+}
 
 static bool evaluate_time_and_command(client_user_pair_t *c, \
 struct timespec *t, int scale)
@@ -53,19 +68,18 @@ struct timespec *t, int scale)
     trantorian_t *trantorian = (trantorian_t *)c->user;
     command_t *command;
 
-    if (apply_time(&trantorian->food_time, t, scale)) {
-        if (0 < trantorian->inventory[FOOD])
-            trantorian->inventory[FOOD] -= 1;
-        else
-            trantorian->life_unit -= 1;
-        if (trantorian->life_unit <= 0)
-            return (kill_client(c));
-        else
-            trantorian->food_time = FOOD_TTL;
-    }
+    if (apply_time(&trantorian->food_time, t, scale))
+        starve(c);
     command = &(trantorian->queue[trantorian->command_ind]);
     if (command->code == EMPTY)
         return (true);
+    else if (commands[command->code].charge_time == command->remaining_time) {
+        if (commands[command->code].is_startable(c, command->arg)) {
+        } else {
+            write_to_client(c, KO_MSG, KO_MSG_LEN);
+            set_to_next_command(trantorian);
+        }
+    }
     return (!apply_time(&command->remaining_time, t, scale));
 }
 
