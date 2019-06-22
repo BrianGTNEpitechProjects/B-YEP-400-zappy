@@ -35,8 +35,7 @@ static void fill_fd_infos_client(fd_infos_t *infos, network_client_t *client,
     time_t time_out = client->last_data_out_timestamp;
     time_t time_in = client->last_data_in_timestamp;
     time_t client_time = time_out < time_in ? time_in : time_out;
-    time_t timeout = client_time + client->user_disconnect_timeout - \
-time(NULL);
+    time_t timeout = client_time + client->user_disconnect_timeout - time(NULL);
     struct timeval to = {timeout, 0};
 
     if (client->user_disconnect_timeout != 0 &&
@@ -100,7 +99,7 @@ bool update_manager(network_manager_t *nm)
     }
     for (list_t curr = nm->servers; curr; curr = curr->next)
         fill_fd_infos_server(&infos, curr->value);
-    infos.to.tv_usec = TOZ(infos.to) ? 1 : infos.to.tv_usec;
+    infos.to = TOZN(infos.to) ? (struct timeval){0, 1} : infos.to;
     if (select(infos.biggest_fd + 1, r_set, w_set, e_set, &infos.to) > 0) {
         for (list_t curr = nm->servers; curr; curr = curr->next)
             update_server(curr->value, &infos);
