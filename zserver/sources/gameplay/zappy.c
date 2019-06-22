@@ -202,11 +202,8 @@ static zappy_t *create_zappy(args_t *args)
         return (NULL);
     res->nm = create_manager();
     res->map = create_map(args->x, args->y);
-    if (res->nm == NULL || res->map == NULL) {
-        delete_zappy(res);
-        return (NULL);
-    }
-    if (init_server(res, args) == false || create_teams(res, args) == false) {
+    if (res->nm == NULL || res->map == NULL || init_server(res, args) == false
+|| create_teams(res, args) == false) {
         delete_zappy(res);
         return (NULL);
     }
@@ -215,6 +212,7 @@ static zappy_t *create_zappy(args_t *args)
     res->time_scale = args->freq;
     res->map_size.x = args->x;
     res->map_size.y = args->y;
+    res->resources_spawn_cap = DEFAULT_RESOURCES_CAP;
     init_spawn_timeouts(res);
     return (res);
 }

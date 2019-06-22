@@ -27,6 +27,8 @@ const size_t CURR_MSG_LEN = sizeof(CURR_MSG);
 const uint8_t INCANT_MSG[] = "Elevation underway\n";
 const size_t INCANT_MSG_LEN = sizeof(INCANT_MSG);
 
+const long DEFAULT_RESOURCES_CAP = 100000;
+
 const double resources_per_tile = 1.0 / 4.0;
 
 const item_t item_map[TOT_ITEM_NB] = {

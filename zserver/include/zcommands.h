@@ -31,6 +31,8 @@ extern const size_t CURR_MSG_LEN;
 extern const uint8_t INCANT_MSG[];
 extern const size_t INCANT_MSG_LEN;
 
+extern const long DEFAULT_RESOURCES_CAP;
+
 extern const incantation_requirement_t REQUIREMENTS[];
 
 extern const command_info_t commands[];

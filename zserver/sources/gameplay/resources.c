@@ -28,11 +28,13 @@ void spawn_rand_resources(zappy_t *zap, e_item_t type)
     long x = 0;
     long y = 0;
     tile_t *tile = NULL;
-    int ratio = 0;
+    long ratio = 0;
 
     if (!zap->natural_spawn_activated)
         return;
     ratio = (int)(resources_per_tile * (zap->map_size.x * zap->map_size.y));
+    if (ratio > zap->resources_spawn_cap)
+        ratio = zap->resources_spawn_cap;
     for (int i = 0; i < ratio; ++i) {
         x = random() % zap->map_size.x;
         y = random() % zap->map_size.y;

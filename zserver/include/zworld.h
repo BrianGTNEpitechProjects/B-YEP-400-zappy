@@ -45,6 +45,7 @@ typedef struct {
     int time_scale;
     struct timespec resources_spawn[TOT_ITEM_NB];
     bool natural_spawn_activated;
+    long resources_spawn_cap;
 } zappy_t;
 
 struct trantorian_s {
