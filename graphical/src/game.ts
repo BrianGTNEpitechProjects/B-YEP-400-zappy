@@ -23,6 +23,7 @@ export default class Game {
     static scene: Scene = new Scene();
     static gltfLoader = new loader();
     static cameraSpeed = 0.8;
+    static cameraRotSpeed = 0.008;
     //static camera = new OrthographicCamera(Game.gameWidth / -2, Game.gameWidth / 2, Game.gameHeight / -2, Game.gameHeight / 2);    
     static camera = new PerspectiveCamera(75, Game.gameWidth / Game.gameHeight, 0.1, 500);
     static soundManager: SoundManager;
@@ -60,8 +61,8 @@ export default class Game {
         this.map = new ZMap();
 
         var that = this;
-        document.addEventListener("keydown", onDocumentKeyDown, false);
-        function onDocumentKeyDown(event: any) {
+        document.addEventListener("keydown", onKeyDown, false);
+        function onKeyDown(event: any) {
             var keyCode = event.which;
 
             if (keyCode == 83) {
@@ -87,10 +88,16 @@ export default class Game {
                 }
             }
             if (keyCode == 78) {
-                if (that.zoomLevel - Game.cameraSpeed >= 0) {
+                if (that.zoomLevel - Game.cameraSpeed >= -100) {
                     Game.camera.position.z -= Game.cameraSpeed;
                     that.zoomLevel -= Game.cameraSpeed;
                 }
+            }
+            if (keyCode == 38) {
+                Game.camera.rotateX(Game.cameraRotSpeed);
+            }
+            if (keyCode == 40) {
+                Game.camera.rotateX(-Game.cameraRotSpeed);
             }
             if (that.movement >= 10) {
                 that.movement = 0;
@@ -245,6 +252,8 @@ export default class Game {
             }
         });
         for (var i = 0; i < currentNumber.length; i++) {
+            if (numberRessources[i] > 4)
+                numberRessources[i] = 4;
             if (numberRessources[i] - currentNumber[i] > 0) {
                 for (var j = 0; j < numberRessources[i] - currentNumber[i]; j++) {
                     new Food(i, x, y);
