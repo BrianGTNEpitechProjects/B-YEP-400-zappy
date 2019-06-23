@@ -6,40 +6,51 @@
 */
 
 #include "zworld.h"
+#include "graphical_protocol.h"
 
-tile_t *tile_forward(tile_t *tile, e_cardinal_t dir)
+static void add_to_tile(trantorian_t *trantorian, tile_t *tile)
 {
-    switch (dir) {
-    case NORTH:
-        return (tile->north);
-    case EAST:
-        return (tile->east);
-    case SOUTH:
-        return (tile->south);
-    case WEST:
-        return (tile->west);
-    default:
-        return (0);
+    trantorian_t *last;
+
+    if (tile) {
+        if (tile->first == NULL) {
+            tile->first = trantorian;
+            trantorian->neighbour = trantorian;
+        } else {
+            last = last_neighbour(tile->first);
+            trantorian->neighbour = last->neighbour;
+            last->neighbour = trantorian;
+        }
     }
+    trantorian->pos = tile;
+}
+
+static void remove_from_tile(trantorian_t *trantorian)
+{
+    trantorian_t *first = first_neighbour(trantorian);
+    trantorian_t *last = last_neighbour(trantorian);
+    tile_t *origin = trantorian->pos;
+
+    if (first && last)
+        last->neighbour = first;
+    if (origin && origin->first == trantorian)
+        origin->first = (first != trantorian) ? first : NULL;
+    trantorian->neighbour = NULL;
+    trantorian->pos = NULL;
 }
 
 int trantorian_move(trantorian_t *trantorian, tile_t *tile)
 {
-    trantorian_t *first = first_neighbour(trantorian);
-    trantorian_t *last = last_neighbour(trantorian);
-
-    if (first && last) {
-        last->neighbour = first;
-    }
-    if (tile->first == trantorian) {
-        tile->first = first;
-    }
-    trantorian->pos = tile;
+    remove_from_tile(trantorian);
+    add_to_tile(trantorian, tile);
+    ppo_all(trantorian->zappy, trantorian);
     return (0);
 }
 
 int trantorian_move_dir(trantorian_t *trantorian, e_cardinal_t dir)
 {
+    if (trantorian->pos == NULL)
+        return (-1);
     switch (dir) {
     case NORTH:
         return (trantorian_move(trantorian, trantorian->pos->north));

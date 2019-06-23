@@ -11,7 +11,7 @@
 
 void seg(zappy_t *world, const char *team)
 {
-    char to_send[C_BUFFER_SIZE] = {0};
+    char to_send[C_BUFFER_SIZE + 1] = {0};
     int data_len = 0;
 
     data_len = snprintf(to_send, C_BUFFER_SIZE, "seg %s\n", team);

@@ -44,3 +44,15 @@ debug:
 		$(CP) $(ZAPPY_SERVER_PATH)/$(ZAPPY_SERVER) . || echo "\e[31m[ERROR] Could not find zappy_server binary\e[39m"
 		$(MAKE) -C $(ZAPPY_AI_PATH) debug
 		$(CP) $(ZAPPY_AI_PATH)/$(ZAPPY_AI) . || echo "\e[31m[ERROR] Could not find zappy_ai binary\e[39m"
+
+tests_run:
+		$(MAKE) -C $(ZAPPY_SERVER_PATH) tests_run
+		$(MAKE) -C $(ZAPPY_AI_PATH) tests_run
+
+tests_clean:
+		$(MAKE) -C $(ZAPPY_SERVER_PATH) tests_clean
+		$(MAKE) -C $(ZAPPY_AI_PATH) tests_clean
+
+tests_fclean:
+		$(MAKE) -C $(ZAPPY_SERVER_PATH) tests_fclean
+		$(MAKE) -C $(ZAPPY_AI_PATH) tests_fclean

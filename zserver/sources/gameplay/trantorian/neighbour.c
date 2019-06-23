@@ -9,26 +9,44 @@
 
 trantorian_t *last_neighbour(trantorian_t *self)
 {
+    if (!self)
+        return (NULL);
     for (trantorian_t *tmp = self->neighbour; tmp; tmp = tmp->neighbour)
         if (tmp->neighbour == self)
-            return ((tmp == self) ? NULL : tmp);
+            return (tmp);
     return (NULL);
 }
 
 trantorian_t *first_neighbour(trantorian_t *self)
 {
-    return ((self->neighbour != self) ? self->neighbour : NULL);
+    if (!self)
+        return (NULL);
+    return (self->neighbour);
 }
 
 int tile_population_size(tile_t *tile)
+{
+    int tot = 0;
+    trantorian_t *t = tile->first;
+
+    if (t == NULL)
+        return (0);
+    do {
+        tot++;
+        t = t->neighbour;
+    } while (t != tile->first);
+    return (tot);
+}
+
+int tile_population_size_with_lvl(tile_t *tile, unsigned int lvl)
 {
     int tot = 1;
 
     for (trantorian_t *trantorian = tile->first; \
          trantorian && trantorian->neighbour != tile->first; \
-         trantorian = trantorian->neighbour)
-    {
-        ++tot;
+         trantorian = trantorian->neighbour) {
+        if (trantorian->lvl == lvl)
+            ++tot;
     }
     return ((tile->first) ? tot : 0);
 }

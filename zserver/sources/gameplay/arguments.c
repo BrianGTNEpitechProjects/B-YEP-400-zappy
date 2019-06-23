@@ -8,7 +8,25 @@
 #include <getopt.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <string.h>
 #include "zserver.h"
+
+static bool check_max_server_capacity(args_t *arguments)
+{
+    for (int i = 0; arguments->teams[i] != NULL; i++) {
+        if (i >= MAX_TEAMS) {
+            fprintf(stderr, MAX_TEAMS_MSG, MAX_TEAMS);
+            return (false);
+        }
+        if (strlen(arguments->teams[i]) >= MAX_TEAM_NAME) {
+            fprintf(stderr, MAX_TEAM_NAME_MSG, MAX_TEAM_NAME, \
+arguments->teams[i]);
+            return (false);
+        }
+    }
+
+    return (true);
+}
 
 static char **extract_teams(int index, char **av, int *team_count)
 {
@@ -34,7 +52,7 @@ static bool extract_int(int *output, char *input)
     long res = strtol(input, NULL, 10);
 
     if (res == LONG_MIN || res == LONG_MAX) {
-        return (handle_error_return("strtol: %s\n", false));
+        return (bool)(handle_error_return("strtol: %s\n", false));
     }
     *output = (int) res;
     return (true);
@@ -61,7 +79,7 @@ bool parse_args(args_t *arguments, int ac, char **av)
 {
     bool ret = false;
 
-    for (int c; (c = getopt(ac, av, "p:x:y:c:f:nw:")) != -1; ) {
+    for (int c; (c = getopt(ac, av, "p:x:y:c:f:nw:i")) != -1; ) {
         switch (c) {
         case 'p': ret = ret || !extract_int(&arguments->port, optarg); break;
         case 'x': ret = ret || !extract_int(&arguments->x, optarg); break;
@@ -73,8 +91,10 @@ bool parse_args(args_t *arguments, int ac, char **av)
             break;
         case 'w': ret = ret || !extract_int(&arguments->wsport, optarg);
             arguments->set_ws = true; break;
+        case 'i': arguments->interactive_mode = true; break;
         default: break;
         }
     }
-    return (!ret && check_args(arguments));
+    return (!ret && check_args(arguments) && \
+check_max_server_capacity(arguments));
 }

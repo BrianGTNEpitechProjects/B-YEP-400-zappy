@@ -10,6 +10,7 @@
 
 static void link_neighbours(tile_t **map, pos_t pos, pos_t sz)
 {
+    map[pos.y][pos.x].coords = pos;
     if (pos.y - 1 < 0)
         map[pos.y][pos.x].north = &map[sz.y - 1][pos.x];
     else
@@ -37,11 +38,42 @@ static void link_map(tile_t **map, dim_t size)
 }
 
 tile_t **create_map(int x, int y) {
-    tile_t **res = calloc(1, (sizeof(tile_t *) * y) + (x * y * sizeof(tile_t)));
-    if (res == NULL)
-        return (NULL);
+    tile_t **r = calloc(1, (sizeof(tile_t *) * y) + (x * y * sizeof(tile_t)));
+    if (r == NULL)
+        return ((tile_t **)(uintptr_t)handle_error_return("calloc: %s\n", 0));
     for (int i = 0; i < y; i++)
-        res[i] = (tile_t *)((uintptr_t)res + sizeof(tile_t *) * y + sizeof(tile_t) * i * x);
-    link_map(res, (dim_t){.x = x, .y = y});
+        r[i] = (tile_t *)((uintptr_t)r + sizeof(tile_t *) * y + \
+sizeof(tile_t) * i * x);
+    link_map(r, (dim_t){.x = x, .y = y});
+    return (r);
+}
+
+pos_t get_random_positions(dim_t map_size)
+{
+    pos_t res;
+
+    res.x = rand() % map_size.x;
+    res.y = rand() % map_size.y;
     return (res);
+}
+
+void set_position(trantorian_t *to_place, tile_t *tile)
+{
+    trantorian_t *relink = NULL;
+
+    if (to_place->pos) {
+        for (relink = to_place->pos->first; relink->neighbour != to_place; \
+relink = relink->neighbour);
+        relink->neighbour = to_place->neighbour;
+    }
+    to_place->pos = tile;
+    if (tile->first == NULL) {
+        tile->first = to_place;
+        to_place->neighbour = to_place;
+    } else {
+        to_place->neighbour = tile->first;
+        for (relink = tile->first; relink->neighbour != tile->first; \
+relink = relink->neighbour);
+        relink->neighbour = to_place;
+    }
 }

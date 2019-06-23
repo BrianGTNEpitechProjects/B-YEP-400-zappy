@@ -7,19 +7,19 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "zserver.h"
 #include "zcommands.h"
-
-//TODO: norm -> too many fx
-
-//TODO: maybe move this define elsewhere
-#define COMMAND_NB (12)
+#include "cli.h"
+#include "graphical_protocol.h"
 
 const command_info_t commands[] = {
     {
         .code = EMPTY,
         .command = NULL,
         .charge_time = 0,
+        .need_arg = false,
+        .is_startable = &always_true,
         .is_valid = &always_true,
         .callback = NULL
     },
@@ -27,6 +27,8 @@ const command_info_t commands[] = {
         .code = FORWARD,
         .command = "Forward",
         .charge_time = 7,
+        .need_arg = false,
+        .is_startable = &always_true,
         .is_valid = &always_true,
         .callback = &forward
     },
@@ -34,6 +36,8 @@ const command_info_t commands[] = {
         .code = RIGHT,
         .command = "Right",
         .charge_time = 7,
+        .need_arg = false,
+        .is_startable = &always_true,
         .is_valid = &always_true,
         .callback = &right
     },
@@ -41,6 +45,8 @@ const command_info_t commands[] = {
         .code = LEFT,
         .command = "Left",
         .charge_time = 7,
+        .need_arg = false,
+        .is_startable = &always_true,
         .is_valid = &always_true,
         .callback = &left
     },
@@ -48,6 +54,8 @@ const command_info_t commands[] = {
         .code = LOOK,
         .command = "Look",
         .charge_time = 7,
+        .need_arg = false,
+        .is_startable = &always_true,
         .is_valid = &always_true,
         .callback = &look
     },
@@ -55,34 +63,44 @@ const command_info_t commands[] = {
         .code = INVENTORY,
         .command = "Inventory",
         .charge_time = 1,
+        .need_arg = false,
+        .is_startable = &always_true,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &inventory
     },
     {
         .code = BROADCAST,
         .command = "Broadcast",
         .charge_time = 7,
+        .need_arg = true,
+        .is_startable = &always_true,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &broadcast
     },
     {
         .code = CONNECT_NBR,
         .command = "Connect_nbr",
         .charge_time = 0,
+        .need_arg = false,
+        .is_startable = &always_true,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &connect_nbr
     },
     {
         .code = FORK,
         .command = "Fork",
         .charge_time = 42,
+        .need_arg = false,
+        .is_startable = &fork_start,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &fork_command
     },
     {
         .code = EJECT,
         .command = "Eject",
         .charge_time = 7,
+        .need_arg = false,
+        .is_startable = &always_true,
         .is_valid = &always_true,
         .callback = &eject
     },
@@ -90,22 +108,37 @@ const command_info_t commands[] = {
         .code = TAKE_OBJECT,
         .command = "Take",
         .charge_time = 7,
+        .need_arg = true,
+        .is_startable = &take_valid,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &take_object
     },
     {
         .code = SET_OBJECT,
         .command = "Set",
         .charge_time = 7,
+        .need_arg = true,
+        .is_startable = &always_true,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &put_object
     },
     {
         .code = INCANTATION,
         .command = "Incantation",
         .charge_time = 300,
+        .need_arg = false,
+        .is_startable = &incantation_startable,
         .is_valid = &always_true,
-        .callback = NULL
+        .callback = &incantation
+    },
+    {
+        .code = HATCH,
+        .command = "Hatch Egg",
+        .charge_time = 600,
+        .need_arg = false,
+        .is_startable = &always_true,
+        .is_valid = &always_true,
+        .callback = &hatch_egg
     }
 };
 
@@ -115,82 +148,50 @@ void delete_zappy(zappy_t *zappy)
         return;
     if (zappy->nm != NULL)
         delete_manager(zappy->nm);
+    if (zappy->teams != NULL)
+        free(zappy->teams);
     free(zappy->map);
     free(zappy->players);
     free(zappy);
 }
 
-static bool init_server(zappy_t *res, int port, int wsport)
+static bool init_server(zappy_t *res, args_t *args)
 {
-    res->classic_id = add_server(res->nm, port);
+    network_server_t *server = NULL;
+
+    if (args->interactive_mode) {
+        res->nm->timeout_on_stdin = true;
+        print_cli_welcome();
+    }
+    res->classic_id = add_server(res->nm, args->port);
     if (res->classic_id == invalid_id)
         return (false);
-    if (wsport != 0) {
-        res->websocket_id = add_server(res->nm, wsport);
+    server = get_server(res->nm, res->classic_id);
+    server->default_client_disconnect_timeout = 60;
+    res->websocket_id = (id_t)-1;
+    if (args->wsport != 0) {
+        res->websocket_id = add_server(res->nm, args->wsport);
         if (res->websocket_id == invalid_id)
             return (false);
     }
     return (true);
 }
 
-void on_disconnect(user_base_t *base, network_client_t *client)
-{
-    puts("client disconnect");
-}
+static bool create_teams(zappy_t *res, args_t *args) {
+    uint size = 0;
 
-static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
-{
-    int ind;
-
-    for (int i = 0; i < COMMAND_QUEUE_LEN; i++) {
-        ind = (player->command_ind + i) % COMMAND_QUEUE_LEN;
-        if (player->queue[ind].code == EMPTY) {
-            player->queue[ind].code = id;
-            player->queue[ind].remaining_time = commands[id].charge_time;
-            strcpy(player->queue[ind].arg, arg);
-            return (i);
-        }
+    for (; args->teams[size]; size++);
+    res->teams = calloc(size + 1, sizeof(team_t));
+    if (res->teams == NULL)
+        return (bool)(handle_error_return("calloc: %s\n", 0));
+    for (id_t i = 0; i < size; i++) {
+        res->teams[i].id = i;
+        res->teams[i].name = args->teams[i];
     }
-    return (-1);
+    res->teams[size].id = invalid_id;
+    return (true);
 }
 
-void on_extract_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
-{
-    int i;
-    size_t separator_ind = strcspn((char *) data, " \n");
-    char *arg;
-    client_user_pair_t pair = {c, b};
-
-#ifdef DEBUG_PRINT_RECV
-    printf("RECEIVED: %.*s\n", (int)sz - 1, data);
-#endif
-    for (i = 1; i <= COMMAND_NB; i++)
-        if (strncmp(data, commands[i].command, separator_ind) == 0)
-            break;
-    if (data[separator_ind] == '\n')
-        arg = "";
-    else
-        arg = (char *)&(data[separator_ind + 1]);
-    data[sz - 1] = '\0';
-    if (i <= COMMAND_NB && emplace_command((trantorian_t *)b, i, arg) < 0)
-        write_to_buffer(&c->cb_out, KO_MSG, KO_MSG_LEN);
-}
-
-void on_extract_not_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz)
-{
-    client_user_pair_t pair = {c, b};
-    ((char *)data)[sz - 1] = 0;
-
-    add_user_to_team(&pair, (char *) data);
-    if (((trantorian_t *)b)->team.name == NULL) {
-        write_to_buffer(&pair.client->cb_out, KO_MSG, KO_MSG_LEN);
-    } else {
-        response_success_connection((trantorian_t *)b, c);
-        b->on_extracted = &on_extract_connected;
-    }
-}
-
-//TODO: norm -> too long fx
 static zappy_t *create_zappy(args_t *args)
 {
     zappy_t *res = calloc(sizeof(*res), 1);
@@ -199,19 +200,19 @@ static zappy_t *create_zappy(args_t *args)
         return (NULL);
     res->nm = create_manager();
     res->map = create_map(args->x, args->y);
-    if (res->nm == NULL || res->map == NULL) {
+    if (res->nm == NULL || res->map == NULL || init_server(res, args) == false
+|| create_teams(res, args) == false) {
         delete_zappy(res);
         return (NULL);
     }
-    if (init_server(res, args->port, args->wsport) == false) {
-        delete_zappy(res);
-        return (NULL);
-    }
+    res->natural_spawn_activated = true;
     res->default_slots_teams = args->ppt;
     res->time_scale = args->freq;
-    res->teams = (team_t *)args->teams;
     res->map_size.x = args->x;
     res->map_size.y = args->y;
+    res->case_sensitive_inputs = true;
+    res->resources_spawn_cap = DEFAULT_RESOURCES_CAP;
+    init_spawn_timeouts(res);
     return (res);
 }
 
@@ -228,6 +229,7 @@ bool zappy(int ac, char **av)
         free(arguments.teams);
         return (ret);
     }
+    srandom((unsigned int)time(NULL));
     ret = run_zappy(zap);
     delete_zappy(zap);
     free(arguments.teams);

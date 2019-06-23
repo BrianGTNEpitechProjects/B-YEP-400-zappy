@@ -17,16 +17,20 @@
 
 int count_unused_slot(zappy_t *zap, char *team_name)
 {
-    int tot = 0;
-    int if_no_eggs = zap->default_slots_teams;
+    int total = 0;
+    int res = zap->default_slots_teams;
 
     for (trantorian_t *node = zap->players; node; node = node->next) {
-        if (team_name == NULL || strcmp(node->team.name, team_name) == 0) {
-            tot += (node->base.on_disconnect == NULL);
-            if_no_eggs -= (node->base.on_disconnect == NULL);
+        if (cmpstr(node->team->name, team_name, \
+zap->case_sensitive_inputs) == 0) {
+            if (node->is_egg && node->base.on_extracted == NULL) {
+                res++;
+            } else {
+                total++;
+            }
         }
     }
-    return (tot < zap->default_slots_teams ? if_no_eggs : tot);
+    return (res - total);
 }
 
 int count_players_team(zappy_t *zap, char *team_name)
@@ -34,8 +38,15 @@ int count_players_team(zappy_t *zap, char *team_name)
     int players = 0;
 
     for (trantorian_t *curr = zap->players; curr != NULL; curr = curr->next) {
-        if (strcmp(team_name, curr->team.name) == 0)
+        if (strcmp(team_name, curr->team->name) == 0)
             players++;
     }
     return (players);
+}
+
+int count_teams(zappy_t *zap) {
+    int res = 0;
+
+    for (; zap->teams[res].name != NULL; res++);
+    return (res);
 }

@@ -45,6 +45,7 @@ static void fill_fd_infos_client(fd_infos_t *infos, network_client_t *client,
         infos->client_server = server;
     }
     FD_SET(client->socket, &infos->read_set);
+    FD_SET(client->socket, &infos->error_set);
     if (client->cb_out.nb_buffered_bytes != 0)
         FD_SET(client->socket, &infos->write_set);
     if (client->socket > infos->biggest_fd)
@@ -74,6 +75,7 @@ static void fill_fd_infos_server(fd_infos_t *infos, network_server_t *ns)
     }
     if (ns->connexion_socket != invalid_socket) {
         FD_SET(ns->connexion_socket, &infos->read_set);
+        FD_SET(ns->connexion_socket, &infos->error_set);
         if (infos->biggest_fd < ns->connexion_socket)
             infos->biggest_fd = ns->connexion_socket;
     }
@@ -83,19 +85,22 @@ static void fill_fd_infos_server(fd_infos_t *infos, network_server_t *ns)
 
 bool update_manager(network_manager_t *nm)
 {
-    fd_infos_t infos = {{}, {}, invalid_socket, {0, 1}, NULL, NULL};
+    fd_infos_t infos = {{}, {}, {}, invalid_socket, {0, 0}, NULL, NULL};
     fd_set *r_set = &infos.read_set;
     fd_set *w_set = &infos.write_set;
+    fd_set *e_set = &infos.error_set;
 
     FD_ZERO(r_set);
     FD_ZERO(w_set);
-    if (nm->timeout_on_stdin)
+    FD_ZERO(e_set);
+    if (nm->timeout_on_stdin) {
         FD_SET(0, r_set);
+        FD_SET(0, e_set);
+    }
     for (list_t curr = nm->servers; curr; curr = curr->next)
         fill_fd_infos_server(&infos, curr->value);
-    if (TOZ(infos.to))
-        infos.to.tv_usec = 1;
-    if (select(infos.biggest_fd + 1, r_set, w_set, NULL, &infos.to) > 0) {
+    infos.to = TOZN(infos.to) ? (struct timeval){0, 1} : infos.to;
+    if (select(infos.biggest_fd + 1, r_set, w_set, e_set, &infos.to) > 0) {
         for (list_t curr = nm->servers; curr; curr = curr->next)
             update_server(curr->value, &infos);
     } else if (infos.to_disconnect_if_timeout != NULL)

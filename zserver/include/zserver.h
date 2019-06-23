@@ -18,6 +18,14 @@
 #include "network_manager.h"
 #include "zworld.h"
 
+#define MAX_TEAMS 50
+#define MAX_TEAM_NAME 50
+#define MAX_PLAYERS_PER_TEAM 50
+
+#define MAX_TEAMS_MSG "Maximum number of teams allowed: %i\n"
+#define MAX_TEAM_NAME_MSG "Maximum length of a team name: %i, %s not valid\n"
+#define MAX_PLAYERS_PER_TEAM_MSG "Maximum number of players per team: %i\n"
+
 enum socket_type {
     UNDEFINED,
     CLASSIC,
@@ -51,10 +59,11 @@ void set_key(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
 void header_end(char *, zuser_ws_t *, regmatch_t *, network_client_t *);
 char *base64_encode(unsigned char *, size_t);
 unsigned int get_base64_size(size_t);
+void send_websocket_header(network_client_t *, size_t, uint8_t);
 void send_websocket(network_client_t *, uint8_t *, size_t, uint8_t);
 void read_ws_clients_data(network_server_t *server);
 
-#define DEFAULT_ARGS {0, 0, 0, 0, 100, NULL, 0, 0, false}
+#define DEFAULT_ARGS {0, 0, 0, 0, 100, NULL, 0, 0, false, false}
 
 typedef struct {
     int port;
@@ -66,37 +75,54 @@ typedef struct {
     int tc;
     int wsport;
     bool set_ws;
+    bool interactive_mode;
 } args_t;
 
 /* utils.c */
 int handle_error_return(char *s, int ret);
-char *concat(char *str1, char *str2, bool free1, bool free2);
 
-/* zappy.c */
+/* on_events */
 void on_disconnect(user_base_t *base, network_client_t *client);
-void on_extract_not_connected(user_base_t *b, network_client_t *c, uint8_t *data, size_t sz);
+void on_extract_not_connected(user_base_t*, network_client_t*, \
+uint8_t*, size_t);
+void on_extract_connected(user_base_t *, network_client_t *, uint8_t *, size_t);
 
 /*  arguments.c */
 bool parse_args(args_t *arguments, int ac, char **av);
 
+/*  remove_signals.c  */
+bool remove_sig_catch(void);
+
 /*  server_running.c    */
 bool setup_catch_signals(void);
-bool remove_sig_catch(void);
 bool running(void);
+void shutdown_server(void);
 
 /* new.c */
 trantorian_t *accept_player(zappy_t *zap);
+void set_position_relative(trantorian_t *to_place, tile_t *tile, pos_t pos);
+tile_t *get_tile_relative(tile_t *tile, pos_t pos);
+trantorian_t *create_player(void);
 
 /* connection.c */
 void response_success_connection(trantorian_t *tranto, network_client_t *nc);
-void add_user_to_team(client_user_pair_t *pair, char *team);
+trantorian_t * add_user_to_team(client_user_pair_t *pair, team_t *team);
 
 /* process_command.c */
 void process_command_on_users(zappy_t *z, network_client_user_map_t *m);
 
+/* resources.c */
+void spawn_resource(zappy_t *world, tile_t *tile, e_item_t type);
+void process_spawn_resources(zappy_t *zap);
+void init_spawn_timeouts(zappy_t *res);
+
+/* starve.c */
+void starve(client_user_pair_t *c);
+
+
 static inline bool write_to_client(\
     client_user_pair_t *client, \
-    uint8_t *data, \
+    const uint8_t *data, \
     size_t sz\
 )
 {

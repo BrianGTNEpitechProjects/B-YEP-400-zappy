@@ -42,5 +42,6 @@ void remove_client_from_map(network_client_user_map_t *m, network_client_t *c)
 {
     if (m == NULL || c == NULL)
         return;
-    map_del_elem(&m->client_user_map, c, (key_comparator_t)&network_client_cmp);
+    map_del_elem(&m->client_user_map, c, (key_comparator_t)\
+&network_client_cmp);
 }

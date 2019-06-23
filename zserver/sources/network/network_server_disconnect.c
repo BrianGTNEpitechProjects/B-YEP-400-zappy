@@ -25,8 +25,6 @@ static void disconnect(
     }
     if (client)
         memcpy(client, &default_client, sizeof(default_client));
-    if (PRINT_DEBUG)
-        fprintf(stderr, "[DEBUG] Client disconnected\n");
 }
 
 void disconnect_client(network_server_t *ns, network_client_t *client)
@@ -56,7 +54,7 @@ void update_disconnected(network_server_t *ns)
 
     while (curr != EMPTY_MAP) {
         pair = curr->value;
-        if (pair->client->lost_connection) {
+        if (pair->client->should_disconnect || pair->client->lost_connection) {
             curr = curr->next;
             disconnect_client(ns, pair->client);
         } else {

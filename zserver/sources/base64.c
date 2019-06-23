@@ -12,9 +12,11 @@
 #include <string.h>
 #include "zserver.h"
 
-static int get_output_from_triple(char *res, unsigned int triple, int osize, size_t length)
+static int get_output_from_triple(char *res, unsigned int triple, int osize, \
+size_t length)
 {
-    const char *base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    const char *base64 = \
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     size_t to_move = 18;
     size_t modified = 0;
 
