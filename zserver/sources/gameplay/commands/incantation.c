@@ -5,6 +5,7 @@
 ** No file there , just an Epitech header example
 */
 
+#include <string.h>
 #include "zcommand_proto.h"
 #include "zcommands.h"
 #include "zserver.h"
@@ -26,7 +27,7 @@ static void write_lvl_msg(client_user_pair_t *client, int lvl)
 
     snprintf(buff, 11, "%d", lvl);
     write_to_client(client, CURR_MSG, CURR_MSG_LEN);
-    write_to_client(client, (uint8_t *)buff, 10);
+    write_to_client(client, (uint8_t *)buff, strlen(buff));
     write_to_client(client, (uint8_t *)"\n", 1);
 }
 
