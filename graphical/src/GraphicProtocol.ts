@@ -39,7 +39,6 @@ export default class GraphicProtocol {
         this.commands.set("smg", this.commandSmg);
         this.commands.set("suc", this.commandSuc);
         this.commands.set("sbp", this.commandSbp);
-        this.commands.set("nrs", this.commandNrs);
 
         var that = this;
         EventManager.getInstance().addListener("EventWebSocketMessage", (e: EventWebSocketMessage) => {
@@ -59,7 +58,6 @@ export default class GraphicProtocol {
     reloadMap() {
         if (!this.game)
             return;
-        this.game.clearMap();
         this.game.visibleCase.forEach((pos: Vector2) => {
             WebSocketManager.sendMessage(`bct ${pos.x} ${pos.y}\n`);
         });
@@ -292,14 +290,4 @@ export default class GraphicProtocol {
     commandSbp(args: Array<string>, protocol: GraphicProtocol) {
         Logger.logError("[ZAPPY GRAPHICAL PROTOCOL SERVER] Invalid parameter");
     }
-
-    commandNrs(args: Array<string>, protocol: GraphicProtocol) {
-        let x: number = parseInt(args[1]);
-        let y: number = parseInt(args[2]);
-        let type: number = parseInt(args[3]);
-
-        if (protocol.game.getVisibleCases().findIndex(val => (val.x == x && val.y == y)) >= 0)
-            protocol.game.addToTile(x, y, type, 1);
-    }
-
 }

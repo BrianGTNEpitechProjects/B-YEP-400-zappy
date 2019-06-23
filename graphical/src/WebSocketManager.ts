@@ -1,5 +1,5 @@
 import EventManager from "./EventManager";
-import { EventWebSocketConnected, EventWebSocketMessage } from "./ZEvent";
+import { EventWebSocketConnected, EventWebSocketMessage, EventWebSocketError } from "./ZEvent";
 
 export default class WebSocketManager {
     private static ws: WebSocket = undefined;
@@ -14,6 +14,14 @@ export default class WebSocketManager {
         ws.onmessage = (ev: MessageEvent) => {
             EventManager.getInstance().emit(new EventWebSocketMessage(ev.data));
         }
+
+        ws.onerror = (ev: Event) => {
+            EventManager.getInstance().emit(new EventWebSocketError());
+        };
+
+        ws.onclose = (ev: Event) => {
+            EventManager.getInstance().emit(new EventWebSocketError());
+        };
 
         this.ws = ws;
         return WebSocketManager.ws;

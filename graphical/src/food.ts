@@ -1,15 +1,16 @@
-import { BoxGeometry, Mesh } from "three";
+import { BoxGeometry, Mesh, Material } from "three";
 import { MapObject } from "./map_object";
 import Game  from "./game";
+import AssetsManager from "./AssetsManager";
 
 var assets = [
-    "textures/melon_side",
-    "textures/iron_ore",
-    "textures/iron_block",
-    "textures/gold_ore",
-    "textures/gold_block",
-    "textures/diamond_ore",
-    "textures/diamond_block",
+    "melon",
+    "iron_ore",
+    "iron_block",
+    "gold_ore",
+    "gold_block",
+    "diamond_ore",
+    "diamond_block",
 ];
 
 export class Food extends MapObject {
@@ -22,7 +23,7 @@ export class Food extends MapObject {
         this.type = type;
 
         var geometry = new BoxGeometry(Game.foodSize, Game.foodSize, Game.foodSize);
-        var material = this.createMaterialTexture("assets/" + assets[type] + ".png", 0, 0);
+        var material: Material = AssetsManager.getAsset(assets[type]);
         var food = new Mesh(geometry, material);
 
         food.position.x = x * Game.squareSize + Game.squareSize / 2;

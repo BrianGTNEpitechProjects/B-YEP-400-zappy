@@ -1,6 +1,7 @@
 import { MapObject } from "./map_object";
 import Game from "./game";
 import { Vector2, LatheBufferGeometry, Mesh } from "three";
+import AssetsManager from "./AssetsManager";
 
 export class Egg extends MapObject {
     id: number;
@@ -18,7 +19,7 @@ export class Egg extends MapObject {
             points.push( point );
         }
         var geometry = new LatheBufferGeometry( points, 32 );
-        var material = this.createMaterialTexture("assets/textures/egg.png", 0, 0);
+        var material = AssetsManager.getAsset("egg");
         var egg = new Mesh(geometry, material);
 
         egg.position.x = x * Game.squareSize + Game.squareSize / 2;

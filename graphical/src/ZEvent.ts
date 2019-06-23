@@ -8,6 +8,12 @@ export class EventWebSocketConnected extends ZEvent {
     }
 }
 
+export class EventWebSocketError extends ZEvent {
+    getName(): string {
+        return "EventWebSocketError";
+    }
+}
+
 export class EventWebSocketConnectionFailed extends ZEvent {
     getName(): string {
         return "EventWebSocketConnectionFailed";

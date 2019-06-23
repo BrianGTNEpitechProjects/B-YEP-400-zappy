@@ -10,6 +10,7 @@ import EventManager from './EventManager';
 import { GameLoadedEvent } from './ZEvent';
 import GraphicProtocol from './GraphicProtocol';
 import WebSocketManager from './WebSocketManager';
+import AssetsManager from './AssetsManager';
 const loader = require('three-gltf-loader');
 
 export default class Game {
@@ -33,6 +34,8 @@ export default class Game {
     map: ZMap;
     protocol: GraphicProtocol;
     soundManager: SoundManager;
+    elapsedTime: number;
+    lastUpdate: number;
 
     constructor(lineSize: number, colSize: number, protocol: GraphicProtocol) {
         if (lineSize) {
@@ -41,9 +44,12 @@ export default class Game {
         if (colSize) {
             Game.col = colSize;
         }
+        AssetsManager.getInstance().load();
         this.renderer = new WebGLRenderer({antialias:true, canvas: document.getElementById("gameCanvas") as HTMLCanvasElement});
         this.protocol = protocol;
         this.soundManager = new SoundManager();
+        this.elapsedTime = 0;
+        this.lastUpdate = 0;
 
         Game.camera.position.set(50, 50, 100);
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -86,7 +92,6 @@ export default class Game {
                     that.zoomLevel -= Game.cameraSpeed;
                 }
             }
-            console.log(that.movement, that.zoomLevel);
             if (that.movement >= 10) {
                 that.movement = 0;
                 let visibles = that.getCurrentVisisble();
@@ -227,10 +232,28 @@ export default class Game {
 
     setTileContent(x: number, y: number, res0: number, res1: number, res2: number, res3: number, res4: number, res5: number, res6: number) {
         var numberRessources = [res0, res1, res2, res3, res4, res5, res6];
+        var currentNumber = [0, 0, 0, 0, 0, 0, 0];
 
-        for (var i = 0; i < numberRessources.length; i++) {
-            for (var j = 0; j < numberRessources[i]; j++) {
-                new Food(i, x, y);
+        Game.mapObject.forEach((elem: MapObject) => {
+            if (elem instanceof Food) {
+                let food: Food = elem as Food;
+
+                if (food.position.x == x && food.position.y == y) {
+                    currentNumber[food.type]++;
+                }
+            }
+        });
+        for (var i = 0; i < currentNumber.length; i++) {
+            if (numberRessources[i] - currentNumber[i] > 0) {
+                for (var j = 0; j < numberRessources[i] - currentNumber[i]; j++) {
+                    new Food(i, x, y);
+                }
+            } else if (numberRessources[i] - currentNumber[i] <= 0) {
+                for (var j = 0; j > numberRessources[i] - currentNumber[i]; j++) {
+                    let index = Game.mapObject.findIndex((elem: MapObject) => {return elem instanceof Food && elem.position.x == x && elem.position.y == y && (elem as Food).type == i});
+                    Game.scene.remove(Game.mapObject[index].object3D);                    
+                    Game.mapObject.splice(index, 1);
+                }
             }
         }
     }
@@ -274,6 +297,14 @@ export default class Game {
     }
 
     animate() {
+        let current = new Date().getTime();
+
+        this.elapsedTime += current - this.lastUpdate;
+        this.lastUpdate = current;
+        if (this.elapsedTime >= 1000) {
+            this.elapsedTime = 0;
+            this.protocol.reloadMap();
+        }
         requestAnimationFrame(()=>this.animate());
         this.renderer.render(Game.scene, Game.camera);
     }

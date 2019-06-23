@@ -1,7 +1,7 @@
 import Game from "./game";
 import EventManager from "./EventManager";
 import WebSocketManager from "./WebSocketManager";
-import { EventWebSocketConnected, EventWebSocketMessage } from "./ZEvent";
+import { EventWebSocketConnected, EventWebSocketMessage, EventWebSocketError } from "./ZEvent";
 import GraphicProtocol from "./GraphicProtocol";
 
 // import { Color, PerspectiveCamera, Scene, WebGLRenderer, Camera } from 'three';
@@ -37,19 +37,16 @@ function run()
 }
 
 function startGame(host: string, port: number) {
-    game.style.display = 'block';
 
     EventManager.getInstance().addListener("EventWebSocketConnected", (e: EventWebSocketConnected) => {
+        game.style.display = 'block';
         WebSocketManager.sendMessage("msz\n");
     });
 
+    EventManager.getInstance().addListener("EventWebSocketError", (e: EventWebSocketError) => {
+        waiting.style.display = "block";
+    });
+
     var protocol = new GraphicProtocol();
-    let reloadMapElement: HTMLButtonElement = <HTMLButtonElement>document.getElementById("reloadMap");
-
-
-    reloadMapElement.onclick = (ev: MouseEvent) => {
-        let game: Game = protocol.getGame();
-        protocol.reloadMap();
-    }
     WebSocketManager.connect(host, port);
 }

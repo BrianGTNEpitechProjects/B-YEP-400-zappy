@@ -23,9 +23,7 @@ export default class EventManager {
 
     emit(event: ZEvent) {
         this.events.forEach(element => {
-            console.log(element[1], event.getName())
             if (element[1] == event.getName()) {
-                console.log("CALLBACK");
                 element[2](event);
             }
         });
