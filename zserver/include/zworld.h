@@ -115,7 +115,7 @@ int trantorian_move_forward(trantorian_t *trantorian);
 /* cardinal_utils.c */
 e_cardinal_t cardinal_rotate_right(e_cardinal_t dir);
 e_cardinal_t cardinal_rotate_left(e_cardinal_t dir);
-char *cardinal_to_string(e_cardinal_t dir);
+const char *cardinal_to_string(e_cardinal_t dir);
 
 /* get_item_id_from_name.c */
 int get_item_id_from_name(char *name, bool case_sensitive);
