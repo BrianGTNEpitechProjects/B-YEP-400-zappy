@@ -21,7 +21,8 @@ int count_unused_slot(zappy_t *zap, char *team_name)
     int res = zap->default_slots_teams;
 
     for (trantorian_t *node = zap->players; node; node = node->next) {
-        if (strcmp(node->team->name, team_name) == 0) {
+        if (cmpstr(node->team->name, team_name, \
+zap->case_sensitive_inputs) == 0) {
             if (node->is_egg && node->base.on_extracted == NULL) {
                 res++;
             } else {
