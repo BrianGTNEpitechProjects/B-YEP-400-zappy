@@ -44,7 +44,8 @@ static int clkwise_to_cclkwise(int a)
     }
 }
 
-static void broadcast_to_tile(trantorian_t *src, tile_t *dest, char *a, int angle)
+static void broadcast_to_tile(trantorian_t *src, tile_t *dest, char *a, \
+int angle)
 {
     network_server_t *server = (dest->first) ? \
 get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
