@@ -10,9 +10,6 @@
 #include "zworld.h"
 #include "graphical_protocol.h"
 
-#define EJECT_MSG ("eject: ")
-#define EJECT_MSG_LEN (sizeof(EJECT_MSG))
-
 static network_client_user_map_t *retrieve_client_map(zappy_t *zap)
 {
     id_t id = zap->classic_id;

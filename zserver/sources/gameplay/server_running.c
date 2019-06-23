@@ -25,9 +25,9 @@ static void catch_sig()
 bool setup_catch_signals(void)
 {
     if (signal(SIGINT, (__sighandler_t) &catch_sig) == SIG_ERR)
-        return (handle_error_return("signal: %s\n", false));
+        return (bool)(handle_error_return("signal: %s\n", false));
     if (signal(SIGTERM, (__sighandler_t) &catch_sig) == SIG_ERR)
-        return (handle_error_return("signal: %s\n", false));
+        return (bool)(handle_error_return("signal: %s\n", false));
     return (true);
 }
 

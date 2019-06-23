@@ -12,7 +12,7 @@
 
 static team_t *get_normal_winner(zappy_t *zap)
 {
-    uint team_count = count_teams(zap);
+    uint team_count = (uint)count_teams(zap);
     int max_level_players[team_count];
 
     memset(&max_level_players, 0, sizeof(uint) * team_count);
@@ -42,7 +42,7 @@ static void add_if_greater(uint *array, uint level, uint size)
 
 static team_t *get_default_winners(zappy_t *zap)
 {
-    uint team_count = count_teams(zap);
+    uint team_count = (uint)count_teams(zap);
     team_t *team = NULL;
     uint best_score = 0;
     uint team_score = 0;

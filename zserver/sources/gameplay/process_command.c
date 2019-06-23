@@ -79,11 +79,10 @@ void process_command_on_users(zappy_t *z, network_client_user_map_t *m)
             .client = get_client(m, (user_base_t *)node)
         };
         command = &(node->queue[node->command_ind]);
-        if (evaluate_time_and_command(&pair, &t, z->time_scale)) {
+        if (evaluate_time_and_command(&pair, &t, z->time_scale))
             apply_timeout(node);
-        } else if (command_valid(&pair, command) && command->remaining_time < 0) {
+        else if (command_valid(&pair, command) && command->remaining_time < 0)
             exec_command(&pair, command);
-        }
     }
     clock_gettime(0, &t);
 }

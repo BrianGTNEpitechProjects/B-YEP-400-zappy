@@ -52,7 +52,7 @@ static bool extract_int(int *output, char *input)
     long res = strtol(input, NULL, 10);
 
     if (res == LONG_MIN || res == LONG_MAX) {
-        return (handle_error_return("strtol: %s\n", false));
+        return (bool)(handle_error_return("strtol: %s\n", false));
     }
     *output = (int) res;
     return (true);
