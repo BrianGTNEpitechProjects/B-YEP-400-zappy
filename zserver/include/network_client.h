@@ -23,6 +23,7 @@ extern const int invalid_socket;
     0,\
     0,\
     0,\
+    0,\
     C_BUFFER_DEFAULT,\
     C_BUFFER_DEFAULT,\
     false\
@@ -34,6 +35,7 @@ typedef struct network_client_s {
     time_t last_data_in_timestamp;
     time_t last_data_out_timestamp;
     time_t user_disconnect_timeout;
+    int should_disconnect;
     int lost_connection;
     circular_buffer_t cb_in;
     circular_buffer_t cb_out;
