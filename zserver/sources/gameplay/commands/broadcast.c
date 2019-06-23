@@ -44,7 +44,8 @@ static int clkwise_to_cclkwise(int a)
     }
 }
 
-static void broadcast_to_tile(tile_t *dest, char *a, int angle)
+static void broadcast_to_tile(trantorian_t *src, tile_t *dest, char *a, \
+int angle)
 {
     network_server_t *server = (dest->first) ? \
 get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
@@ -57,13 +58,12 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
         return;
     do {
         client = get_client(server->client_user_map, (user_base_t *)p);
-        if (!client)
-            continue;
         ang = (int)((angle == -1) ? 0 : \
 floor((((180 + angle - (int)(p->orientation * 90.0)) % 360) * 8) / 360.0) + 1);
         ang = clkwise_to_cclkwise(ang);
         snprintf(buff, 10, "%d", ang);
-        write_msg(client, buff, a);
+        if (p != src)
+            write_msg(client, buff, a);
         p = p->neighbour;
     } while (p != dest->first);
 }
@@ -83,7 +83,7 @@ unsigned int l, unsigned long long broadcast_nb)
             continue;
         angle = (l == 0) ? -1 : \
 evaluate_tile_angle(tran->orientation, i, (lim - 1) * 4);
-        broadcast_to_tile(t, arg, angle);
+        broadcast_to_tile(tran, t, arg, angle);
         t->broadcasted = broadcast_nb;
     }
 }
