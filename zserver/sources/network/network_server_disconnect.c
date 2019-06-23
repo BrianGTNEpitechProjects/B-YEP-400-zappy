@@ -54,7 +54,7 @@ void update_disconnected(network_server_t *ns)
 
     while (curr != EMPTY_MAP) {
         pair = curr->value;
-        if (pair->client->lost_connection) {
+        if (pair->client->should_disconnect || pair->client->lost_connection) {
             curr = curr->next;
             disconnect_client(ns, pair->client);
         } else {
