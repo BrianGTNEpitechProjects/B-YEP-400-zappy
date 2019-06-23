@@ -78,6 +78,8 @@ void process_command_on_users(zappy_t *z, network_client_user_map_t *m)
             .user = (user_base_t *)node,
             .client = get_client(m, (user_base_t *)node)
         };
+        if (pair.client == NULL)
+            continue;
         command = &(node->queue[node->command_ind]);
         if (evaluate_time_and_command(&pair, &t, z->time_scale))
             apply_timeout(node);
