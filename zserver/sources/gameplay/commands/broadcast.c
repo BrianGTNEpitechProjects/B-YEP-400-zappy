@@ -14,6 +14,8 @@
 
 static void write_msg(network_client_t *client, char buff[10], char *a)
 {
+    if (client == NULL)
+        return;
     write_to_buffer(&client->cb_out, (const uint8_t *)"message ", 8);
     write_to_buffer(&client->cb_out, (const uint8_t *)buff, strlen(buff));
     write_to_buffer(&client->cb_out, (const uint8_t *)", ", 2);
