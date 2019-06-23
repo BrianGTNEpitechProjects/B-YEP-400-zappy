@@ -121,7 +121,7 @@ const char *cardinal_to_string(e_cardinal_t dir);
 int get_item_id_from_name(char *name, bool case_sensitive);
 
 /* apply_time.c */
-bool apply_time(double *ref, struct timespec *delta_start, int scale);
+bool apply_time(double *ref, struct timespec *start, int scale);
 
 /* kill_client.c */
 bool kill_player(trantorian_t *p);

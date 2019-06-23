@@ -15,6 +15,7 @@ void set_to_next_command(trantorian_t *t)
 
     t->command_ind = \
 (unsigned char)((t->command_ind + 1) % COMMAND_QUEUE_LEN);
+    t->queue[t->command_ind].remaining_time -= command->remaining_time;
     command->code = EMPTY;
     command->remaining_time = .0;
     memset(command->arg, 0, ARG_BUFFER_SIZE);
