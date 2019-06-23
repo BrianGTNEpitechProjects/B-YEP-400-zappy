@@ -75,17 +75,23 @@ void process_command_on_users(zappy_t *z, network_client_user_map_t *m)
     static struct timespec t = {0};
     command_t *command;
     client_user_pair_t pair;
+    trantorian_t *tmp = NULL;
 
-    for (trantorian_t *node = z->players; node; node = node->next) {
-        pair = (client_user_pair_t){
-            .user = (user_base_t *)node,
-            .client = get_client(m, (user_base_t *)node)
-        };
+    for (trantorian_t *node = z->players; node;) {
+        pair = (client_user_pair_t){get_client(m, (user_base_t *)node), \
+(user_base_t *)node};
+        if (node->life_unit <= 0 && node->base.on_disconnect) {
+            tmp = node;
+            node = node->next;
+            tmp->base.on_disconnect((user_base_t *)tmp, NULL);
+            continue;
+        }
         command = &(node->queue[node->command_ind]);
         if (evaluate_time_and_command(&pair, &t, z->time_scale))
             apply_timeout(node);
         else if (command_valid(&pair, command) && command->remaining_time < 0)
             exec_command(&pair, command);
+        node = node->next;
     }
     clock_gettime(0, &t);
 }

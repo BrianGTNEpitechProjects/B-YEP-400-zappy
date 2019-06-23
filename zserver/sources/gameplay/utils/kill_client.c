@@ -33,8 +33,6 @@ bool kill_client(client_user_pair_t *c)
     if (c->client != NULL) {
         write_to_buffer(&c->client->cb_out, DEAD_MSG, DEAD_MSG_LEN);
         c->client->should_disconnect = true;
-    } else if (p->base.on_disconnect) {
-        p->base.on_disconnect((user_base_t *)p, NULL);
     }
     pdi(p->zappy, p);
     return (true);
