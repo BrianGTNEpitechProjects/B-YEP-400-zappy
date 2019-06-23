@@ -28,6 +28,8 @@ static bool command_valid(client_user_pair_t *client, command_t *command)
 {
     trantorian_t *trantorian = (trantorian_t *)client->user;
 
+    if (trantorian->is_egg)
+        return (false);
     if (commands[command->code].is_valid(client, command->arg))
         return (true);
     set_to_next_command(trantorian);
@@ -58,7 +60,8 @@ struct timespec *t, int scale)
     if (command->code == EMPTY)
         return (true);
     else if (commands[command->code].charge_time == command->remaining_time) {
-        if (commands[command->code].is_startable(c, command->arg)) {
+        if (!trantorian->is_egg && \
+commands[command->code].is_startable(c, command->arg)) {
         } else {
             write_to_client(c, KO_MSG, KO_MSG_LEN);
             set_to_next_command(trantorian);
@@ -78,8 +81,6 @@ void process_command_on_users(zappy_t *z, network_client_user_map_t *m)
             .user = (user_base_t *)node,
             .client = get_client(m, (user_base_t *)node)
         };
-        if (pair.client == NULL)
-            continue;
         command = &(node->queue[node->command_ind]);
         if (evaluate_time_and_command(&pair, &t, z->time_scale))
             apply_timeout(node);
