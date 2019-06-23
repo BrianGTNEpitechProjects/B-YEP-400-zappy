@@ -40,27 +40,41 @@ static bool extract_int(int *output, char *input)
     return (true);
 }
 
+static bool check_args(args_t *arguments)
+{
+    if (arguments->x == 0 || arguments->y == 0)
+        return (false);
+    if (arguments->port == 0)
+        return (false);
+    if (arguments->ppt <= 0)
+        return (false);
+    if (arguments->freq <= 0)
+        return (false);
+    if (arguments->teams == NULL || arguments->tc <= 0)
+        return (false);
+    if (arguments->set_ws && arguments->wsport <= 0)
+        return (false);
+    return (true);
+}
+
 bool parse_args(args_t *arguments, int ac, char **av)
 {
     bool ret = false;
 
-    for (int c; (c = getopt(ac, av, "p:x:y:c:f:n")) != -1; ) {
+    for (int c; (c = getopt(ac, av, "p:x:y:c:f:nw:")) != -1; ) {
         switch (c) {
-        case 'p': ret = ret || !extract_int(&arguments->port, optarg);
-            break;
-        case 'x': ret = ret || !extract_int(&arguments->x, optarg);
-            break;
-        case 'y': ret = ret || !extract_int(&arguments->y, optarg);
-            break;
-        case 'c': ret = ret || !extract_int(&arguments->ppt, optarg);
-            break;
-        case 'f': ret = ret || !extract_int(&arguments->freq, optarg);
-            break;
+        case 'p': ret = ret || !extract_int(&arguments->port, optarg); break;
+        case 'x': ret = ret || !extract_int(&arguments->x, optarg); break;
+        case 'y': ret = ret || !extract_int(&arguments->y, optarg); break;
+        case 'c': ret = ret || !extract_int(&arguments->ppt, optarg); break;
+        case 'f': ret = ret || !extract_int(&arguments->freq, optarg); break;
         case 'n': arguments->teams = extract_teams(optind, av, &arguments->tc);
             ret = ret || (arguments->teams == NULL);
             break;
+        case 'w': ret = ret || !extract_int(&arguments->wsport, optarg);
+            arguments->set_ws = true; break;
         default: break;
         }
     }
-    return (!ret);
+    return (!ret && check_args(arguments));
 }

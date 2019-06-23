@@ -24,7 +24,8 @@ extern const int invalid_socket;
     0,\
     0,\
     C_BUFFER_DEFAULT,\
-    C_BUFFER_DEFAULT\
+    C_BUFFER_DEFAULT,\
+    false\
 }
 
 typedef struct network_client_s {
@@ -36,6 +37,7 @@ typedef struct network_client_s {
     int lost_connection;
     circular_buffer_t cb_in;
     circular_buffer_t cb_out;
+    bool has_overflow;
 } network_client_t;
 
 int network_client_cmp(network_client_t *a, network_client_t *b);

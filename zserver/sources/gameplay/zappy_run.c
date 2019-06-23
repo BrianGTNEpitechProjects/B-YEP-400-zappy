@@ -2,18 +2,13 @@
 ** EPITECH PROJECT, 2018
 ** PSU_zappy_2018
 ** File description:
-** No file there , just an Epitech header example
+** Zappy
 */
 
 #include <stdlib.h>
+#include <time.h>
 #include "zserver.h"
-
-static inline void write_to_client(struct client_user_pair_s *client, \
-                                   uint8_t *msg, \
-                                   size_t len)
-{
-    write_to_buffer(&client->client->cb_out, msg, len);
-}
+#include "graphical_protocol.h"
 
 static void process_welcome_procedure(zappy_t *zap, network_server_t *server)
 {
@@ -23,8 +18,11 @@ static void process_welcome_procedure(zappy_t *zap, network_server_t *server)
         client = get_next_client_without_user(server->client_user_map);
         if (!client)
             return;
-        client->user = (user_base_t *)&zap->players[0];
-        write_to_client(client, (uint8_t *)"WELCOME\n", sizeof("WELCOME\n"));
+        client->user = (user_base_t *) accept_player(zap);
+        if (client->user == NULL)
+            return;
+                write_to_buffer(&client->client->cb_out, \
+(uint8_t *)WELCOME_MSG, WELCOME_MSG_LEN);
     } while (1);
 }
 
@@ -39,6 +37,8 @@ bool run_zappy(zappy_t *zap)
         update_manager(zap->nm);
         extract_to_users(server, (uint8_t *)ZAPPY_DELIM, ZAPPY_DELIM_SIZE);
         process_welcome_procedure(zap, server);
+        process_command_on_users(zap, server->client_user_map);
+        update_ws_server(zap);
     }
     remove_sig_catch();
     return (true);
