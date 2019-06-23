@@ -2,8 +2,7 @@ import { PerspectiveCamera, Scene, WebGLRenderer, TextureLoader, MeshBasicMateri
 import { OrbitControls } from "three-orbitcontrols-ts";
 import { ZMap } from "./map"
 import { Food } from './food';
-import { MapObject } from './map_object';
-import { Player, Orientation } from './player';
+import { MapObject, Player, Orientation } from './map_object';
 import { Egg } from './egg';
 import { SoundManager, Sound } from './sound_manager';
 import EventManager from './EventManager';
@@ -44,6 +43,7 @@ export default class Game {
         if (colSize) {
             Game.col = colSize;
         }
+        Game.scene.background = new Color(0x808080);
         AssetsManager.getInstance().load();
         this.renderer = new WebGLRenderer({antialias:true, canvas: document.getElementById("gameCanvas") as HTMLCanvasElement});
         this.protocol = protocol;
@@ -138,18 +138,19 @@ export default class Game {
         return cases;
     }
 
-    spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string) {
-        new Player(id, x, y, level, team_name, orientation);
+    spawnPlayer(id: number, x: number, y: number, orientation: number, level: number, team_name: string, sendPos: boolean = false) {
+        new Player(id, x, y, level, team_name, orientation, sendPos);
         this.soundManager.playSound(Sound.VILLAGER_HUM, false);
     }
 
     setPlayerPos(id: number, x: number, y: number, orientation: number) {
         var player = this.findPlayer(id);
-        this.reajustHeight(player);
+
+        this.reajustHeight(player);        
         player.moovePlayer(x, y, orientation);
     }
 
-    findPlayer(id: number) {
+    findPlayer(id: number): Player {
         for (var i = 0; i < Game.mapObject.length; i++) {
             if (Game.mapObject[i] instanceof Player) {
                 var player = Game.mapObject[i] as Player;

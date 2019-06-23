@@ -71,9 +71,9 @@ export default class GraphicProtocol {
         let width: number = parseInt(args[1]);
         let height: number = parseInt(args[2]);
         
-        WebSocketManager.sendMessage("tna\n");
         protocol.game = new Game(width, height, protocol);
         protocol.reloadMap();
+        WebSocketManager.sendMessage("tna\n");
     }
 
     commandBct(args: Array<string>, protocol: GraphicProtocol) {
@@ -97,6 +97,9 @@ export default class GraphicProtocol {
             teams.push(args[i]);
             Logger.logMessage("Get team: " + args[i]);
         }
+        teams.forEach((teamName: string) => {
+            WebSocketManager.sendMessage(`pia ${teamName}\n`);
+        });
     }
 
     commandPia(args: Array<string>, protocol: GraphicProtocol) {
@@ -107,7 +110,9 @@ export default class GraphicProtocol {
             playersIds.push(parseInt(args[i]));
         }
 
-        console.log(`Team ${teamName} contains ${playersIds.length} players`);
+        playersIds.forEach((playerId: number) => {
+            protocol.game.spawnPlayer(playerId, 0, 0, 1, 0, teamName, true);
+        });
     }
 
     commandPnw(args: Array<string>, protocol: GraphicProtocol) {
