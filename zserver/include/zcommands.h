@@ -30,6 +30,8 @@ extern const uint8_t CURR_MSG[];
 extern const size_t CURR_MSG_LEN;
 extern const uint8_t INCANT_MSG[];
 extern const size_t INCANT_MSG_LEN;
+extern const uint8_t EJECT_MSG[];
+extern const size_t EJECT_MSG_LEN;
 
 extern const long DEFAULT_RESOURCES_CAP;
 
