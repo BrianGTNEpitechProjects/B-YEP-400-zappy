@@ -15,8 +15,8 @@ def static_vars(**kwargs):
     return decorate
 
 
-@static_vars(answers=[""])
-def parse_buffer(pending_commands, buffer):
+@static_vars(answer="")
+def parse_buffer(pending_command, buffer):
     func_table = {
         "Forward\n": forward,
         "Right\n": right,
@@ -32,24 +32,37 @@ def parse_buffer(pending_commands, buffer):
         "Incantation\n": start_incantation
     }
 
-    parse_buffer.answers[0] += buffer
-    parse_buffer.answers = parse_buffer.answers[0].split('\n')
-    if "dead" in parse_buffer.answers:
+    if pending_command == "Set linemate\n":
+        sys.exit(0)
+    if buffer == "dead\n":
         return "dead"
-    for command, answer in zip(pending_commands, parse_buffer.answers):
+    elif buffer.startswith("message "):
+        message(buffer[8:])
+        return "ok"
+    elif buffer.startswith("Current level: "):
+        player.level_up(int(buffer.split(':')[1:-1]))
+        player.reset()
+        return "ok"
+    elif buffer == "ko\n" and player.get_elevation_started():
+        player.reset()
+        return "ok"
+    parse_buffer.answer += buffer
+    if '\n' in parse_buffer.answer:
         # print("Command : " + command + "Answer : " + answer)
         for known_command in func_table:
-            if command.startswith(known_command):
+            if pending_command.startswith(known_command):
                 function = func_table[known_command]
-                function(answer)
-        pending_commands.pop(0)
-        parse_buffer.answers.pop(0)
-    return "ok"
+                if function(parse_buffer.answer.split('\n')[0]):
+                    parse_buffer.answer = ""
+                    return "ok"
+                else:
+                    return "ko"
+    return "ko"
 
 
 def run(client_socket):
-    commands = ["Forward\n"]
-    pending_commands = []
+    command = "Forward\n"
+    pending_command = ""
     fds = [client_socket]
 
     while 1:
@@ -58,16 +71,20 @@ def run(client_socket):
             buffer = client_socket.recv(1024).decode()
             print(buffer)
             if len(buffer) != 0:
-                if parse_buffer(pending_commands, buffer) == "dead":
+                return_value = parse_buffer(pending_command, buffer)
+                if return_value == "dead":
                     sys.exit(0)
-                commands.append(player.new_action())
-        if len(outfds) != 0 and len(commands) != 0:
-            if len(commands) > 0:
-                print("Commands : " + str(commands))
-                client_socket.send(("".join(commands)).encode("Utf8"))
-                pending_commands = commands.copy()
-                commands.clear()
-            print("After clear : " + str(commands))
+                elif return_value == "ok":
+                    command = player.new_action()
+            else:
+                command = player.new_action()
+        if len(outfds) != 0 and len(command) != 0:
+            if len(command) > 0:
+                print("Commands : " + str(command))
+                client_socket.send(command.encode("Utf8"))
+                pending_command = command
+                command = ""
+            print("After clear : " + str(command))
 
 
 def init_client_connection(client_socket):
@@ -79,10 +96,6 @@ def init_client_connection(client_socket):
     data = client_socket.recv(1024).decode()
     client_num, map_size = int(data.split('\n')[0]), (int(data.split('\n')[1].split(' ')[0]), int(data.split('\n')[1].split(' ')[1]))
     player.set_map_size(map_size)
-    # if client_num > 0:
-    #     if os.fork() == 0:
-    #         connect_clients()
-    #         sys.exit(0)
 
 
 def connect_clients():
