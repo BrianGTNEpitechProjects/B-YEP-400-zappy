@@ -32,11 +32,11 @@ const long DEFAULT_RESOURCES_CAP = 100000;
 const double resources_per_tile = 1.0 / 4.0;
 
 const item_t item_map[TOT_ITEM_NB] = {
-    {FOOD, (const uint8_t *)"Food", 50},
-    {LINEMATE, (const uint8_t *)"Linemate", 50},
-    {DERAUMERE, (const uint8_t *)"Deraumere", 60},
-    {SIBUR, (const uint8_t *)"Sibur", 70},
-    {MENDIANE, (const uint8_t *)"Mendiane", 80},
-    {PHIRAS, (const uint8_t *)"Phiras", 90},
-    {THYSTAME, (const uint8_t *)"Thystame", 100},
+    {FOOD, (const uint8_t *)"food", 50},
+    {LINEMATE, (const uint8_t *)"linemate", 50},
+    {DERAUMERE, (const uint8_t *)"deraumere", 60},
+    {SIBUR, (const uint8_t *)"sibur", 70},
+    {MENDIANE, (const uint8_t *)"mendiane", 80},
+    {PHIRAS, (const uint8_t *)"phiras", 90},
+    {THYSTAME, (const uint8_t *)"thystame", 100},
 };

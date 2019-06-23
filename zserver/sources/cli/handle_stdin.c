@@ -22,6 +22,7 @@ static const cli_cmd_pair_t cli_cmd_map[] = {
     {"help", &cli_help},
     {"kill", &cli_kill},
     {"naturalspawn", &cli_natural_spawn},
+    {"case_sensitive", &cli_case_sensitive},
     {"nscap", &cli_nscap},
     {"pinfo", &cli_pinfo},
     {"timescale", &cli_timescale},

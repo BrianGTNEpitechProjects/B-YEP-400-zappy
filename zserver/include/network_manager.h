@@ -14,7 +14,7 @@
 #include "network_server.h"
 
 #define TOZ(to) (to.tv_usec == 0 && to.tv_sec == 0)
-#define TOZN(to) (to.tv_usec <= 0 || to.tv_sec <= 0)
+#define TOZN(to) (to.tv_usec <= 0 && to.tv_sec <= 0)
 #define TOLT(to1, to2) ((to1.tv_sec < to2.tv_sec) || \
 (to1.tv_sec == to2.tv_sec && to1.tv_usec < to2.tv_usec))
 #define TOGT(to1, to2) ((to1.tv_sec > to2.tv_sec) || \

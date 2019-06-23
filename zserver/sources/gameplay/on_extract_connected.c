@@ -26,14 +26,15 @@ static int emplace_command(trantorian_t *player, e_command_t id, char *arg)
     return (-1);
 }
 
-static bool is_command_valid(const uint8_t *data, int command_ind)
+static bool is_command_valid(const uint8_t *data, int command_ind, \
+bool case_sensitive)
 {
     char *command = commands[command_ind].command;
     size_t len = strlen(command);
 
     if (*data == ' ')
         return (false);
-    if (strncmp((const char *)data, command, len) != 0)
+    if (cmpnstr((const char *)data, command, case_sensitive, len) != 0)
         return (false);
     return (data[len] == ' ' || data[len] == '\n');
 }
@@ -60,7 +61,8 @@ uint8_t *data, size_t sz)
         return;
     }
     for (i = 1; i <= COMMAND_NB; i++)
-        if (sep_ind && is_command_valid(data, i))
+        if (sep_ind && is_command_valid(data, i, \
+((trantorian_t *)b)->zappy->case_sensitive_inputs))
             break;
     arg = (data[sep_ind] == '\n') ? "" : (char *)&(data[sep_ind + 1]);
     data[sz - 1] = '\0';

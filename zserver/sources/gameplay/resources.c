@@ -15,12 +15,11 @@
 #include "graphical_protocol.h"
 #include "zcommands.h"
 
-void spawn_resource(zappy_t *world, tile_t *tile, e_item_t type)
+void spawn_resource(UNUSED zappy_t *world, tile_t *tile, e_item_t type)
 {
     if (type >= TOT_ITEM_NB)
         return;
     tile->content[type]++;
-    nrs(world, tile, type);
 }
 
 void spawn_rand_resources(zappy_t *zap, e_item_t type)
