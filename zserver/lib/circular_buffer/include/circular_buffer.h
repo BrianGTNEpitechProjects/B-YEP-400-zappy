@@ -14,7 +14,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define C_BUFFER_SIZE (4096)
+#define C_BUFFER_SIZE (8192)
 #define C_BUFFER_DEFAULT {0, 0, false, 0, {0}}
 
 typedef struct circular_buffer_s {
