@@ -10,22 +10,22 @@
 #include "zitem.h"
 
 const uint8_t OK_MSG[] = "ok\n";
-const size_t OK_MSG_LEN = sizeof(OK_MSG);
+const size_t OK_MSG_LEN = (sizeof(OK_MSG) - 1);
 
 const uint8_t KO_MSG[] = "ko\n";
-const size_t KO_MSG_LEN = sizeof(KO_MSG);
+const size_t KO_MSG_LEN = (sizeof(KO_MSG) - 1);
 
 const uint8_t WELCOME_MSG[] = "WELCOME\n";
-const size_t WELCOME_MSG_LEN = sizeof(WELCOME_MSG);
+const size_t WELCOME_MSG_LEN = (sizeof(WELCOME_MSG) - 1);
 
 const uint8_t DEAD_MSG[] = "dead\n";
-const size_t DEAD_MSG_LEN = sizeof(DEAD_MSG);
+const size_t DEAD_MSG_LEN = (sizeof(DEAD_MSG) - 1);
 
 const uint8_t CURR_MSG[] = "Current level: ";
-const size_t CURR_MSG_LEN = sizeof(CURR_MSG);
+const size_t CURR_MSG_LEN = (sizeof(CURR_MSG) - 1);
 
 const uint8_t INCANT_MSG[] = "Elevation underway\n";
-const size_t INCANT_MSG_LEN = sizeof(INCANT_MSG);
+const size_t INCANT_MSG_LEN = (sizeof(INCANT_MSG) - 1);
 
 const long DEFAULT_RESOURCES_CAP = 100000;
 
