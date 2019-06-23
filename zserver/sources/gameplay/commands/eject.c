@@ -26,15 +26,22 @@ static network_client_user_map_t *retrieve_client_map(zappy_t *zap)
     return (NULL);
 }
 
-static void notify_user(network_client_t *client, e_cardinal_t dir)
+static void notify_user(network_client_t *c, e_cardinal_t s_d, e_cardinal_t e_d)
 {
-    char *str = cardinal_to_string(dir);
+    char buff[11] = {0};
+    double ang = (int)((e_d * 90.0 - s_d * 90) + 90 * 6) % 360;
+    e_cardinal_t dir = (e_cardinal_t)((int)ang / 90);
 
-    if (!client)
+    if (dir == EAST)
+        dir = WEST;
+    else if (dir == WEST)
+        dir = EAST;
+    snprintf(buff, 10, "%d", dir * 2 + 1);
+    if (!c)
         return;
-    write_to_buffer(&client->cb_out, (const uint8_t *)EJECT_MSG, EJECT_MSG_LEN);
-    write_to_buffer(&client->cb_out, (const uint8_t *)str, strlen(str));
-    write_to_buffer(&client->cb_out, (const uint8_t *)"\n", 1);
+    write_to_buffer(&c->cb_out, (const uint8_t *)EJECT_MSG, EJECT_MSG_LEN);
+    write_to_buffer(&c->cb_out, (const uint8_t *)buff, strlen(buff));
+    write_to_buffer(&c->cb_out, (const uint8_t *)"\n", 1);
 }
 
 void eject(client_user_pair_t *client, __attribute__((unused)) char *arg)
@@ -51,7 +58,8 @@ void eject(client_user_pair_t *client, __attribute__((unused)) char *arg)
     pex(self->zappy, self);
     for (trantorian_t *tmp = self->neighbour; tmp != self;) {
         trantorian = tmp->neighbour;
-        notify_user(get_client(map, (user_base_t *)tmp), self->orientation);
+        notify_user(get_client(map, (user_base_t *)tmp), \
+trantorian->orientation, self->orientation);
         trantorian_move(tmp, tile);
         tmp = trantorian;
     }
