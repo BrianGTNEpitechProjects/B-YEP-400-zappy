@@ -43,7 +43,8 @@ uint8_t *data, size_t sz)
     }
     data[sz - 1] = 0;
     for (int i = 0; tranto->zappy->teams[i].name != NULL; i++) {
-        if (strcmp((char *) data, tranto->zappy->teams[i].name) == 0)
+        if (cmpstr((char *) data, tranto->zappy->teams[i].name, \
+tranto->zappy->case_sensitive_inputs) == 0)
             tranto = add_user_to_team(&pair, &tranto->zappy->teams[i]);
     }
     if (tranto->team == NULL) {
