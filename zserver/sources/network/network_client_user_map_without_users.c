@@ -21,7 +21,8 @@ bool has_client_without_user(network_client_user_map_t *map)
     return (false);
 }
 
-client_user_pair_t *get_next_client_without_user(network_client_user_map_t *map)
+client_user_pair_t *get_next_client_without_user(network_client_user_map_t \
+*map)
 {
     client_user_pair_t *pair;
 

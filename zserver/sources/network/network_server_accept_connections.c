@@ -49,7 +49,8 @@ static int create_new_connection(network_server_t *ns)
 
 int accept_connections(network_server_t *ns, fd_infos_t *infos)
 {
-    if (FD_ISSET(ns->connexion_socket, &infos->read_set)) {
+    if (FD_ISSET(ns->connexion_socket, &infos->read_set)
+    && !FD_ISSET(ns->connexion_socket, &infos->error_set)) {
         return (create_new_connection(ns));
     }
     return (0);
