@@ -28,19 +28,23 @@ def parse_buffer(pending_command, buffer):
         "Fork\n": fork,
         "Eject\n": eject,
         "Take ": take_object,
-        "Set ": set_object,
-        "Incantation\n": start_incantation
+        "Set ": set_object
     }
 
-    if pending_command == "Set linemate\n":
-        sys.exit(0)
-    if buffer == "dead\n":
+    if buffer.startswith("dead"):
         return "dead"
     elif buffer.startswith("message "):
-        message(buffer[8:])
-        return "ok"
+        print("GROS FDP TA MERE")
+        message(buffer[8:].split('\n')[0])
+        print("BEFORE = " + buffer)
+        buffer = buffer.split('\n', 1)[1]
+        print("AFTER = " + buffer)
+        if len(buffer) == 0:
+            print("ISSOU")
+            return "ko"
+        print("COMMAND = " + pending_command)
     elif buffer.startswith("Current level: "):
-        player.level_up(int(buffer.split(':')[1:-1]))
+        player.level_up(int(buffer.split('\n')[0].split(':')[1]))
         player.reset()
         return "ok"
     elif buffer == "ko\n" and player.get_elevation_started():
@@ -53,6 +57,7 @@ def parse_buffer(pending_command, buffer):
             if pending_command.startswith(known_command):
                 function = func_table[known_command]
                 if function(parse_buffer.answer.split('\n')[0]):
+                    print("PENDING COMMAND = " + pending_command)
                     parse_buffer.answer = ""
                     return "ok"
                 else:
@@ -89,7 +94,7 @@ def run(client_socket):
 
 def init_client_connection(client_socket):
     data = client_socket.recv(1024).decode()
-    if data == "WELCOME\n":
+    if data.startswith("WELCOME\n"):
         client_socket.send((name + "\n").encode("Utf8"))
     else:
         sys.exit(84)

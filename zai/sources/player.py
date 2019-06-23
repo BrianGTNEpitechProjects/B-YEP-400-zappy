@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import time
+
 
 class Player:
     def __init__(self):
@@ -21,6 +23,7 @@ class Player:
         self.thrown_objects = []
         self.hold_position = False
         self.target_locked = False
+        self.elevation_id = 0
         self.elevation_ready = False
         self.elevation_started = False
         self.elevation_members = 1
@@ -49,6 +52,7 @@ class Player:
 
     def level_up(self, level):
         self.current_level = level
+        print(self.current_level)
 
     def can_level_up(self):
         level_requirement = [
@@ -67,40 +71,38 @@ class Player:
 
     def new_action(self):
         globals().update()
-        if self.can_level_up() and (not self.hold_position or not self.target_locked) and self.inventory["food"] > 30:
+        if self.can_level_up() and not self.hold_position and not self.target_locked and self.inventory["food"] > 30:
             print("\n\n\nLEVEL UP : " + str(self.current_level) + "\n\n\n")
             print(str(self.inventory) + "\n\n\n")
             self.hold_position = True
+            self.elevation_id = int(time.time())
             if self.elevation_members < self.required_members():
-                return "Broadcast HEHO COPAINS !\n"
-        if self.can_level_up() and self.elevation_members >= self.required_members() and self.inventory["food"] > 30:
+                return "Broadcast elevation " + str(self.current_level + 1) + " " + str(self.elevation_id) + "\n"
+        if self.can_level_up() and self.elevation_members >= self.required_members():
             if not self.elevation_ready:
                 if len(self.thrown_objects) == 0:
                     self.throw_elevation_items()
                 item = self.thrown_objects.pop()
                 print(self.thrown_objects)
                 if len(self.thrown_objects) == 0:
-                    self.start_elevation()
+                    self.elevation_ready = True
                 return "Set " + item + "\n"
             elif not self.elevation_started:
-                return "Broadcast LET'S GO !\n"
+                self.start_elevation()
+                return "Broadcast beginning " + str(self.elevation_id) + "\n"
             else:
                 return "Incantation\n"
         if self.commands_count == 10:
             self.commands_count = 0
             return "Inventory\n"
         elif self.commands_count % 2 == 0 and not self.hold_position:
-            print(self.target_position)
-            print(self.target)
             self.commands_count += 1
             if not self.target:
                 return "Forward\n"
             elif self.target_position[0] == 0:
                 if self.target_position[1] == 0:
-                    print("target")
-                    self.commands_count = 1
                     if self.target == "elevation":
-                        command = "Broadcast JUI LA !\n"
+                        command = "Broadcast here " + str(self.elevation_id) + "\n"
                         self.hold_position = True
                     else:
                         command = "Take " + self.target + "\n"
@@ -118,7 +120,12 @@ class Player:
             else:
                 return "Forward\n"
         elif self.commands_count % 2 == 0 and self.hold_position:
-            return "Broadcast HEHO COPAINS !\n"
+            self.commands_count += 1
+            if self.inventory["food"] > 10:
+                return "Broadcast elevation " + str(self.current_level + 1) + " " + str(self.elevation_id) + "\n"
+            else:
+                self.reset()
+                return "Look\n"
         else:
             self.commands_count += 1
             return "Look\n"
@@ -143,7 +150,7 @@ class Player:
     def update_item(self, item, quantity):
         self.inventory[item] = quantity
 
-    def set_elevation_target(self, broadcast_direction):
+    def set_elevation_target(self, broadcast_direction, elevation_id):
         max_range = self.map_size[0] if self.map_size[0] > self.map_size[1] else self.map_size[1]
         switcher = {
             0: [0, 0],
@@ -156,16 +163,26 @@ class Player:
             7: [0, max_range],
             8: [max_range, max_range]
         }
-        self.set_target_position(switcher.get(broadcast_direction))
+        self.target_position = switcher.get(broadcast_direction)
         self.set_target("elevation")
+        self.elevation_id = elevation_id
         self.target_locked = True
+
+    def set_hold_position(self, hold_position):
+        self.hold_position = hold_position
+
+    def get_hold_position(self):
+        return self.hold_position
+
+    def set_target_locked(self, locked):
+        self.target_locked = locked
 
     def is_target_locked(self):
         return self.target_locked
 
     def spot_player(self, position):
         if self.target_locked and self.target == "elevation":
-            self.target = [position[0], position[1]]
+            self.target_position = position
 
     def add_elevation_member(self):
         self.elevation_members += 1
@@ -194,11 +211,17 @@ class Player:
         ]
         self.thrown_objects = items_to_throw[self.current_level - 1]
 
+    def set_elevation_id(self, elevation_id):
+        self.elevation_id = elevation_id
+
+    def get_elevation_id(self):
+        return self.elevation_id
+
     def start_elevation(self):
         self.elevation_started = True
 
     def get_elevation_started(self):
-        return self.elevation_started;
+        return self.elevation_started
 
     def reset(self):
         self.target_position = [0, 0]

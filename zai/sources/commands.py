@@ -57,6 +57,9 @@ def look(buffer):
                 if player.set_target_position([line, index - (line * (line + 1))]):
                     player.set_target(item)
                 target_found = True
+            elif item == "player":
+                line = int(math.sqrt(index))
+                player.spot_player([line, index - (line * (line + 1))])
         index += 1
     if not target_found:
         player.set_target_position([0, 0])
@@ -80,15 +83,25 @@ def broadcast(_):
 
 
 def message(buffer):
-    message_body = buffer.spit(',')
+    message_body = buffer.split(',')
     direction = int(message_body[0])
     content = message_body[1]
-    if content == "HEHO COPAINS !":
-        player.set_elevation_target(direction)
-    elif content == "JUI LA !" and direction == 0:
-        player.add_elevation_member()
-    elif content == "LET'S GO !" and player.get_target() == "elevation":
-        player.start_elevation()
+    content = content.lstrip()
+    print(content)
+    if content.startswith("elevation "):
+        print("SLT BB")
+        elevation = content.split(' ')
+        if player.get_current_level() == int(elevation[1]) - 1 and player.get_elevation_id() <= int(elevation[2]):
+            player.set_hold_position(False)
+            player.set_elevation_target(direction, int(elevation[2]))
+    elif content.startswith("here ") and direction == 0:
+        elevation = content.split(' ')
+        if int(elevation[1]) == player.get_elevation_id():
+            player.add_elevation_member()
+    elif content.startswith("beginning ") and player.get_target() == "elevation":
+        elevation = content.split(' ')
+        if int(elevation[1]) == player.get_elevation_id():
+            player.start_elevation()
     return True
 
 
@@ -116,14 +129,5 @@ def take_object(_):
     return True
 
 
-def set_object(buffer):
-    print(buffer)
-    print("plop")
-    sys.exit(0)
-    return True
-
-
-def start_incantation(buffer):
-    if buffer != "ko":
-        player.level_up(int(buffer))
+def set_object(_):
     return True
