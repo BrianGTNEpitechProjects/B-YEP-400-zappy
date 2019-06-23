@@ -74,7 +74,10 @@ def inventory(buffer):
         item = item.lstrip()
         item = item.rstrip()
         item = re.sub(' +', ' ', item)
-        player.update_item(item.split(' ')[0], int(item.split(' ')[1]))
+        try:
+            player.update_item(item.split(' ')[0], int(item.split(' ')[1]))
+        except ValueError:
+            return True
     return True
 
 
@@ -87,9 +90,7 @@ def message(buffer):
     direction = int(message_body[0])
     content = message_body[1]
     content = content.lstrip()
-    print(content)
     if content.startswith("elevation "):
-        print("SLT BB")
         elevation = content.split(' ')
         if player.get_current_level() == int(elevation[1]) - 1 and player.get_elevation_id() <= int(elevation[2]):
             player.set_hold_position(False)
@@ -105,19 +106,11 @@ def message(buffer):
     return True
 
 
-def connect_nbr(buffer):
-    if int(buffer) > 0:
-        if os.fork() == 0:
-            connect_clients()
-            sys.exit(0)
+def connect_nbr(_):
     return True
 
 
-def fork(buffer):
-    if buffer == "ok":
-        if os.fork() == 0:
-            connect_clients()
-            sys.exit(0)
+def fork(_):
     return True
 
 

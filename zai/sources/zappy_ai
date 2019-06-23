@@ -1,1 +1,1 @@
-./sources/main.py $@
+./zai/sources/main.py $@

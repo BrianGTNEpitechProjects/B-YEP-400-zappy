@@ -27,6 +27,7 @@ class Player:
         self.elevation_ready = False
         self.elevation_started = False
         self.elevation_members = 1
+        self.waiting = 0
 
     def get_current_level(self):
         return self.current_level
@@ -52,7 +53,6 @@ class Player:
 
     def level_up(self, level):
         self.current_level = level
-        print(self.current_level)
 
     def can_level_up(self):
         level_requirement = [
@@ -71,9 +71,7 @@ class Player:
 
     def new_action(self):
         globals().update()
-        if self.can_level_up() and not self.hold_position and not self.target_locked and self.inventory["food"] > 30:
-            print("\n\n\nLEVEL UP : " + str(self.current_level) + "\n\n\n")
-            print(str(self.inventory) + "\n\n\n")
+        if self.can_level_up() and not self.hold_position and not self.target_locked and self.inventory["food"] > 50:
             self.hold_position = True
             self.elevation_id = int(time.time())
             if self.elevation_members < self.required_members():
@@ -83,7 +81,6 @@ class Player:
                 if len(self.thrown_objects) == 0:
                     self.throw_elevation_items()
                 item = self.thrown_objects.pop()
-                print(self.thrown_objects)
                 if len(self.thrown_objects) == 0:
                     self.elevation_ready = True
                 return "Set " + item + "\n"
@@ -122,6 +119,10 @@ class Player:
         elif self.commands_count % 2 == 0 and self.hold_position:
             self.commands_count += 1
             if self.inventory["food"] > 10:
+                self.waiting += 1
+                if self.waiting > 10:
+                    self.waiting = 0
+                    return "Fork\n"
                 return "Broadcast elevation " + str(self.current_level + 1) + " " + str(self.elevation_id) + "\n"
             else:
                 self.reset()

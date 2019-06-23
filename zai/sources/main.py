@@ -34,15 +34,10 @@ def parse_buffer(pending_command, buffer):
     if buffer.startswith("dead"):
         return "dead"
     elif buffer.startswith("message "):
-        print("GROS FDP TA MERE")
         message(buffer[8:].split('\n')[0])
-        print("BEFORE = " + buffer)
         buffer = buffer.split('\n', 1)[1]
-        print("AFTER = " + buffer)
         if len(buffer) == 0:
-            print("ISSOU")
             return "ko"
-        print("COMMAND = " + pending_command)
     elif buffer.startswith("Current level: "):
         player.level_up(int(buffer.split('\n')[0].split(':')[1]))
         player.reset()
@@ -52,12 +47,10 @@ def parse_buffer(pending_command, buffer):
         return "ok"
     parse_buffer.answer += buffer
     if '\n' in parse_buffer.answer:
-        # print("Command : " + command + "Answer : " + answer)
         for known_command in func_table:
             if pending_command.startswith(known_command):
                 function = func_table[known_command]
                 if function(parse_buffer.answer.split('\n')[0]):
-                    print("PENDING COMMAND = " + pending_command)
                     parse_buffer.answer = ""
                     return "ok"
                 else:
@@ -74,7 +67,6 @@ def run(client_socket):
         infds, outfds, errfds = select.select(fds, fds, [], 0.1)
         if len(infds) != 0:
             buffer = client_socket.recv(1024).decode()
-            print(buffer)
             if len(buffer) != 0:
                 return_value = parse_buffer(pending_command, buffer)
                 if return_value == "dead":
@@ -85,11 +77,13 @@ def run(client_socket):
                 command = player.new_action()
         if len(outfds) != 0 and len(command) != 0:
             if len(command) > 0:
-                print("Commands : " + str(command))
-                client_socket.send(command.encode("Utf8"))
+                try:
+                    client_socket.send(command.encode("Utf8"))
+                except BrokenPipeError:
+                    print("Connection closed.", file=sys.stderr)
+                    sys.exit(84)
                 pending_command = command
                 command = ""
-            print("After clear : " + str(command))
 
 
 def init_client_connection(client_socket):
@@ -105,7 +99,11 @@ def init_client_connection(client_socket):
 
 def connect_clients():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((socket.gethostbyname(hostname), port))
+    try:
+        client_socket.connect((socket.gethostbyname(hostname), port))
+    except ConnectionRefusedError:
+        print("Connection refused.", file=sys.stderr)
+        sys.exit(84)
     init_client_connection(client_socket)
     run(client_socket)
     client_socket.close()
