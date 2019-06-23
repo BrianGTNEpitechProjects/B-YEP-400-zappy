@@ -15,9 +15,8 @@ void starve(client_user_pair_t *c)
         trantorian->inventory[FOOD] -= 1;
     else
         trantorian->life_unit -= 1;
-    if (trantorian->life_unit <= 0) {
+    if (trantorian->life_unit <= 0)
         kill_client(c);
-        return;
-    } else
-        trantorian->food_time = FOOD_TTL;
+    else
+        trantorian->food_time += FOOD_TTL;
 }

@@ -22,12 +22,14 @@ trantorian_t *get_egg_hatched(const char *team, zappy_t *zap)
 
 void replace_egg(trantorian_t *trantorian, trantorian_t *egg)
 {
-    network_server_t *server = get_server(trantorian->zappy->nm, trantorian->zappy->classic_id);
+    network_server_t *server = get_server(trantorian->zappy->nm, \
+trantorian->zappy->classic_id);
     client_user_pair_t *pair = NULL;
 
-    for (map_t curr = server->client_user_map->client_user_map; curr != NULL; curr = curr->next) {
-        if (((client_user_pair_t *)curr->value)->user == &trantorian->base)
-            pair = (client_user_pair_t *)curr->value;
+    for (map_t c = server->client_user_map->client_user_map; c != NULL; \
+c = c->next) {
+        if (((client_user_pair_t *)c->value)->user == &trantorian->base)
+            pair = (client_user_pair_t *)c->value;
     }
     if (pair == NULL)
         return;
@@ -48,13 +50,13 @@ trantorian_t * add_user_to_team(client_user_pair_t *pair, team_t *team)
 {
     trantorian_t *trantorian = (trantorian_t *)pair->user;
     trantorian_t *egg = NULL;
-    dim_t position = get_random_positions(trantorian->zappy->map_size);
+    dim_t pos = get_random_positions(trantorian->zappy->map_size);
 
     if (count_unused_slot(trantorian->zappy, team->name) > 0) {
         egg = get_egg_hatched(team->name, trantorian->zappy);
         if (egg == NULL) {
             trantorian->team = team;
-            set_position_relative(trantorian, *trantorian->zappy->map, position);
+            set_position_relative(trantorian, *trantorian->zappy->map, pos);
             trantorian->next = trantorian->zappy->players;
             trantorian->zappy->players = trantorian;
             pnw(trantorian->zappy, trantorian);

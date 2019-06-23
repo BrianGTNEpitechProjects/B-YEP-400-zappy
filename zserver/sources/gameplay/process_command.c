@@ -16,10 +16,9 @@ static void apply_timeout(trantorian_t *trantorian)
     double min = trantorian->food_time;
     command_t *command_info = &trantorian->queue[trantorian->command_ind];
 
-    if (command_info->code == EMPTY)
-        return;
-    if (command_info->remaining_time < min)
+    if (command_info->code != EMPTY && command_info->remaining_time < min)
         min = command_info->remaining_time;
+    min /= trantorian->zappy->time_scale;
     trantorian->base.user_event_timeout.tv_sec = (__time_t)floor(min);
     trantorian->base.user_event_timeout.tv_usec = \
 (__suseconds_t)((min - trunc(min)) * pow(10, 6));
@@ -80,11 +79,9 @@ void process_command_on_users(zappy_t *z, network_client_user_map_t *m)
             .client = get_client(m, (user_base_t *)node)
         };
         command = &(node->queue[node->command_ind]);
-        if (evaluate_time_and_command(&pair, &t, z->time_scale)) {
+        if (evaluate_time_and_command(&pair, &t, z->time_scale))
             apply_timeout(node);
-            continue;
-        }
-        if (command_valid(&pair, command) && command->remaining_time < 0)
+        else if (command_valid(&pair, command) && command->remaining_time < 0)
             exec_command(&pair, command);
     }
     clock_gettime(0, &t);

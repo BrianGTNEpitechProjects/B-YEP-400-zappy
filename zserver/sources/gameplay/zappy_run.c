@@ -20,10 +20,10 @@ static void process_welcome_procedure(zappy_t *zap, network_server_t *server)
         client = get_next_client_without_user(server->client_user_map);
         if (!client)
             return;
-        client->user = (user_base_t *) accept_player(zap);
+        client->user = (user_base_t *)accept_player(zap);
         if (client->user == NULL)
             return;
-                write_to_buffer(&client->client->cb_out, \
+        write_to_buffer(&client->client->cb_out, \
 (uint8_t *)WELCOME_MSG, WELCOME_MSG_LEN);
     } while (1);
 }

@@ -17,9 +17,9 @@ e_cardinal_t cardinal_rotate_left(e_cardinal_t dir)
     return ((dir == 0) ? 3 : dir - 1);
 }
 
-char *cardinal_to_string(e_cardinal_t dir)
+const char *cardinal_to_string(e_cardinal_t dir)
 {
-    char *map[] = {
+    const char *map[] = {
         "NORTH",
         "EAST",
         "SOUTH",

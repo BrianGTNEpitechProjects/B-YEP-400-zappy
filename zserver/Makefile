@@ -77,6 +77,7 @@ CLI_COMMAND_FILES	=	\
 					cinfo.c \
 					clear.c \
 					drop.c \
+					case_sensitive.c \
 					endgame.c \
 					exit.c \
 					help.c \

@@ -15,7 +15,7 @@
 static void write_msg(network_client_t *client, char buff[10], char *a)
 {
     write_to_buffer(&client->cb_out, (const uint8_t *)"message ", 8);
-    write_to_buffer(&client->cb_out, (const uint8_t *)buff, 10);
+    write_to_buffer(&client->cb_out, (const uint8_t *)buff, strlen(buff));
     write_to_buffer(&client->cb_out, (const uint8_t *)", ", 2);
     write_to_buffer(&client->cb_out, (const uint8_t *)a, strlen(a));
     write_to_buffer(&client->cb_out, (const uint8_t *)"\n", 1);
@@ -25,14 +25,22 @@ static int clkwise_to_cclkwise(int a)
 {
     switch (a) {
     case 1:
-    case 5: return (a);
-    case 2: return (8);
-    case 8: return (2);
-    case 3: return (7);
-    case 7: return (3);
-    case 4: return (6);
-    case 6: return (4);
-    default: return (0);
+    case 5:
+        return (a);
+    case 2:
+        return (8);
+    case 8:
+        return (2);
+    case 3:
+        return (7);
+    case 7:
+        return (3);
+    case 4:
+        return (6);
+    case 6:
+        return (4);
+    default:
+        return (0);
     }
 }
 
@@ -51,8 +59,8 @@ get_server(dest->first->zappy->nm, dest->first->zappy->classic_id) : NULL;
         client = get_client(server->client_user_map, (user_base_t *)p);
         if (!client)
             continue;
-        ang = (angle == -1) ? 0 : \
-floor((((180 + angle - (int)(p->orientation * 90.0)) % 360) * 8) / 360) + 1;
+        ang = (int)((angle == -1) ? 0 : \
+floor((((180 + angle - (int)(p->orientation * 90.0)) % 360) * 8) / 360.0) + 1);
         ang = clkwise_to_cclkwise(ang);
         snprintf(buff, 10, "%d", ang);
         write_msg(client, buff, a);

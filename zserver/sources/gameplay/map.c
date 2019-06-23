@@ -38,13 +38,14 @@ static void link_map(tile_t **map, dim_t size)
 }
 
 tile_t **create_map(int x, int y) {
-    tile_t **res = calloc(1, (sizeof(tile_t *) * y) + (x * y * sizeof(tile_t)));
-    if (res == NULL)
+    tile_t **r = calloc(1, (sizeof(tile_t *) * y) + (x * y * sizeof(tile_t)));
+    if (r == NULL)
         return ((tile_t **)(uintptr_t)handle_error_return("calloc: %s\n", 0));
     for (int i = 0; i < y; i++)
-        res[i] = (tile_t *)((uintptr_t)res + sizeof(tile_t *) * y + sizeof(tile_t) * i * x);
-    link_map(res, (dim_t){.x = x, .y = y});
-    return (res);
+        r[i] = (tile_t *)((uintptr_t)r + sizeof(tile_t *) * y + \
+sizeof(tile_t) * i * x);
+    link_map(r, (dim_t){.x = x, .y = y});
+    return (r);
 }
 
 pos_t get_random_positions(dim_t map_size)

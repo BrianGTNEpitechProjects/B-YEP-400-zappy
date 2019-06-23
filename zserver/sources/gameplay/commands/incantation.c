@@ -5,20 +5,11 @@
 ** No file there , just an Epitech header example
 */
 
+#include <string.h>
 #include "zcommand_proto.h"
 #include "zcommands.h"
 #include "zserver.h"
 #include "graphical_protocol.h"
-
-const incantation_requirement_t REQUIREMENTS[] = {
-    {1, {0, 1, 0, 0, 0, 0, 0}},
-    {2, {0, 1, 1, 1, 0, 0, 0}},
-    {2, {0, 2, 0, 1, 0, 2, 0}},
-    {4, {0, 1, 1, 2, 0, 1, 0}},
-    {4, {0, 1, 2, 1, 3, 0, 0}},
-    {6, {0, 1, 2, 3, 0, 1, 0}},
-    {6, {0, 2, 2, 2, 2, 2, 1}}
-};
 
 static void write_lvl_msg(client_user_pair_t *client, int lvl)
 {
@@ -26,7 +17,7 @@ static void write_lvl_msg(client_user_pair_t *client, int lvl)
 
     snprintf(buff, 11, "%d", lvl);
     write_to_client(client, CURR_MSG, CURR_MSG_LEN);
-    write_to_client(client, (uint8_t *)buff, 10);
+    write_to_client(client, (uint8_t *)buff, strlen(buff));
     write_to_client(client, (uint8_t *)"\n", 1);
 }
 

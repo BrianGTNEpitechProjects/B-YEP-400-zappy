@@ -45,6 +45,7 @@ typedef struct {
     int time_scale;
     struct timespec resources_spawn[TOT_ITEM_NB];
     bool natural_spawn_activated;
+    bool case_sensitive_inputs;
     long resources_spawn_cap;
 } zappy_t;
 
@@ -114,13 +115,13 @@ int trantorian_move_forward(trantorian_t *trantorian);
 /* cardinal_utils.c */
 e_cardinal_t cardinal_rotate_right(e_cardinal_t dir);
 e_cardinal_t cardinal_rotate_left(e_cardinal_t dir);
-char *cardinal_to_string(e_cardinal_t dir);
+const char *cardinal_to_string(e_cardinal_t dir);
 
 /* get_item_id_from_name.c */
-int get_item_id_from_name(char *name);
+int get_item_id_from_name(char *name, bool case_sensitive);
 
 /* apply_time.c */
-bool apply_time(double *ref, struct timespec *delta_start, int scale);
+bool apply_time(double *ref, struct timespec *start, int scale);
 
 /* kill_client.c */
 bool kill_player(trantorian_t *p);
@@ -132,5 +133,9 @@ void set_to_next_command(trantorian_t *t);
 /* end_game.c */
 void end_game(zappy_t *zap, team_t *winners);
 void check_end_game(zappy_t *zap);
+
+/* case_sensitive */
+int cmpstr(const char *s1, const char *s2, bool case_sensitive);
+int cmpnstr(const char *s1, const char *s2, bool case_sensitive, int n);
 
 #endif

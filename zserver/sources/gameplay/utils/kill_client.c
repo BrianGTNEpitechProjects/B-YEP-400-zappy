@@ -31,7 +31,7 @@ bool kill_client(client_user_pair_t *c)
     trantorian_t *p = (trantorian_t *)c->user;
 
     write_to_buffer(&c->client->cb_out, DEAD_MSG, DEAD_MSG_LEN);
-    c->client->lost_connection = true;
+    c->client->should_disconnect = true;
     pdi(p->zappy, p);
     return (true);
 }

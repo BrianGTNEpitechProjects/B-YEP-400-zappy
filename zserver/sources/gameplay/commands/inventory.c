@@ -11,6 +11,7 @@
 #include "zworld.h"
 #include "zitem.h"
 #include "common.h"
+#include "zserver.h"
 
 void inventory(client_user_pair_t *client, UNUSED char *arg)
 {
@@ -26,7 +27,7 @@ void inventory(client_user_pair_t *client, UNUSED char *arg)
         snprintf(nb, 10, "%d", self->inventory[i]);
         write_to_buffer(&client->client->cb_out, name, len);
         write_to_buffer(&client->client->cb_out, (const uint8_t *)" ", 1);
-        write_to_buffer(&client->client->cb_out, (const uint8_t *)nb, 10);
+        write_to_client(client, (const uint8_t *)nb, strlen(nb));
         if (i != TOT_ITEM_NB - 1)
             write_to_buffer(&client->client->cb_out, (const uint8_t *)",", 1);
     }

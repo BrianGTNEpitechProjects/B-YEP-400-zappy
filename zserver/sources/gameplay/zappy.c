@@ -13,8 +13,6 @@
 #include "cli.h"
 #include "graphical_protocol.h"
 
-//TODO: norm -> too many fx
-
 const command_info_t commands[] = {
     {
         .code = EMPTY,
@@ -185,7 +183,7 @@ static bool create_teams(zappy_t *res, args_t *args) {
     for (; args->teams[size]; size++);
     res->teams = calloc(size + 1, sizeof(team_t));
     if (res->teams == NULL)
-        return (handle_error_return("calloc: %s\n", 0));
+        return (bool)(handle_error_return("calloc: %s\n", 0));
     for (id_t i = 0; i < size; i++) {
         res->teams[i].id = i;
         res->teams[i].name = args->teams[i];
@@ -212,6 +210,7 @@ static zappy_t *create_zappy(args_t *args)
     res->time_scale = args->freq;
     res->map_size.x = args->x;
     res->map_size.y = args->y;
+    res->case_sensitive_inputs = true;
     res->resources_spawn_cap = DEFAULT_RESOURCES_CAP;
     init_spawn_timeouts(res);
     return (res);
@@ -230,7 +229,7 @@ bool zappy(int ac, char **av)
         free(arguments.teams);
         return (ret);
     }
-    srandom(time(NULL));
+    srandom((unsigned int)time(NULL));
     ret = run_zappy(zap);
     delete_zappy(zap);
     free(arguments.teams);
