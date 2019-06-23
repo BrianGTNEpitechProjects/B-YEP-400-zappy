@@ -29,8 +29,11 @@ static void force_incant_on_neighbours(network_server_t *s, trantorian_t *ref)
     int i = 0;
     network_client_t *c;
 
-    pic(t->zappy, t);
+    if (t != NULL)
+        pic(t->zappy, t);
     do {
+        if (t == NULL)
+            return;
         if (t->lvl == ref->lvl) {
             c = get_client(s->client_user_map, (user_base_t *)t);
             pic(t->zappy, t);
