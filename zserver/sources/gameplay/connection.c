@@ -41,6 +41,7 @@ void response_success_connection(trantorian_t *tranto, network_client_t *nc)
     size_t size = snprintf((char *)&buff, C_BUFFER_SIZE, "%i\n%i %i\n", slots\
 , tranto->zappy->map_size.x, tranto->zappy->map_size.y);
 
+    //TODO: Lilian fix non printable char pls
     write_to_buffer(&nc->cb_out, (uint8_t *)buff, size);
 }
 
