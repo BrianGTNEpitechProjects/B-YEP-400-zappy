@@ -15,7 +15,7 @@
 #include "graphical_protocol.h"
 #include "zcommands.h"
 
-void spawn_resource(zappy_t *world, tile_t *tile, e_item_t type)
+void spawn_resource(UNUSED zappy_t *world, tile_t *tile, e_item_t type)
 {
     if (type >= TOT_ITEM_NB)
         return;
