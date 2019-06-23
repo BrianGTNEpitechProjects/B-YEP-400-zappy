@@ -37,6 +37,8 @@ display the current timescale instead");
     puts("drop r x y     : drop the resource id r at position x y");
     puts("naturalspawn b : enable/disable/display natural ressource spawning \
 (b must be enable or disable or empty)");
+    puts("case_sensitive [true | 1 / false | 0] if b is empty value will be \
+displayed");
     puts("nscap value    : set the natural resource spawn cap to value or if \
 value is not set display the current cap. \
 (warning: a large cap will make the server lag on big maps)");

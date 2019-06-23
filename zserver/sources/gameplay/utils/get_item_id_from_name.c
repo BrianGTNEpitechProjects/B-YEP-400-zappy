@@ -9,10 +9,10 @@
 #include "zworld.h"
 #include "zitem.h"
 
-int get_item_id_from_name(char *name)
+int get_item_id_from_name(char *name, bool case_sensitive)
 {
     for (int i = 0; i < TOT_ITEM_NB; ++i) {
-        if (strcmp(name, (const char *)item_map[i].name) == 0)
+        if (cmpstr(name, (const char *)item_map[i].name, case_sensitive) == 0)
             return (i);
     }
     return (-1);

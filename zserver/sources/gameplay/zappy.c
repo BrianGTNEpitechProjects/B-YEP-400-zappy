@@ -212,6 +212,7 @@ static zappy_t *create_zappy(args_t *args)
     res->time_scale = args->freq;
     res->map_size.x = args->x;
     res->map_size.y = args->y;
+    res->case_sensitive_inputs = true;
     res->resources_spawn_cap = DEFAULT_RESOURCES_CAP;
     init_spawn_timeouts(res);
     return (res);
