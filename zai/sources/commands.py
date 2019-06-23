@@ -78,6 +78,8 @@ def inventory(buffer):
             player.update_item(item.split(' ')[0], int(item.split(' ')[1]))
         except ValueError:
             return True
+        except IndexError:
+            return True
     return True
 
 
