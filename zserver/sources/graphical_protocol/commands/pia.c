@@ -29,10 +29,11 @@ bool pia(graphical_user_t *user, network_client_t *client,
     char tmp[12] = {0};
     int data_size = 0;
     char *team_name = strstr((char *)data, " ") + 1;
-    int player_size = compute_player_ids_size(world, team_name);
+    int player_size = 0;
     int team_name_size;
 
     data[size - 1] = '\0';
+    player_size = compute_player_ids_size(world, team_name);
     team_name_size = strlen(team_name);
     data_size = 4 + team_name_size + player_size + 1;
     send_websocket_header(client, data_size, 1);
